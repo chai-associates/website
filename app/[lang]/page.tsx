@@ -159,8 +159,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <p className="tag">{text.services.tag[lang]}</p>
             <h2>{text.services.title[lang]}</h2>
           </div>
-          {/* 5 个服务分类（内容在 lib/site.ts）· 卡片宽度至少 300px，自动决定一行几张，比例固定 3:2 */}
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4">
+          {/* 5 个服务分类（内容在 lib/site.ts）· 卡片比例固定 3:2 */}
+          <div className="card-grid">
             {serviceCategories.map((c) => (
               <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card aspect-[3/2]">
                 {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
@@ -185,15 +185,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           </div>
           <div className="scroll-row [--cols:3]">
             {people.list.map((p, i) => (
-              <article key={i} className="overflow-hidden rounded-lg bg-bg">
-                <div className="relative flex aspect-[4/5] items-end bg-line p-3">
-                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" className="object-cover" /> : <span className="muted text-caption">{lang === "zh" ? "照片" : "Photo"}</span>}
+              <article key={i} className="person-card">
+                {/* 没有照片时显示英文名缩写 */}
+                <div className="person-photo">
+                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" /> : p.name.en.split(" ").map((w) => w[0]).join("").slice(0, 2)}
                 </div>
-                <div className="px-4 pt-4 pb-5">
-                  <h3>{p.name[lang]}</h3>
-                  <p className="text-small font-semibold">{p.role[lang]}</p>
-                  <p className="muted mt-1 text-caption">{p.since ? `${people.since[lang]} ${p.since} · ` : ""}{p.languages[lang]}</p>
-                </div>
+                <h3>{p.name[lang]}</h3>
+                <strong>{p.role[lang]}</strong>
+                <p>{p.since ? `${people.since[lang]} ${p.since} · ` : ""}{p.languages[lang]}</p>
               </article>
             ))}
           </div>
@@ -220,7 +219,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   {c.label[lang]} <em>{offices.filter((o) => o.city === c.id).length}</em>
                 </label>
                 <div className="tab-panel">
-                  <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4">
+                  <div className="card-grid">
                     {offices.filter((o) => o.city === c.id).map((o) => (
                       <div key={o.address} className="card">
                         <p className="font-semibold">{o.name[lang]}</p>

@@ -23,8 +23,9 @@ export const firm = {
   },
 };
 
-export const whatsappLink = (lang: Lang) =>
-  `https://wa.me/${firm.whatsapp}?text=${encodeURIComponent(firm.whatsappMessage[lang])}`;
+// 不给 message 就用上面的默认讯息；询问表格会给自己组好的讯息
+export const whatsappLink = (lang: Lang, message: string = firm.whatsappMessage[lang]) =>
+  `https://wa.me/${firm.whatsapp}?text=${encodeURIComponent(message)}`;
 
 export const mapsLink = (address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${firm.name} ${address}`)}`;
@@ -85,6 +86,19 @@ export const services: { slug: string; category: ServiceCategory; title: Bi; sho
   { slug: "protection-order", category: "separation", title: { zh: "家暴保护令", en: "Domestic Violence Protection Order" }, short: { zh: "保护你与孩子的人身安全", en: "Keeping you and your children safe" } },
   { slug: "mediation", category: "separation", title: { zh: "调解", en: "Mediation" }, short: { zh: "不上法庭，协商解决", en: "Resolving matters without court" } },
 ];
+
+// ── 多个页面共用的文字（选单、面包屑、页尾的「不是你的情况？」） ──
+export const common = {
+  home: { zh: "首页", en: "Home" },
+  services: { zh: "离婚服务", en: "Divorce Services" },
+  viewAll: { zh: "查看全部服务", en: "View All Services" },
+  askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
+  readMore: { zh: "阅读详情", en: "Read More" },
+  notYours: {
+    title: { zh: "不是你的情况？", en: "Not quite your situation?" },
+    desc: { zh: "看看我们的全部服务，或直接问律师。", en: "Browse all our services, or ask a lawyer directly." },
+  },
+};
 
 // ── 法律声明（页脚、以后的服务页和文章页共用） ──
 export const disclaimer: Bi = {

@@ -10,8 +10,8 @@ import { EB_Garamond, Noto_Sans_SC, Plus_Jakarta_Sans } from "next/font/google";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import Menu from "@/lib/menu";
-import { disclaimer, firm, isLang, locales, serviceCategories, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { Menu } from "@/lib/interactive";
+import { common, disclaimer, firm, isLang, locales, serviceCategories, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 字体（变成 CSS 变量，tokens.css 里使用） ─────
 const notoSC = Noto_Sans_SC({ weight: ["400", "500", "700"], preload: false, display: "swap", variable: "--font-noto-sc" });
@@ -22,11 +22,11 @@ const garamond = EB_Garamond({ subsets: ["latin"], weight: ["500"], variable: "-
 const text = {
   // 选单（有 children 的会展开；href 同时给页脚用）
   nav: [
-    { href: "", label: { zh: "首页", en: "Home" } },
+    { href: "", label: common.home },
     {
-      href: "/services", label: { zh: "离婚服务", en: "Divorce Services" },
+      href: "/services", label: common.services,
       children: [
-        { href: "/services", label: { zh: "查看全部服务", en: "View All Services" } },
+        { href: "/services", label: common.viewAll },
         ...serviceCategories.map((c) => ({ href: `/services/${c.slug}`, label: c.title })),
       ],
     },
@@ -80,7 +80,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             <div className="nav-right">
               <a className="btn btn-cta btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{text.book[lang]}</a>
 
-              {/* 选单：里面放什么写在这里；打开 / 关闭由 lib/menu.tsx 负责 */}
+              {/* 选单：里面放什么写在这里；打开 / 关闭由 lib/interactive.tsx 负责 */}
               <Menu label={text.menu[lang]}>
                 <nav className="menu-links" aria-label="Main">
                   {text.nav.map((l) =>
