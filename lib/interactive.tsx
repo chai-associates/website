@@ -5,7 +5,9 @@
 // · Menu            选单开关（layout.tsx）
 // · SituationPicker 「我的情况是」选择器（/services 页）
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
+// · TeamFilter      律师团队按办事处筛选（/people 页）
 // ═══════════════════════════════════════════════════════════════
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { whatsappLink, type Lang } from "@/lib/site";
@@ -107,5 +109,53 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
       ))}
       <button type="submit" className="btn btn-cta w-full">{submit}</button>
     </form>
+  );
+}
+
+// ── 律师团队按办事处筛选 ─────────────────────────
+// 点城市 → 只显示那个城市的成员；某一组没有人就整组隐藏。
+// 没有 JavaScript 时显示全部成员。
+type Person = { key: string; city: string; image: string | null; initials: string; name: string; role: string; meta: string };
+export function TeamFilter({ label, allLabel, countLabel, cities, groups }: {
+  label: string;
+  allLabel: string;
+  countLabel: string; // 例如「{n} 位」
+  cities: { id: string; label: string }[];
+  groups: { title: string; people: Person[] }[];
+}) {
+  const [city, setCity] = useState("all");
+  const shown = groups
+    .map((g) => ({ ...g, people: g.people.filter((p) => city === "all" || p.city === city) }))
+    .filter((g) => g.people.length > 0);
+
+  return (
+    <div className="grid gap-12">
+      <div className="btn-row" role="group" aria-label={label}>
+        <span className="muted text-small">{label}</span>
+        {[{ id: "all", label: allLabel }, ...cities].map((c) => (
+          <button key={c.id} type="button" className="chip" aria-pressed={city === c.id} onClick={() => setCity(c.id)}>{c.label}</button>
+        ))}
+      </div>
+      {shown.map((g) => (
+        <div key={g.title}>
+          <div className="list-head">
+            <h2>{g.title}</h2>
+            <span>{countLabel.replace("{n}", String(g.people.length))}</span>
+          </div>
+          <div className="person-grid">
+            {g.people.map((p) => (
+              <article key={p.key} className="person-card reveal">
+                <div className="person-photo">
+                  {p.image ? <Image src={p.image} alt={p.name} fill sizes="(min-width: 860px) 25vw, 50vw" /> : p.initials}
+                </div>
+                <h3>{p.name}</h3>
+                <strong>{p.role}</strong>
+                <p>{p.meta}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

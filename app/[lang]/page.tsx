@@ -13,7 +13,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, firm, isLang, mapsLink, offices, serviceCategories, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { cities, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, whatsappLink, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -56,20 +56,11 @@ const text = {
     more: { zh: "了解", en: "Learn more" },
   },
 
-  // ③ 我们的团队（排列顺序 = 这里的顺序；照片放进 public/images/lawyers/ 后填上路径）
+  // ③ 我们的团队（成员资料在 lib/site.ts 的 team）
   people: {
     tag: { zh: "我们的团队", en: "Our people" },
     title: { zh: "认识我们的团队", en: "Meet our people" },
-    since: { zh: "执业自", en: "Practising since" },
     swipe: { zh: "← 左右滑动 →", en: "← Swipe →" },
-    list: [
-      { name: { zh: "律师姓名", en: "Lawyer Name" }, role: { zh: "主管合伙人", en: "Managing Partner" }, since: null, languages: { zh: "中文 · English", en: "Chinese · English" }, image: null },
-      { name: { zh: "律师姓名", en: "Lawyer Name" }, role: { zh: "律师", en: "Lawyer" }, since: null, languages: { zh: "中文 · English", en: "Chinese · English" }, image: null },
-      { name: { zh: "律师姓名", en: "Lawyer Name" }, role: { zh: "律师", en: "Lawyer" }, since: null, languages: { zh: "中文 · English", en: "Chinese · English" }, image: null },
-      { name: { zh: "律师姓名", en: "Lawyer Name" }, role: { zh: "律师", en: "Lawyer" }, since: null, languages: { zh: "中文 · English", en: "Chinese · English" }, image: null },
-      { name: { zh: "律师姓名", en: "Lawyer Name" }, role: { zh: "律师", en: "Lawyer" }, since: null, languages: { zh: "中文 · English", en: "Chinese · English" }, image: null },
-      { name: { zh: "律师姓名", en: "Lawyer Name" }, role: { zh: "律师", en: "Lawyer" }, since: null, languages: { zh: "中文 · English", en: "Chinese · English" }, image: null },
-    ] as { name: Bi; role: Bi; since: number | null; languages: Bi; image: string | null }[],
   },
 
   // ④ 联系我们（办事处资料在 lib/site.ts）
@@ -184,15 +175,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <h2>{people.title[lang]}</h2>
           </div>
           <div className="scroll-row [--cols:3]">
-            {people.list.map((p, i) => (
-              <article key={i} className="person-card">
-                {/* 没有照片时显示英文名缩写 */}
+            {team.filter((p) => roles[p.role].group !== "support").map((p) => (
+              <article key={p.slug} className="person-card">
                 <div className="person-photo">
-                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" /> : p.name.en.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" /> : initials(p.name)}
                 </div>
                 <h3>{p.name[lang]}</h3>
-                <strong>{p.role[lang]}</strong>
-                <p>{p.since ? `${people.since[lang]} ${p.since} · ` : ""}{p.languages[lang]}</p>
+                <strong>{roles[p.role].label[lang]}</strong>
+                <p>{cities.find((c) => c.id === p.city)?.label[lang]} · {p.languages[lang]}</p>
               </article>
             ))}
           </div>

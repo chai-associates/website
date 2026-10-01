@@ -45,6 +45,37 @@ export const offices: { city: string; name: Bi; address: string; phone: string; 
   { city: "mlk", name: { zh: "Ayer Keroh", en: "Ayer Keroh" }, address: "No. 27-2, Jalan PPPS 1, Pusat Perniagaan Putra Sentosa, 75150 Ayer Keroh, Melaka", phone: "+6062337189", phoneDisplay: "+606-233 7189" },
 ];
 
+// ── 团队（首页、律师团队页、以后的个人页、办事处页都读这里） ──
+// 职位 → 属于哪一组。法律支援团队（助理、实习律师）不能放在「律师」组（律师公会规定）。
+export const roles = {
+  "partner": { group: "partners", label: { zh: "合伙人", en: "Partner" } },
+  "consultant": { group: "partners", label: { zh: "顾问律师", en: "Consultant" } },
+  "senior-associate": { group: "lawyers", label: { zh: "资深律师", en: "Senior Associate" } },
+  "associate": { group: "lawyers", label: { zh: "律师", en: "Associate" } },
+  "legal-assistant": { group: "support", label: { zh: "法律助理", en: "Legal Assistant" } },
+  "pupil": { group: "support", label: { zh: "实习律师", en: "Pupil in Chambers" } },
+} as const;
+export type Role = keyof typeof roles;
+export const teamGroups = [
+  { id: "partners", title: { zh: "合伙人与顾问律师", en: "Partners & Consultants" } },
+  { id: "lawyers", title: { zh: "律师", en: "Lawyers" } },
+  { id: "support", title: { zh: "法律支援团队", en: "Legal Support" } },
+] as const;
+
+// 每一位成员（顺序 = 显示顺序）。⚠ 以下是占位，等律所提供真实资料后替换。
+// city：所属城市（对应上面的 cities）· services：负责的服务（服务的 slug，个人页用）
+// image：照片放进 public/images/people/ 后填上路径（人像 4:5）
+export const team: { slug: string; name: Bi; role: Role; city: string; languages: Bi; services: string[]; image: string | null }[] = [
+  { slug: "partner-1", name: { zh: "律师姓名", en: "Partner Name" }, role: "partner", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+  { slug: "consultant-1", name: { zh: "律师姓名", en: "Consultant Name" }, role: "consultant", city: "kl", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+  { slug: "senior-associate-1", name: { zh: "律师姓名", en: "Senior Associate" }, role: "senior-associate", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+  { slug: "senior-associate-2", name: { zh: "律师姓名", en: "Senior Associate" }, role: "senior-associate", city: "mlk", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+  { slug: "associate-1", name: { zh: "律师姓名", en: "Associate Name" }, role: "associate", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+  { slug: "associate-2", name: { zh: "律师姓名", en: "Associate Name" }, role: "associate", city: "kl", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+];
+// 没有照片时显示的英文名缩写，例如 Lim Hui Ying → LH
+export const initials = (name: Bi) => name.en.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+
 // ── 离婚服务：5 个分类（首页卡片、选单、服务页都读这里） ──
 // 网址：/services（全部）→ /services/分类 → /services/分类/服务
 // image：照片放进 public/images/services/ 后，把 null 改成路径
