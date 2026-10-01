@@ -26,7 +26,7 @@ const text = {
     "英文大标题（h1、h2）用 Garamond 衬线；中文标题、h3 以下用无衬线",
     "灰色区块 = 换话题；细横线标题 = 一组清单的开头",
     "小标签：大写、拉开字距、古铜色",
-    "照片比例：人像 4:5，场景 3:2",
+    "照片比例：人像 4:5，场景 3:2（首页首屏全屏照片例外）",
     "古铜只用在主要按钮和小标签",
     "动态要轻；手机设定「减少动态」时全部关闭",
   ],
@@ -160,11 +160,8 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </div>
           </div>
           <div>
-            <div className="list-head"><h2>照片框</h2><span>photo-frame 场景 3:2 · photo-frame-portrait 人像 4:5</span></div>
-            <div className="grid max-w-xl grid-cols-[3fr_2fr] items-start gap-4">
-              <div className="photo-frame"><Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="340px" /></div>
-              <div className="photo-frame photo-frame-portrait"><Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="230px" /></div>
-            </div>
+            <div className="list-head"><h2>照片框</h2><span>photo-frame · 场景 3:2</span></div>
+            <div className="photo-frame max-w-md"><Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="448px" /></div>
           </div>
           <div>
             <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 --cols 栏</span></div>
@@ -175,15 +172,18 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <p className="muted">muted：次要文字用灰色</p>
           </div>
           <div>
-            <div className="list-head"><h2>首屏与重点三栏</h2><span>hero · points（首页）</span></div>
-            <div className="hero">
-              <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折。"}</h1>
-              <p>hero：大标题 → lead 说明 → btn-outline 按钮 → 快速跳转</p>
-              <div className="btn-row"><a className="btn btn-outline" href="#">了解我们的服务 →</a></div>
-              <div className="btn-row"><a className="text-link" href="#">认识我们的团队 →</a><a className="text-link" href="#">联系我们 →</a></div>
+            <div className="list-head"><h2>首屏与重点三栏</h2><span>hero（全屏照片，示范缩小高度）· points</span></div>
+            <div className="hero min-h-[480px] overflow-hidden rounded-md">
+              <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="1152px" />
+              <div className="px-6">
+                <p className="tag">新山 · 吉隆坡 · 马六甲</p>
+                <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折。"}</h1>
+                <p>hero：小标签 → 大标题 → 说明 → 按钮，压在照片下半部</p>
+                <div className="btn-row"><a className="btn btn-cta" href="#">了解我们的服务 →</a></div>
+              </div>
             </div>
             <ul className="points mt-8">
-              {["重点 1", "重点 2", "重点 3"].map((t) => <li key={t}><strong>{t}</strong><p>points：标题 → 灰色小字</p></li>)}
+              {["多年经验", "收费透明", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
             </ul>
           </div>
           <div>

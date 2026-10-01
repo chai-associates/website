@@ -33,17 +33,13 @@ const text = {
       en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",
     },
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
-    jumps: [
-      { href: "#people", label: { zh: "认识我们的团队", en: "Meet our people" } },
-      { href: "#contact", label: { zh: "联系我们", en: "Find an office" } },
-    ],
     image: "/images/hero/hero-bg.jpg",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
-    // 首屏 3 点：⚠ 占位，照「律所问卷」B5 的答案替换（图示也按内容换：award / receipt / lock，或在下面 Icon 加新的）
+    // 首屏下方 3 点（之后可照「律所问卷」B5 调整；图示可选 award / receipt / lock，或在下面 Icon 加新的）
     points: [
-      { icon: "award", title: { zh: "[B5 第 1 点]", en: "[B5 point 1]" }, desc: { zh: "[一句话说明]", en: "[One-line description]" } },
-      { icon: "receipt", title: { zh: "[B5 第 2 点]", en: "[B5 point 2]" }, desc: { zh: "[一句话说明]", en: "[One-line description]" } },
-      { icon: "lock", title: { zh: "[B5 第 3 点]", en: "[B5 point 3]" }, desc: { zh: "[一句话说明]", en: "[One-line description]" } },
+      { icon: "award", title: { zh: "多年经验", en: "Experienced" } },
+      { icon: "receipt", title: { zh: "收费透明", en: "Clear fees" } },
+      { icon: "lock", title: { zh: "隐私保密", en: "Confidential" } },
     ],
   },
 
@@ -97,42 +93,26 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   return (
     <>
       {/* ═════════ ① 首屏 ═════════
-          占满第一个画面（扣掉页首）。左文字 : 右照片 = 1.618 : 1（黄金比例），手机和电脑都左右并排。
-          照片用人像 4:5（photo-frame-portrait），窄栏里也看得清楚。 */}
-      <section className="hero flex min-h-[calc(100svh-var(--header-h))] py-6">
-        <div className="container flex flex-col justify-center gap-8">
-          <div className="grid grid-cols-[1.618fr_1fr] items-center gap-3 md:gap-12">
-            <div className="min-w-0">
-              <h1>{hero.title[lang]}</h1>
-              <p>{hero.sub[lang]}</p>
-              <div className="btn-row">
-                <Link className="btn btn-outline" href={`/${lang}/services`}>
-                  {hero.cta[lang]} <Icon name="arrow" size={18} />
-                </Link>
-              </div>
-              <nav className="btn-row" aria-label={lang === "zh" ? "快速跳转" : "Jump to"}>
-                {hero.jumps.map((j) => (
-                  <a key={j.href} className="text-link" href={j.href}>{j.label[lang]} <Icon name="arrow" size={16} /></a>
-                ))}
-              </nav>
-            </div>
-
-            <div className="photo-frame photo-frame-portrait min-w-0">
-              {/* objectPosition：照片焦点，保证窄框里律师在画面内 */}
-              <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="40vw" style={{ objectPosition: "30% 25%" }} />
-            </div>
+          照片占满第一个画面（扣掉页首），文字压在照片下半部：小标签（城市）→ 标题 → 说明 → 按钮。
+          下面接 3 点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
+      <section className="hero">
+        <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" style={{ objectPosition: "40% 30%" }} />
+        <div className="container">
+          <p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>
+          <h1>{hero.title[lang]}</h1>
+          <p>{hero.sub[lang]}</p>
+          <div className="btn-row">
+            <Link className="btn btn-cta" href={`/${lang}/services`}>
+              {hero.cta[lang]} <Icon name="arrow" size={18} />
+            </Link>
           </div>
-
-          <ul className="points">
-            {hero.points.map((p) => (
-              <li key={p.icon} className="min-w-0">
-                <strong><Icon name={p.icon} /> {p.title[lang]}</strong>
-                <p>{p.desc[lang]}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
+      <div className="container py-6">
+        <ul className="points">
+          {hero.points.map((p) => <li key={p.icon}><Icon name={p.icon} /> {p.title[lang]}</li>)}
+        </ul>
+      </div>
 
       {/* ═════════ ② 服务范围 ═════════
           每张卡片连到该服务自己的页面（/zh/服务代号），服务清单在 lib/site.ts。 */}
