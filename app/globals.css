@@ -232,7 +232,7 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .tab > input:checked ~ .tab-panel { display: block; }
 
 /* ── 外框：页首 ─────────────────────────────────── */
-.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: 1px solid var(--color-line); }
+.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: 1px solid var(--color-line); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: calc(var(--spacing) * 3); height: var(--header-h); }
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
 .logo-wm { font-family: var(--font-serif); font-size: var(--text-small); font-weight: 500; letter-spacing: 0.04em; }
@@ -282,9 +282,22 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
   .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
 }
 @keyframes reveal { from { opacity: 0; transform: translateY(16px); } }
+@keyframes fade-out { to { opacity: 0; } }
 
-/* 手机设定「减少动态」时，全站所有动态关闭 */
+/* ── 品牌语法 8：换页动态（lib/interactive.tsx 的 PageTransition 包住 <main>）──
+   旧内容很快淡出 → 新内容淡入并轻轻往上浮（跟 .reveal 同一个动态）。页首、页面其他部分不动。
+   不支援的浏览器直接换页，不影响使用。 */
+::view-transition { pointer-events: none; } /* 动画进行时，点击照样有效 */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+::view-transition-group(site-header) { animation: none; z-index: 1; }
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
+::view-transition-old(.page-exit) { animation: var(--motion-fast) var(--ease) both fade-out; }
+::view-transition-new(.page-enter) { animation: var(--motion) var(--ease) var(--motion-fast) both reveal; }
+
+/* 手机设定「减少动态」时，全站所有动态关闭（包括换页动态） */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 }

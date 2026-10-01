@@ -6,10 +6,12 @@
 // · SituationPicker 「我的情况是」选择器（/services 页）
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
 // · TeamFilter      律师团队按办事处筛选（/people 页）
+// · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
 // ═══════════════════════════════════════════════════════════════
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState, ViewTransition } from "react";
 import { whatsappLink, type Lang } from "@/lib/site";
 
 // ── 选单 ─────────────────────────────────────────
@@ -157,5 +159,16 @@ export function TeamFilter({ label, allLabel, countLabel, cities, groups }: {
         </div>
       ))}
     </div>
+  );
+}
+
+// ── 换页动态 ─────────────────────────────────────
+// 网址一变，旧内容淡出（page-exit）、新内容淡入往上浮（page-enter）。只在换页时动，第一次打开网页不动。
+export function PageTransition({ children }: { children: React.ReactNode }) {
+  const path = usePathname();
+  return (
+    <ViewTransition key={path} enter="page-enter" exit="page-exit" default="none">
+      {children}
+    </ViewTransition>
   );
 }

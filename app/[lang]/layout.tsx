@@ -10,7 +10,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { fontVariables } from "@/lib/fonts";
-import { Menu } from "@/lib/interactive";
+import { Menu, PageTransition } from "@/lib/interactive";
 import { aboutSections, common, disclaimer, firm, isLang, launched, locales, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
@@ -112,7 +112,10 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           </div>
         </header>
 
-        <main>{children}</main>
+        {/* 换页时只有 <main> 淡出淡入，页首、页脚不动 */}
+        <PageTransition>
+          <main>{children}</main>
+        </PageTransition>
 
         {/* ── 页脚 ───────────────────────────── */}
         <footer className="site-footer">
