@@ -14,7 +14,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, cityOf, common, displayName, firm, initials, isLang, lawyerCount, offices, roles, team, whatsappLink, type Bi } from "@/lib/site";
+import { cities, cityOf, common, displayName, firm, initials, isLang, lawyerCount, offices, pageMeta, roles, team, whatsappLink, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
 
@@ -116,7 +116,7 @@ const text = {
 export async function generateMetadata({ params }: PageProps<"/[lang]/about">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: text.title[lang], description: text.lead[lang] };
+  return pageMeta(lang, "/about", text.title[lang], text.lead[lang]);
 }
 
 export default async function AboutPage({ params }: PageProps<"/[lang]/about">) {

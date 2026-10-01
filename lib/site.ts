@@ -3,6 +3,8 @@
 // 多个页面 / layout 都会用到的东西只放这里，改一次全站更新。
 // ═══════════════════════════════════════════════════════════════
 
+import type { Metadata } from "next";
+
 // ── 语言 ─────────────────────────────────────────
 export const locales = ["zh", "en"] as const;
 export type Lang = (typeof locales)[number];
@@ -34,6 +36,22 @@ export const firm = {
 // 不给 message 就用上面的默认讯息；询问表格会给自己组好的讯息
 export const whatsappLink = (lang: Lang, message: string = firm.whatsappMessage[lang]) =>
   `https://wa.me/${firm.whatsapp}?text=${encodeURIComponent(message)}`;
+
+// ── 网址与搜寻引擎 ─────────────────────────────────
+// siteUrl：Vercel 自动给正式网址（连接网域后会自动变成网域）；本机开发时是 localhost
+export const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
+// launched：正式上线前保持 false → 全站不让 Google 收录（robots.txt 全部挡住 + 每页 noindex）。上线当天改成 true。
+export const launched = false;
+// 每一页的 SEO 资料：标题、说明、中英对应网址（hreflang）、分享预览（Open Graph）。path 不含语言，例如 "/about"
+export const pageMeta = (lang: Lang, path: string, title: string, description: string): Metadata => ({
+  title,
+  description,
+  alternates: { canonical: `/${lang}${path}`, languages: { "zh-Hans": `/zh${path}`, en: `/en${path}`, "x-default": `/zh${path}` } },
+  openGraph: {
+    type: "website", siteName: firm.name, locale: lang === "zh" ? "zh_MY" : "en_MY", url: `/${lang}${path}`, title, description,
+    images: [{ url: "/images/brand/og.jpg", width: 1200, height: 630, alt: firm.name }],
+  },
+});
 
 export const mapsLink = (address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${firm.name} ${address}`)}`;
@@ -179,5 +197,5 @@ export const disclaimer: Bi = {
 // ── 社交媒体（选单和页脚都用这里） ──
 export const socials: { label: string; url: string }[] = [
   { label: "Facebook", url: "https://www.facebook.com/CHAI.ASSOCIATES/" },
-  { label: "Instagram", url: "https://www.instagram.com/chai.consults/" }, // 之后改成 chai.associates
+  { label: "Instagram", url: "https://www.instagram.com/chai.associates/" },
 ];

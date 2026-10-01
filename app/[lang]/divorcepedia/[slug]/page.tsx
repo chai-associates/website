@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
-import { common, disclaimer, isLang, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { common, disclaimer, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/divorceped
   const { lang, slug } = await params;
   const a = articles.find((x) => x.slug === slug);
   if (!isLang(lang) || !a) return {};
-  return { title: a.title[lang], description: a.summary[lang] };
+  return pageMeta(lang, `/divorcepedia/${a.slug}`, a.title[lang], a.summary[lang]);
 }
 
 export default async function ArticlePage({ params }: PageProps<"/[lang]/divorcepedia/[slug]">) {

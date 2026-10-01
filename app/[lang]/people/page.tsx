@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TeamFilter } from "@/lib/interactive";
-import { cities, cityOf, common, displayName, initials, isLang, roles, team, teamGroups, whatsappLink } from "@/lib/site";
+import { cities, cityOf, common, displayName, initials, isLang, pageMeta, roles, team, teamGroups, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -35,7 +35,7 @@ const text = {
 export async function generateMetadata({ params }: PageProps<"/[lang]/people">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: common.people[lang], description: text.lead[lang] };
+  return pageMeta(lang, "/people", common.people[lang], text.lead[lang]);
 }
 
 export default async function PeoplePage({ params }: PageProps<"/[lang]/people">) {

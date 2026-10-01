@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cityOf, common, displayName, initials, isLang, roles, services, team, whatsappLink, type Bi } from "@/lib/site";
+import { cityOf, common, displayName, initials, isLang, pageMeta, roles, services, team, whatsappLink, type Bi } from "@/lib/site";
 
 type Profile = {
   admitted?: number;                         // 执业年份（只显示在标题区的资料列）
@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/people/[sl
   const { lang, slug } = await params;
   const p = team.find((x) => x.slug === slug);
   if (!isLang(lang) || !p) return {};
-  return { title: displayName(p, lang), description: text.profiles[p.slug]?.tagline?.[lang] ?? roles[p.role].label[lang] };
+  return pageMeta(lang, `/people/${p.slug}`, displayName(p, lang), text.profiles[p.slug]?.tagline?.[lang] ?? roles[p.role].label[lang]);
 }
 
 export default async function PersonPage({ params }: PageProps<"/[lang]/people/[slug]">) {

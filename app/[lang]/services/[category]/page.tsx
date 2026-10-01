@@ -7,7 +7,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { common, isLang, serviceCategories, services, whatsappLink, type Bi, type ServiceCategory } from "@/lib/site";
+import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi, type ServiceCategory } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/services/[
   const { lang, category } = await params;
   const c = serviceCategories.find((x) => x.slug === category);
   if (!isLang(lang) || !c) return {};
-  return { title: c.title[lang], description: text.intro[c.slug][lang] };
+  return pageMeta(lang, `/services/${c.slug}`, c.title[lang], text.intro[c.slug][lang]);
 }
 
 export default async function CategoryPage({ params }: PageProps<"/[lang]/services/[category]">) {

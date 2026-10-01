@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SituationPicker } from "@/lib/interactive";
-import { common, isLang, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -55,7 +55,7 @@ const text = {
 export async function generateMetadata({ params }: PageProps<"/[lang]/services">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: common.services[lang], description: text.meta.description[lang] };
+  return pageMeta(lang, "/services", common.services[lang], text.meta.description[lang]);
 }
 
 export default async function ServicesPage({ params }: PageProps<"/[lang]/services">) {

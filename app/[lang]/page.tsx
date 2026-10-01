@@ -11,7 +11,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, type Lang } from "@/lib/site";
+import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, serviceCategories, team, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -85,11 +85,8 @@ function Icon({ name, size = 20 }: { name: string; size?: number }) {
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   const l: Lang = isLang(lang) ? lang : "zh";
-  return {
-    title: { absolute: text.meta.title[l] },
-    description: text.meta.description[l],
-    alternates: { languages: { zh: "/zh", en: "/en" } },
-  };
+  // 首页标题不加「| Chai & Associates」后缀（absolute）
+  return { ...pageMeta(l, "", text.meta.title[l], text.meta.description[l]), title: { absolute: text.meta.title[l] } };
 }
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {

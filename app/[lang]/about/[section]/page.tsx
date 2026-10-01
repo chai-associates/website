@@ -11,7 +11,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { aboutSections, common, isLang, whatsappLink, type AboutSection, type Bi } from "@/lib/site";
+import { aboutSections, common, isLang, pageMeta, whatsappLink, type AboutSection, type Bi } from "@/lib/site";
 
 // 一项：date = 年份或年月；source = 媒体名称、合作单位或地点；href = 外部链接（报道原文、活动页面），没有就不填
 type Entry = { date: string; source: Bi; title: Bi; desc?: Bi; href?: string };
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/about/[sec
   const { lang, section } = await params;
   const s = aboutSections.find((x) => x.slug === section);
   if (!isLang(lang) || !s) return {};
-  return { title: s.title[lang], description: text.sections[s.slug].lead[lang] };
+  return pageMeta(lang, `/about/${s.slug}`, s.title[lang], text.sections[s.slug].lead[lang]);
 }
 
 export default async function AboutSectionPage({ params }: PageProps<"/[lang]/about/[section]">) {

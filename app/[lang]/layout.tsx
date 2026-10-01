@@ -2,21 +2,16 @@
 // 全站外框：每一页都会出现的东西只写在这里
 // · 页首（Logo、咨询按钮、选单；语言切换在选单里）
 // · 页脚（链接、社交媒体、法律声明）
-// · 字体、网页默认标题
+// · 网页默认标题、网址、搜寻引擎设定（字体在 lib/fonts.ts）
 // 页面内容写在各自的 page.tsx。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import { EB_Garamond, Noto_Sans_SC, Plus_Jakarta_Sans } from "next/font/google";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
+import { fontVariables } from "@/lib/fonts";
 import { Menu } from "@/lib/interactive";
-import { aboutSections, common, disclaimer, firm, isLang, locales, serviceCategories, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
-
-// ── 字体（变成 CSS 变量，tokens.css 里使用） ─────
-const notoSC = Noto_Sans_SC({ weight: ["400", "500", "700"], preload: false, display: "swap", variable: "--font-noto-sc" });
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-jakarta" });
-const garamond = EB_Garamond({ subsets: ["latin"], weight: ["500"], variable: "--font-garamond" });
+import { aboutSections, common, disclaimer, firm, isLang, launched, locales, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
 const text = {
@@ -51,14 +46,18 @@ const text = {
   language: { zh: "语言", en: "Language" },
 };
 
-// 预先生成 /zh 和 /en
+// 预先生成 /zh 和 /en；其他语言代码（例如 /abc）直接 404（app/global-not-found.tsx）
+export const dynamicParams = false;
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
 // 默认网页标题（每一页可以在自己的 page.tsx 覆盖）
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: { default: firm.name, template: `%s | ${firm.name}` },
+  // 上线前（lib/site.ts 的 launched = false）每一页都不让 Google 收录
+  robots: launched ? undefined : { index: false, follow: false },
 };
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
@@ -68,7 +67,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   const home = `/${lang}`;
 
   return (
-    <html lang={lang === "zh" ? "zh-Hans" : "en"} className={`${notoSC.variable} ${jakarta.variable} ${garamond.variable}`}>
+    <html lang={lang === "zh" ? "zh-Hans" : "en"} className={fontVariables}>
       <body className={`lang-${lang}`}>
         {/* ── 页首 ───────────────────────────── */}
         <header className="site-header">

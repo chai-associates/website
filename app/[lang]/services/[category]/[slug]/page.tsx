@@ -12,7 +12,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
 import { InquiryForm } from "@/lib/interactive";
-import { cities, common, isLang, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { cities, common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/services/[
   const { lang, slug } = await params;
   const s = services.find((x) => x.slug === slug);
   if (!isLang(lang) || !s) return {};
-  return { title: s.title[lang], description: (text.content[s.slug]?.intro ?? s.short)[lang] };
+  return pageMeta(lang, `/services/${s.category}/${s.slug}`, s.title[lang], (text.content[s.slug]?.intro ?? s.short)[lang]);
 }
 
 export default async function ServicePage({ params }: PageProps<"/[lang]/services/[category]/[slug]">) {

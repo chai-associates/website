@@ -12,7 +12,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, common, displayName, firm, initials, isLang, mapsLink, offices, roles, team, whatsappLink } from "@/lib/site";
+import { cities, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, team, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -35,7 +35,7 @@ const text = {
 export async function generateMetadata({ params }: PageProps<"/[lang]/locations">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: text.title[lang], description: text.lead[lang] };
+  return pageMeta(lang, "/locations", text.title[lang], text.lead[lang]);
 }
 
 export default async function LocationsPage({ params }: PageProps<"/[lang]/locations">) {

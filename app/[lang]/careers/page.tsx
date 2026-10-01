@@ -10,7 +10,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { common, firm, isLang, type Bi } from "@/lib/site";
+import { common, firm, isLang, pageMeta, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
 
@@ -69,7 +69,7 @@ const mailto = (subject: string) => `mailto:${firm.careersEmail}?subject=${encod
 export async function generateMetadata({ params }: PageProps<"/[lang]/careers">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: text.title[lang], description: text.lead[lang] };
+  return pageMeta(lang, "/careers", text.title[lang], text.lead[lang]);
 }
 
 export default async function CareersPage({ params }: PageProps<"/[lang]/careers">) {
