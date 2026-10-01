@@ -140,7 +140,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="card-grid">
               {["办理离婚", "孩子"].map((t) => (
                 <a key={t} href="#" className="photo-card reveal">
-                  <div><h3>{t}</h3><p className="mt-1 text-small">photo-card：左上标题、右下按钮</p></div>
+                  <div><h3>{t}</h3><p>photo-card：左上标题、右下按钮</p></div>
                   <span className="btn btn-light btn-sm photo-card-action">阅读详情 →</span>
                 </a>
               ))}
@@ -160,9 +160,10 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </div>
           </div>
           <div>
-            <div className="list-head"><h2>照片框</h2><span>photo-frame · 圆角裁切</span></div>
-            <div className="photo-frame aspect-[3/2] max-w-md">
-              <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="448px" />
+            <div className="list-head"><h2>照片框</h2><span>photo-frame 场景 3:2 · photo-frame-portrait 人像 4:5</span></div>
+            <div className="grid max-w-xl grid-cols-[3fr_2fr] items-start gap-4">
+              <div className="photo-frame"><Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="340px" /></div>
+              <div className="photo-frame photo-frame-portrait"><Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="230px" /></div>
             </div>
           </div>
           <div>
@@ -170,7 +171,20 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="scroll-row [--cols:3]">
               {["01", "02", "03", "04"].map((n) => <div key={n} className="card"><h3>{n}</h3><p>scroll-row 里的项目</p></div>)}
             </div>
-            <p className="muted mt-3">muted：次要文字用灰色</p>
+            <p className="scroll-hint">scroll-hint：← 左右滑动 →（只在手机显示）</p>
+            <p className="muted">muted：次要文字用灰色</p>
+          </div>
+          <div>
+            <div className="list-head"><h2>首屏与重点三栏</h2><span>hero · points（首页）</span></div>
+            <div className="hero">
+              <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折。"}</h1>
+              <p>hero：大标题 → lead 说明 → btn-outline 按钮 → 快速跳转</p>
+              <div className="btn-row"><a className="btn btn-outline" href="#">了解我们的服务 →</a></div>
+              <div className="btn-row"><a className="text-link" href="#">认识我们的团队 →</a><a className="text-link" href="#">联系我们 →</a></div>
+            </div>
+            <ul className="points mt-8">
+              {["重点 1", "重点 2", "重点 3"].map((t) => <li key={t}><strong>{t}</strong><p>points：标题 → 灰色小字</p></li>)}
+            </ul>
           </div>
           <div>
             <div className="list-head"><h2>分页选择</h2><span>tabs · 不用 JavaScript</span></div>

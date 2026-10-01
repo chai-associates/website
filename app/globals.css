@@ -66,6 +66,18 @@ p { max-width: var(--measure); }
 body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacing: -0.005em; }
 .quote figcaption { margin-top: calc(var(--spacing) * 6); color: var(--color-ink-muted); font-size: var(--text-small); font-weight: 600; }
 .quote + .text-link { margin-top: calc(var(--spacing) * 4); }
+/* 首屏（首页）：大标题 → 说明（lead）→ 按钮 → 快速跳转；几栏、比例写在首页 page.tsx */
+.hero h1 + p { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-lead); }
+.hero p + .btn-row { margin-top: calc(var(--spacing) * 6); }
+.hero .btn-row + .btn-row { margin-top: calc(var(--spacing) * 2); gap: 0 calc(var(--spacing) * 6); } /* 快速跳转：换行时上下不再加距离（链接本身已有 44px 高） */
+/* 重点三栏（首屏下方）：上下细线，每一点 = 图示 + 标题（strong）→ 灰色小字说明 */
+.points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(var(--spacing) * 4); padding: calc(var(--spacing) * 5) 0; border-block: 1px solid var(--color-line); }
+.points strong { display: flex; flex-direction: column; gap: calc(var(--spacing) * 1); font-weight: 600; }
+.points strong + p { margin-top: calc(var(--spacing) * 2); color: var(--color-ink-muted); font-size: var(--text-caption); }
+@media (min-width: 860px) {
+  .points { gap: calc(var(--spacing) * 16); }
+  .points strong { flex-direction: row; align-items: center; gap: calc(var(--spacing) * 2); }
+}
 /* 一组一组往下排（例如多个横线标题 + 内容） */
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--spacing) * 12); } /* minmax(0, 1fr)：里面的滑动列、长字不会把整页撑宽 */
 /* 正文段落（个人介绍、离婚百科文章）：段落 · 小标题 h2 · 清单 ul */
@@ -137,9 +149,11 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .photo-card > img { z-index: -2; object-fit: cover; }
 .photo-card > img { transition: transform var(--motion) var(--ease); }
 .photo-card:hover > img { transform: scale(1.03); }
+.photo-card h3 + p { margin-top: calc(var(--spacing) * 1); font-size: var(--text-small); }
 .photo-card-action { align-self: flex-end; }
-/* 照片框：圆角裁切的照片 */
-.photo-frame { position: relative; overflow: hidden; border-radius: var(--radius-md); background: var(--color-subtle); }
+/* 照片框：圆角裁切的照片。品牌语法 6：默认场景 3:2；加 photo-frame-portrait = 人像 4:5 */
+.photo-frame { position: relative; overflow: hidden; aspect-ratio: 3 / 2; border-radius: var(--radius-md); background: var(--color-subtle); }
+.photo-frame-portrait { aspect-ratio: 4 / 5; }
 .photo-frame > img { object-fit: cover; }
 
 /* ── 积木：人物卡片（照片 4:5 → 名字 → 职位 → 办事处 · 语言） ── */
@@ -193,8 +207,11 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .scroll-row { display: grid; grid-auto-flow: column; grid-auto-columns: 76%; gap: calc(var(--spacing) * 4); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .scroll-row::-webkit-scrollbar { display: none; }
 .scroll-row > * { scroll-snap-align: start; }
+/* 滑动提示：只在手机显示（电脑是网格，不用滑） */
+.scroll-row + .scroll-hint { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-caption); }
 @media (min-width: 860px) {
   .scroll-row { grid-auto-flow: row; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); overflow: visible; }
+  .scroll-hint { display: none; }
 }
 
 /* ── 积木：分页选择（例如城市）──────────────────────

@@ -3,17 +3,15 @@
 // ───────────────────────────────────────────────────────────────
 // 区块顺序：① 首屏  ② 服务范围  ③ 我们的团队  ④ 联系我们
 //   用 Cmd + F 搜「① 首屏」等标题就能跳到该区块。
-// 样式规则：
-// · 颜色 / 字号 / 间距 只用 tokens（例如 text-ink-muted、text-lead、gap-4、md:gap-12）
-//   字号是流体的，会跟着荧幕大小自动缩放，不需要另外写手机版 / 电脑版字号
-// · 共用积木（按钮、卡片、照片卡片、滑动列）来自 globals.css
-// · 只属于这一页的调整（几栏、比例、位置）直接写在下面的 className
+// 样式规则（跟其他页一样）：
+// · 视觉样式只用 globals.css 的积木（hero、points、photo-card、scroll-row、tabs……）
+// · 只属于这一页的排版（几栏、比例、位置、高度）直接写在下面的 className
 // 律所资料、服务清单、办事处来自 lib/site.ts（全站共用）。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, whatsappLink, type Lang } from "@/lib/site";
+import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -34,18 +32,18 @@ const text = {
       zh: "离婚、抚养权、赡养费与财产分割，我们用清楚易懂的方式陪你处理每一步。",
       en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",
     },
-    cta: { zh: "预约咨询", en: "Get in Touch" },
+    cta: { zh: "了解我们的服务", en: "Explore Our Services" },
     jumps: [
-      { href: "#services", label: { zh: "查看服务范围", en: "Our services" } },
       { href: "#people", label: { zh: "认识我们的团队", en: "Meet our people" } },
       { href: "#contact", label: { zh: "联系我们", en: "Find an office" } },
     ],
     image: "/images/hero/hero-bg.jpg",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
+    // 首屏 3 点：⚠ 占位，照「律所问卷」B5 的答案替换（图示也按内容换：award / receipt / lock，或在下面 Icon 加新的）
     points: [
-      { icon: "award", title: { zh: "多年经验", en: "Experienced" }, desc: { zh: "专注离婚与家事案件，熟悉每一个程序。", en: "Focused on divorce and family matters." } },
-      { icon: "receipt", title: { zh: "收费透明", en: "Clear fees" }, desc: { zh: "开始之前先说明费用，清楚明白。", en: "Costs explained before we begin." } },
-      { icon: "lock", title: { zh: "隐私保密", en: "Confidential" }, desc: { zh: "所有咨询内容都严格保密。", en: "Every conversation stays private." } },
+      { icon: "award", title: { zh: "[B5 第 1 点]", en: "[B5 point 1]" }, desc: { zh: "[一句话说明]", en: "[One-line description]" } },
+      { icon: "receipt", title: { zh: "[B5 第 2 点]", en: "[B5 point 2]" }, desc: { zh: "[一句话说明]", en: "[One-line description]" } },
+      { icon: "lock", title: { zh: "[B5 第 3 点]", en: "[B5 point 3]" }, desc: { zh: "[一句话说明]", en: "[One-line description]" } },
     ],
   },
 
@@ -53,7 +51,6 @@ const text = {
   services: {
     tag: { zh: "服务范围", en: "Our services" },
     title: { zh: "我们可以怎么帮你", en: "How we can help" },
-    more: { zh: "了解", en: "Learn more" },
   },
 
   // ③ 我们的团队（成员资料在 lib/site.ts 的 team）
@@ -103,37 +100,37 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   return (
     <>
       {/* ═════════ ① 首屏 ═════════
-          占满第一个画面（扣掉页首），底部让出浮动 WhatsApp 按钮的位置。
-          左文字 : 右照片 = 1.618 : 1（黄金比例），手机和电脑都左右并排。 */}
-      <section className="flex min-h-[calc(100svh-var(--header-h))] py-6">
-        <div className="container flex flex-col gap-8">
-          <div className="grid flex-1 grid-cols-[1.618fr_1fr] gap-3 md:gap-12">
-            <div className="flex min-w-0 flex-col justify-center">
+          占满第一个画面（扣掉页首）。左文字 : 右照片 = 1.618 : 1（黄金比例），手机和电脑都左右并排。
+          照片用人像 4:5（photo-frame-portrait），窄栏里也看得清楚。 */}
+      <section className="hero flex min-h-[calc(100svh-var(--header-h))] py-6">
+        <div className="container flex flex-col justify-center gap-8">
+          <div className="grid grid-cols-[1.618fr_1fr] items-center gap-3 md:gap-12">
+            <div className="min-w-0">
               <h1>{hero.title[lang]}</h1>
-              <p className="muted mt-3 text-lead">{hero.sub[lang]}</p>
-              <div className="mt-6">
-                <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">
+              <p>{hero.sub[lang]}</p>
+              <div className="btn-row">
+                <Link className="btn btn-outline" href={`/${lang}/services`}>
                   {hero.cta[lang]} <Icon name="arrow" size={18} />
-                </a>
+                </Link>
               </div>
-              <nav className="mt-3 flex flex-col items-start md:flex-row md:gap-6" aria-label={lang === "zh" ? "快速跳转" : "Jump to"}>
+              <nav className="btn-row" aria-label={lang === "zh" ? "快速跳转" : "Jump to"}>
                 {hero.jumps.map((j) => (
-                  <a key={j.href} className="text-link text-small" href={j.href}>{j.label[lang]} <Icon name="arrow" size={16} /></a>
+                  <a key={j.href} className="text-link" href={j.href}>{j.label[lang]} <Icon name="arrow" size={16} /></a>
                 ))}
               </nav>
             </div>
 
-            <div className="photo-frame min-w-0">
-              {/* objectPosition：照片焦点，保证手机窄框里律师在画面内 */}
+            <div className="photo-frame photo-frame-portrait min-w-0">
+              {/* objectPosition：照片焦点，保证窄框里律师在画面内 */}
               <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="40vw" style={{ objectPosition: "30% 25%" }} />
             </div>
           </div>
 
-          <ul className="grid grid-cols-3 gap-4 border-y border-line py-5 md:gap-16">
+          <ul className="points">
             {hero.points.map((p) => (
               <li key={p.icon} className="min-w-0">
-                <p className="flex flex-col gap-1 text-body font-semibold md:flex-row md:items-center md:gap-2"><Icon name={p.icon} /> {p.title[lang]}</p>
-                <p className="muted mt-2 text-caption">{p.desc[lang]}</p>
+                <strong><Icon name={p.icon} /> {p.title[lang]}</strong>
+                <p>{p.desc[lang]}</p>
               </li>
             ))}
           </ul>
@@ -155,9 +152,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
                 <div>
                   <h3>{c.title[lang]}</h3>
-                  <p className="mt-1 text-small">{c.short[lang]}</p>
+                  <p>{c.short[lang]}</p>
                 </div>
-                <span className="btn btn-light btn-sm photo-card-action">{text.services.more[lang]} <Icon name="arrow" size={16} /></span>
+                <span className="btn btn-light btn-sm photo-card-action">{common.readMore[lang]} <Icon name="arrow" size={16} /></span>
               </Link>
             ))}
           </div>
@@ -184,7 +181,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               </Link>
             ))}
           </div>
-          <p className="muted mt-3 text-caption md:hidden">{people.swipe[lang]}</p>
+          <p className="scroll-hint">{people.swipe[lang]}</p>
         </div>
       </section>
 
@@ -195,7 +192,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <div className="section-head">
             <p className="tag">{contact.tag[lang]}</p>
             <h2>{contact.title[lang]}</h2>
-            <p className="muted mt-2 text-lead">{firm.hours[lang]}</p>
+            <p>{firm.hours[lang]}</p>
           </div>
 
           {/* 选城市：选中的变黑底，下面只显示该城市的办事处（不需要 JavaScript） */}
