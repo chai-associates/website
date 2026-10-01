@@ -13,7 +13,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, firm, isLang, mapsLink, offices, services, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { cities, firm, isLang, mapsLink, offices, serviceCategories, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -159,14 +159,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <p className="tag">{text.services.tag[lang]}</p>
             <h2>{text.services.title[lang]}</h2>
           </div>
-          {/* 卡片宽度至少 300px，自动决定一行几张（手机 1 张、平板 2 张、电脑 3 张），比例固定 3:2 */}
+          {/* 5 个服务分类（内容在 lib/site.ts）· 卡片宽度至少 300px，自动决定一行几张，比例固定 3:2 */}
           <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4">
-            {services.map((s) => (
-              <Link key={s.slug} href={`/${lang}/${s.slug}`} className="photo-card aspect-[3/2]">
-                {s.image && <Image src={s.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+            {serviceCategories.map((c) => (
+              <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card aspect-[3/2]">
+                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
                 <div>
-                  <h3>{s.title[lang]}</h3>
-                  <p className="mt-1 text-small">{s.short[lang]}</p>
+                  <h3>{c.title[lang]}</h3>
+                  <p className="mt-1 text-small">{c.short[lang]}</p>
                 </div>
                 <span className="btn btn-light btn-sm photo-card-action">{text.services.more[lang]} <Icon name="arrow" size={16} /></span>
               </Link>

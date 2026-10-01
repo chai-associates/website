@@ -44,16 +44,46 @@ export const offices: { city: string; name: Bi; address: string; phone: string; 
   { city: "mlk", name: { zh: "Ayer Keroh", en: "Ayer Keroh" }, address: "No. 27-2, Jalan PPPS 1, Pusat Perniagaan Putra Sentosa, 75150 Ayer Keroh, Melaka", phone: "+6062337189", phoneDisplay: "+606-233 7189" },
 ];
 
-// ── 服务清单（首页卡片、选单、页脚、以后的服务页都读这里） ──
-// href：以后每项服务都有自己的页面，例如 /zh/joint-petition
+// ── 离婚服务：5 个分类（首页卡片、选单、服务页都读这里） ──
+// 网址：/services（全部）→ /services/分类 → /services/分类/服务
 // image：照片放进 public/images/services/ 后，把 null 改成路径
-export const services: { slug: string; title: Bi; short: Bi; image: string | null }[] = [
-  { slug: "joint-petition", title: { zh: "协议离婚", en: "Joint Petition" }, short: { zh: "双方同意离婚及所有条件", en: "When you both agree on everything" }, image: null },
-  { slug: "single-petition", title: { zh: "单方面离婚", en: "Single Petition" }, short: { zh: "对方不同意离婚时", en: "When your spouse won't agree" }, image: null },
-  { slug: "custody", title: { zh: "抚养权与探视权", en: "Custody & Access" }, short: { zh: "孩子的监护与探视安排", en: "Arrangements for your children" }, image: null },
-  { slug: "maintenance", title: { zh: "赡养费与抚养费", en: "Maintenance" }, short: { zh: "配偶及子女抚养费", en: "Spousal & child maintenance" }, image: null },
-  { slug: "matrimonial-assets", title: { zh: "夫妻财产分割", en: "Matrimonial Assets" }, short: { zh: "房产、存款及婚内资产", en: "Your home, savings and assets" }, image: null },
-  { slug: "annulment", title: { zh: "婚姻无效申请", en: "Annulment" }, short: { zh: "无效或可撤销婚姻", en: "Void & voidable marriages" }, image: null },
+export const serviceCategories = [
+  { slug: "divorce", title: { zh: "办理离婚", en: "Getting Divorced" }, short: { zh: "协议、单方面、外遇与婚姻无效", en: "Joint, single, adultery and annulment" }, image: null as string | null },
+  { slug: "children", title: { zh: "孩子", en: "Children" }, short: { zh: "抚养权、探视权与抚养费", en: "Custody, access and child maintenance" }, image: null as string | null },
+  { slug: "finances", title: { zh: "财产与赡养费", en: "Money & Property" }, short: { zh: "赡养费、财产分配与欠债", en: "Maintenance, assets and debts" }, image: null as string | null },
+  { slug: "after-divorce", title: { zh: "离婚之后", en: "After Divorce" }, short: { zh: "执行、修改法庭令与婚姻状况证明", en: "Enforcing and changing orders, marital status" }, image: null as string | null },
+  { slug: "separation", title: { zh: "分居与保护", en: "Separation & Protection" }, short: { zh: "分居协议、家暴保护令与调解", en: "Separation deeds, protection orders, mediation" }, image: null as string | null },
+] as const;
+export type ServiceCategory = (typeof serviceCategories)[number]["slug"];
+
+// ── 每一项服务（category = 属于哪个分类；不要的直接删掉那一行） ──
+export const services: { slug: string; category: ServiceCategory; title: Bi; short: Bi }[] = [
+  // 办理离婚
+  { slug: "joint-petition", category: "divorce", title: { zh: "协议离婚", en: "Joint Petition" }, short: { zh: "双方同意离婚及所有条件", en: "When you both agree on everything" } },
+  { slug: "single-petition", category: "divorce", title: { zh: "单方面离婚", en: "Single Petition" }, short: { zh: "对方不同意离婚时", en: "When your spouse won't agree" } },
+  { slug: "responding", category: "divorce", title: { zh: "收到离婚申请", en: "Responding to a Petition" }, short: { zh: "对方已经提出离婚，你要怎么回应", en: "When your spouse has filed for divorce" } },
+  { slug: "adultery", category: "divorce", title: { zh: "外遇与索赔", en: "Adultery & Claims" }, short: { zh: "因外遇离婚，并向对方或第三者索赔", en: "Divorce on adultery and claims for damages" } },
+  { slug: "annulment", category: "divorce", title: { zh: "婚姻无效", en: "Annulment" }, short: { zh: "无效或可撤销的婚姻", en: "Void and voidable marriages" } },
+  { slug: "foreigner-divorce", category: "divorce", title: { zh: "外籍人士离婚", en: "Divorce for Foreigners" }, short: { zh: "外籍人士在马来西亚申请离婚", en: "Divorcing in Malaysia as a foreigner" } },
+  // 孩子
+  { slug: "custody", category: "children", title: { zh: "抚养权与监护权", en: "Custody & Guardianship" }, short: { zh: "孩子跟谁住、由谁做决定", en: "Who the children live with and who decides" } },
+  { slug: "access", category: "children", title: { zh: "探视权", en: "Access" }, short: { zh: "没有抚养权的一方如何探望孩子", en: "Time with your children after separation" } },
+  { slug: "child-maintenance", category: "children", title: { zh: "子女抚养费", en: "Child Maintenance" }, short: { zh: "孩子的生活与教育费用", en: "Support for your children's needs" } },
+  { slug: "adoption", category: "children", title: { zh: "领养", en: "Adoption" }, short: { zh: "合法领养孩子的程序", en: "The legal process of adoption" } },
+  // 财产与赡养费
+  { slug: "spousal-maintenance", category: "finances", title: { zh: "配偶赡养费", en: "Spousal Maintenance" }, short: { zh: "离婚后配偶的生活费", en: "Financial support after divorce" } },
+  { slug: "matrimonial-assets", category: "finances", title: { zh: "婚姻财产分配", en: "Division of Matrimonial Assets" }, short: { zh: "房产、存款、公积金及婚内资产", en: "Your home, savings, EPF and assets" } },
+  { slug: "debt-recovery", category: "finances", title: { zh: "追讨欠债", en: "Recovering Debts" }, short: { zh: "在离婚申请中一并追讨欠款", en: "Claiming debts within the divorce" } },
+  { slug: "prenup", category: "finances", title: { zh: "婚前协议", en: "Prenuptial Agreement" }, short: { zh: "结婚前先定好财产安排", en: "Agreeing finances before marriage" } },
+  // 离婚之后
+  { slug: "enforcement", category: "after-divorce", title: { zh: "执行法庭令", en: "Enforcing Court Orders" }, short: { zh: "对方不付赡养费或不遵守探视安排", en: "When orders are not being followed" } },
+  { slug: "variation", category: "after-divorce", title: { zh: "修改法庭令", en: "Varying Court Orders" }, short: { zh: "情况改变时，修改抚养权或赡养费", en: "When circumstances change after an order" } },
+  { slug: "foreign-divorce", category: "after-divorce", title: { zh: "外国离婚令承认", en: "Recognition of Foreign Divorce" }, short: { zh: "在国外离婚，在马来西亚更新婚姻状况", en: "Registering an overseas divorce in Malaysia" } },
+  { slug: "single-status", category: "after-divorce", title: { zh: "单身证明", en: "Single Status Certificate" }, short: { zh: "再婚或办理文件所需的婚姻状况证明", en: "Proof of marital status for remarriage or applications" } },
+  // 分居与保护
+  { slug: "deed-of-separation", category: "separation", title: { zh: "分居协议", en: "Deed of Separation" }, short: { zh: "暂不离婚，先定好分居安排", en: "Living apart without divorcing yet" } },
+  { slug: "protection-order", category: "separation", title: { zh: "家暴保护令", en: "Domestic Violence Protection Order" }, short: { zh: "保护你与孩子的人身安全", en: "Keeping you and your children safe" } },
+  { slug: "mediation", category: "separation", title: { zh: "调解", en: "Mediation" }, short: { zh: "不上法庭，协商解决", en: "Resolving matters without court" } },
 ];
 
 // ── 法律声明（页脚、以后的服务页和文章页共用） ──
@@ -62,7 +92,8 @@ export const disclaimer: Bi = {
   en: "The content on this website is general information only. It is not legal advice and does not create a lawyer–client relationship.",
 };
 
-// ── 社交媒体（有网址才会显示在页脚） ──
+// ── 社交媒体（选单和页脚都用这里） ──
 export const socials: { label: string; url: string }[] = [
-  // { label: "Facebook", url: "https://www.facebook.com/..." },
+  { label: "Facebook", url: "https://www.facebook.com/CHAI.ASSOCIATES/" },
+  { label: "Instagram", url: "https://www.instagram.com/chai.consults/" }, // 之后改成 chai.associates
 ];

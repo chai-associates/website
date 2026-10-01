@@ -107,12 +107,19 @@ p { max-width: var(--measure); }
 .menu[data-open="true"] .menu-panel { transform: none; visibility: visible; }
 .menu[data-open="true"] .menu-panel > * { opacity: 1; transform: none; transition-delay: 0.12s; }
 .menu-links { display: flex; flex-direction: column; }
-.menu-links a { display: flex; align-items: center; min-height: var(--tap); border-bottom: 1px solid var(--color-line); font-size: var(--text-subtitle); font-weight: 600; }
+/* 第一层：直接进页面的链接 + 可展开的母目录，长得一样 */
+.menu-links > a, .menu-group > summary { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap); border-bottom: 1px solid var(--color-line); font-size: var(--text-lead); font-weight: 600; cursor: pointer; list-style: none; }
+.menu-group > summary::-webkit-details-marker { display: none; }
+.menu-group > summary::after { content: "+"; font-size: var(--text-title); font-weight: 300; line-height: 1; transition: transform 0.25s ease; }
+.menu-group[open] > summary::after { transform: rotate(45deg); }
+/* 第二层：子目录 */
+.menu-sub { display: flex; flex-direction: column; padding: calc(var(--spacing) * 2) 0; border-bottom: 1px solid var(--color-line); }
+.menu-sub a { display: flex; align-items: center; min-height: var(--tap-min); padding-left: calc(var(--spacing) * 4); font-size: var(--text-body); color: var(--color-ink-muted); }
 .lang-switch { display: flex; align-self: flex-start; padding: calc(var(--spacing) * 1); border-radius: 999px; background: var(--color-subtle); }
 .lang-switch a { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 calc(var(--spacing) * 4); border-radius: 999px; font-size: var(--text-small); font-weight: 600; color: var(--color-ink-muted); white-space: nowrap; }
 .lang-switch a[aria-current="true"] { background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-soft); }
 @media (prefers-reduced-motion: reduce) {
-  .menu-btn span, .menu-backdrop, .menu-panel, .menu-panel > * { transition: none; }
+  .menu-btn span, .menu-backdrop, .menu-panel, .menu-panel > *, .menu-group > summary::after { transition: none; }
 }
 
 /* ── 外框：页脚 ─────────────────────────────────── */
