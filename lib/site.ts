@@ -10,7 +10,7 @@ export type Bi = { zh: string; en: string }; // 中英对照文字
 export const isLang = (v: string): v is Lang => (locales as readonly string[]).includes(v);
 
 // ── 律所 ─────────────────────────────────────────
-// ⚠ founded、phone、email、tagline 是示范资料（律师人数由 team 自动算），等律所问卷 A 部分回来后替换
+// ⚠ founded、phone、email、careersEmail、tagline 是示范资料（律师人数由 team 自动算），等律所问卷 A 部分回来后替换
 export const firm = {
   name: "Chai & Associates",
   nameZh: "律师事务所",
@@ -18,6 +18,7 @@ export const firm = {
   phone: "+60194774149",
   phoneDisplay: "+6019-477 4149",
   email: "enquiry@chaiassociates.com.my",
+  careersEmail: "careers@chaiassociates.com.my", // 招聘电邮（加入我们页）
   tagline: { zh: "专注家事法律，陪你走过人生转折。", en: "Family law, handled with care." },
   whatsapp: "60194774149", // 国际格式，不加 + 或空格
   whatsappMessage: {
