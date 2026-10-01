@@ -145,6 +145,15 @@ export const services: { slug: string; category: ServiceCategory; title: Bi; sho
   { slug: "mediation", category: "separation", title: { zh: "调解", en: "Mediation" }, short: { zh: "不上法庭，协商解决", en: "Resolving matters without court" } },
 ];
 
+// ── 关于我们的子页面（选单、/about/[section] 都读这里）：对应「律所问卷」Tab 6–8 ──
+// 网址：/about/media、/about/community、/about/events；内容写在 app/[lang]/about/[section]/page.tsx
+export const aboutSections = [
+  { slug: "media", title: { zh: "媒体报道", en: "In the Media" } },
+  { slug: "community", title: { zh: "公益活动", en: "Community" } },
+  { slug: "events", title: { zh: "活动与讲座", en: "Events & Talks" } },
+] as const;
+export type AboutSection = (typeof aboutSections)[number]["slug"];
+
 // ── 多个页面共用的文字（选单、面包屑、页尾的「不是你的情况？」） ──
 export const common = {
   home: { zh: "首页", en: "Home" },

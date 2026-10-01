@@ -11,7 +11,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { Menu } from "@/lib/interactive";
-import { common, disclaimer, firm, isLang, locales, serviceCategories, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { aboutSections, common, disclaimer, firm, isLang, locales, serviceCategories, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 字体（变成 CSS 变量，tokens.css 里使用） ─────
 const notoSC = Noto_Sans_SC({ weight: ["400", "500", "700"], preload: false, display: "swap", variable: "--font-noto-sc" });
@@ -37,6 +37,7 @@ const text = {
         { href: "/about#firm", label: { zh: "律所简介", en: "Our Firm" } },
         { href: "/about#values", label: { zh: "我们的理念", en: "Our Values" } },
         { href: "/about#recognitions", label: { zh: "荣誉与认可", en: "Recognitions" } },
+        ...aboutSections.map((s) => ({ href: `/about/${s.slug}`, label: s.title })),
       ],
     },
     { href: "/people", label: { zh: "律师团队", en: "People" } },
