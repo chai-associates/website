@@ -1,14 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 你需要知道的（只写到重点）+ 常见问题（左）+ ③ 询问表格（右侧栏）
+// 区块顺序：① 标题  ② 你需要知道的（只写到重点）+ 相关文章（左）+ ③ 询问表格（右侧栏）
 //          ④ 不是你的情况？  ⑤ 相关服务
-// 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content，常见问题写在 text.faq。
-// 还没写内容的服务会显示「内容准备中」；没有常见问题的服务，那一段自动隐藏。
+// 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
+// 相关文章读 lib/divorcepedia.ts（文章的 services 有这项服务就会出现）；没有相关文章，那一段自动隐藏。
+// 还没写内容的服务会显示「内容准备中」。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { articles } from "@/lib/divorcepedia";
 import { InquiryForm } from "@/lib/interactive";
 import { cities, common, isLang, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
 
@@ -53,20 +55,8 @@ const text = {
       ],
     },
   } as Record<string, { intro: Bi; points: Bi[] }>,
-  // ② 常见问题（key = 服务的 slug），对应「律所问卷」Tab 10。⚠ 下面是占位，等问卷回来后照题目替换
-  faq: {
-    "joint-petition": [
-      { q: { zh: "[常见问题 1，例如：协议离婚大概需要多久？]", en: "[Question 1, e.g. how long does a joint petition take?]" }, a: { zh: "[答案，由律所提供]", en: "[Answer, provided by the firm]" } },
-      { q: { zh: "[常见问题 2]", en: "[Question 2]" }, a: { zh: "[答案，由律所提供]", en: "[Answer, provided by the firm]" } },
-    ],
-    "single-petition": [
-      { q: { zh: "[常见问题 1]", en: "[Question 1]" }, a: { zh: "[答案，由律所提供]", en: "[Answer, provided by the firm]" } },
-    ],
-    "custody": [
-      { q: { zh: "[常见问题 1]", en: "[Question 1]" }, a: { zh: "[答案，由律所提供]", en: "[Answer, provided by the firm]" } },
-    ],
-  } as Record<string, { q: Bi; a: Bi }[]>,
-  faqTitle: { zh: "常见问题", en: "Frequently asked questions" },
+  reads: { zh: "相关文章", en: "Related reading" },
+  allReads: { zh: "离婚百科", en: "Divorcepedia" },
   pending: { zh: "这项服务的详细说明正在准备中。你可以先用下面的表格，把情况发给律师。", en: "Details for this service are being prepared. In the meantime, send your situation to a lawyer using the form below." },
   know: { zh: "你需要知道的", en: "What you need to know" },
 
@@ -108,7 +98,7 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
   const c = serviceCategories.find((x) => x.slug === category);
   if (!isLang(lang) || !s || !c) notFound();
   const content = text.content[s.slug];
-  const faq = text.faq[s.slug] ?? [];
+  const reads = articles.filter((a) => a.services.includes(s.slug));
   const related = services.filter((x) => x.category === s.category && x.slug !== s.slug).slice(0, 3);
 
   return (
@@ -141,17 +131,15 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
                 <p className="muted">{text.pending[lang]}</p>
               )}
             </div>
-            {faq.length > 0 && (
+            {reads.length > 0 && (
               <div>
-                <div className="list-head"><h2>{text.faqTitle[lang]}</h2></div>
-                <div className="faq">
-                  {faq.map((f) => (
-                    <details key={f.q.zh}>
-                      <summary>{f.q[lang]}</summary>
-                      <p>{f.a[lang]}</p>
-                    </details>
-                  ))}
+                <div className="list-head">
+                  <h2>{text.reads[lang]}</h2>
+                  <Link className="text-link" href={`/${lang}/divorcepedia`}>{text.allReads[lang]} →</Link>
                 </div>
+                <ul className="rule-list">
+                  {reads.map((a) => <li key={a.slug}><Link className="text-link" href={`/${lang}/divorcepedia/${a.slug}`}>{a.title[lang]} →</Link></li>)}
+                </ul>
               </div>
             )}
           </div>
