@@ -131,7 +131,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="list-head"><h2>照片卡片</h2><span>场景 3:2</span></div>
             <div className="card-grid">
               {["办理离婚", "孩子"].map((t) => (
-                <a key={t} href="#" className="photo-card aspect-[3/2] reveal">
+                <a key={t} href="#" className="photo-card reveal">
                   <div><h3>{t}</h3><p className="mt-1 text-small">photo-card：左上标题、右下按钮</p></div>
                   <span className="btn btn-light btn-sm photo-card-action">阅读详情 →</span>
                 </a>
@@ -139,8 +139,8 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </div>
           </div>
           <div>
-            <div className="list-head"><h2>人物卡片</h2><span>人像 4:5</span></div>
-            <div className="card-grid">
+            <div className="list-head"><h2>人物卡片</h2><span>人像 4:5 · 手机 2 栏、电脑 4 栏</span></div>
+            <div className="person-grid">
               {text.people.map((p) => (
                 <article key={p.initials} className="person-card reveal">
                   <div className="person-photo">{p.initials}</div>

@@ -10,8 +10,15 @@ export type Bi = { zh: string; en: string }; // 中英对照文字
 export const isLang = (v: string): v is Lang => (locales as readonly string[]).includes(v);
 
 // ── 律所 ─────────────────────────────────────────
+// ⚠ founded、phone、email、tagline 是示范资料（律师人数由 team 自动算），等律所问卷 A 部分回来后替换
 export const firm = {
   name: "Chai & Associates",
+  nameZh: "律师事务所",
+  founded: 2010, // 页脚和关于我们显示「Est. 2010」
+  phone: "+60194774149",
+  phoneDisplay: "+6019-477 4149",
+  email: "enquiry@chaiassociates.com.my",
+  tagline: { zh: "专注家事法律，陪你走过人生转折。", en: "Family law, handled with care." },
   whatsapp: "60194774149", // 国际格式，不加 + 或空格
   whatsappMessage: {
     zh: "你好，我想预约咨询离婚相关问题。",
@@ -38,17 +45,19 @@ export const cities: { id: string; label: Bi; full: Bi }[] = [
   { id: "mlk", label: { zh: "马六甲", en: "Melaka" }, full: { zh: "马六甲", en: "Melaka" } },
 ];
 
-export const offices: { city: string; name: Bi; address: string; phone: string; phoneDisplay: string }[] = [
-  { city: "jb", name: { zh: "Taman Impian Emas（士姑来）", en: "Taman Impian Emas (Skudai)" }, address: "241, Jalan Impian Emas 22, Taman Impian Emas, 81300 Skudai, Johor", phone: "+60194774149", phoneDisplay: "+6019-477 4149" },
-  { city: "jb", name: { zh: "Eko Galleria（依斯干达公主城）", en: "Eko Galleria (Iskandar Puteri)" }, address: "B-05-36, Blok B, Eko Galleria, Persiaran Eko Botani, 79100 Iskandar Puteri, Johor", phone: "+6075853008", phoneDisplay: "+607-585 3008" },
-  { city: "jb", name: { zh: "Bandar Jaya Putra", en: "Bandar Jaya Putra" }, address: "12-01 & 12-02, Jalan Jaya Putra 7/2, Bandar Jaya Putra, 81100 Johor Bahru, Johor", phone: "+6073614666", phoneDisplay: "+607-361 4666" },
-  { city: "kl", name: { zh: "八打灵再也 Taman Sea", en: "Petaling Jaya (Taman Sea)" }, address: "51-03, Jalan SS 23/15, Taman Sea, 47400 Petaling Jaya, Selangor", phone: "+60378869672", phoneDisplay: "+603-7886 9672" },
-  { city: "mlk", name: { zh: "Ayer Keroh", en: "Ayer Keroh" }, address: "No. 27-2, Jalan PPPS 1, Pusat Perniagaan Putra Sentosa, 75150 Ayer Keroh, Melaka", phone: "+6062337189", phoneDisplay: "+606-233 7189" },
+// id：办事处编号（团队成员用它指定在哪一间）
+export const offices: { id: string; city: string; name: Bi; address: string; phone: string; phoneDisplay: string }[] = [
+  { id: "impian-emas", city: "jb", name: { zh: "Taman Impian Emas（士姑来）", en: "Taman Impian Emas (Skudai)" }, address: "241, Jalan Impian Emas 22, Taman Impian Emas, 81300 Skudai, Johor", phone: "+60194774149", phoneDisplay: "+6019-477 4149" },
+  { id: "eko-galleria", city: "jb", name: { zh: "Eko Galleria（依斯干达公主城）", en: "Eko Galleria (Iskandar Puteri)" }, address: "B-05-36, Blok B, Eko Galleria, Persiaran Eko Botani, 79100 Iskandar Puteri, Johor", phone: "+6075853008", phoneDisplay: "+607-585 3008" },
+  { id: "jaya-putra", city: "jb", name: { zh: "Bandar Jaya Putra", en: "Bandar Jaya Putra" }, address: "12-01 & 12-02, Jalan Jaya Putra 7/2, Bandar Jaya Putra, 81100 Johor Bahru, Johor", phone: "+6073614666", phoneDisplay: "+607-361 4666" },
+  { id: "taman-sea", city: "kl", name: { zh: "八打灵再也 Taman Sea", en: "Petaling Jaya (Taman Sea)" }, address: "51-03, Jalan SS 23/15, Taman Sea, 47400 Petaling Jaya, Selangor", phone: "+60378869672", phoneDisplay: "+603-7886 9672" },
+  { id: "ayer-keroh", city: "mlk", name: { zh: "Ayer Keroh", en: "Ayer Keroh" }, address: "No. 27-2, Jalan PPPS 1, Pusat Perniagaan Putra Sentosa, 75150 Ayer Keroh, Melaka", phone: "+6062337189", phoneDisplay: "+606-233 7189" },
 ];
 
 // ── 团队（首页、律师团队页、以后的个人页、办事处页都读这里） ──
 // 职位 → 属于哪一组。法律支援团队（助理、实习律师）不能放在「律师」组（律师公会规定）。
 export const roles = {
+  "managing-partner": { group: "partners", label: { zh: "主管合伙人", en: "Managing Partner" } },
   "partner": { group: "partners", label: { zh: "合伙人", en: "Partner" } },
   "consultant": { group: "partners", label: { zh: "顾问律师", en: "Consultant" } },
   "senior-associate": { group: "lawyers", label: { zh: "资深律师", en: "Senior Associate" } },
@@ -63,17 +72,31 @@ export const teamGroups = [
   { id: "support", title: { zh: "法律支援团队", en: "Legal Support" } },
 ] as const;
 
-// 每一位成员（顺序 = 显示顺序）。⚠ 以下是占位，等律所提供真实资料后替换。
-// city：所属城市（对应上面的 cities）· services：负责的服务（服务的 slug，个人页用）
+// 每一位成员（顺序 = 显示顺序）。对应「律师问卷」第 1–3 部分。
+// ⚠ 以下是示范资料（名字取自设计稿），上线前全部换成律所的真实资料。
+// office：所在办事处（上面 offices 的 id）· honorific：Dato'、Dr 等，没有就不填
+// services：负责的服务（服务的 slug）· lead：主要领域（会排第一并加黑）
 // image：照片放进 public/images/people/ 后填上路径（人像 4:5）
-export const team: { slug: string; name: Bi; role: Role; city: string; languages: Bi; services: string[]; image: string | null }[] = [
-  { slug: "partner-1", name: { zh: "律师姓名", en: "Partner Name" }, role: "partner", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: ["joint-petition", "custody", "matrimonial-assets"], image: null },
-  { slug: "consultant-1", name: { zh: "律师姓名", en: "Consultant Name" }, role: "consultant", city: "kl", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
-  { slug: "senior-associate-1", name: { zh: "律师姓名", en: "Senior Associate" }, role: "senior-associate", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
-  { slug: "senior-associate-2", name: { zh: "律师姓名", en: "Senior Associate" }, role: "senior-associate", city: "mlk", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
-  { slug: "associate-1", name: { zh: "律师姓名", en: "Associate Name" }, role: "associate", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
-  { slug: "associate-2", name: { zh: "律师姓名", en: "Associate Name" }, role: "associate", city: "kl", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+type Member = { slug: string; honorific?: string; name: Bi; role: Role; office: string; languages: Bi; services: string[]; lead?: string; image: string | null };
+const EN_ZH = { zh: "English · 华语", en: "English · Mandarin" };
+export const team: Member[] = [
+  { slug: "lim-hui-ying", name: { zh: "林慧盈", en: "Lim Hui Ying" }, role: "managing-partner", office: "impian-emas", languages: { zh: "English · 华语 · 粤语", en: "English · Mandarin · Cantonese" }, services: ["custody", "matrimonial-assets", "joint-petition", "single-petition"], lead: "custody", image: null },
+  { slug: "tan-kok-wai", name: { zh: "陈国伟", en: "Tan Kok Wai" }, role: "partner", office: "taman-sea", languages: { zh: "English · 华语 · 福建话", en: "English · Mandarin · Hokkien" }, services: ["single-petition", "adultery", "matrimonial-assets"], lead: "single-petition", image: null },
+  { slug: "ng-pei-shan", name: { zh: "黄佩珊", en: "Ng Pei Shan" }, role: "partner", office: "ayer-keroh", languages: { zh: "English · 华语 · 马来语", en: "English · Mandarin · Malay" }, services: ["joint-petition", "spousal-maintenance", "child-maintenance"], lead: "joint-petition", image: null },
+  { slug: "wong-jun-hao", honorific: "Dato'", name: { zh: "王俊豪", en: "Wong Jun Hao" }, role: "consultant", office: "eko-galleria", languages: EN_ZH, services: ["matrimonial-assets", "prenup"], lead: "matrimonial-assets", image: null },
+  { slug: "jessica-tan-mei-ling", name: { zh: "陈美玲", en: "Jessica Tan Mei Ling" }, role: "senior-associate", office: "impian-emas", languages: { zh: "English · 华语 · 粤语", en: "English · Mandarin · Cantonese" }, services: ["custody", "access", "matrimonial-assets", "foreign-divorce", "spousal-maintenance"], lead: "custody", image: null },
+  { slug: "lee-chee-keong", name: { zh: "李志强", en: "Lee Chee Keong" }, role: "senior-associate", office: "taman-sea", languages: { zh: "English · 华语 · 客家话", en: "English · Mandarin · Hakka" }, services: ["responding", "enforcement", "variation"], lead: "responding", image: null },
+  { slug: "priya-nair", name: { zh: "Priya Nair", en: "Priya Nair" }, role: "associate", office: "jaya-putra", languages: { zh: "English · 马来语 · 淡米尔语", en: "English · Malay · Tamil" }, services: ["protection-order", "deed-of-separation"], lead: "protection-order", image: null },
+  { slug: "ong-zi-xuan", name: { zh: "王子萱", en: "Ong Zi Xuan" }, role: "associate", office: "ayer-keroh", languages: EN_ZH, services: ["joint-petition", "single-status"], lead: "joint-petition", image: null },
+  { slug: "goh-xin-yi", name: { zh: "吴欣怡", en: "Goh Xin Yi" }, role: "legal-assistant", office: "impian-emas", languages: { zh: "English · 华语 · 福建话", en: "English · Mandarin · Hokkien" }, services: [], image: null },
+  { slug: "yap-wen-jie", name: { zh: "叶文杰", en: "Yap Wen Jie" }, role: "legal-assistant", office: "taman-sea", languages: EN_ZH, services: [], image: null },
+  { slug: "nurul-aina", name: { zh: "Nurul Aina", en: "Nurul Aina" }, role: "legal-assistant", office: "jaya-putra", languages: { zh: "English · 马来语", en: "English · Malay" }, services: [], image: null },
+  { slug: "chong-mei-qi", name: { zh: "张美琪", en: "Chong Mei Qi" }, role: "pupil", office: "eko-galleria", languages: { zh: "English · 华语 · 粤语", en: "English · Mandarin · Cantonese" }, services: [], image: null },
 ];
+// 显示用的名字：加上称号，例如「Dato' Wong Jun Hao」
+export const displayName = (p: Member, lang: Lang) => (p.honorific ? `${p.honorific} ` : "") + p.name[lang];
+// 成员所在的城市（由办事处推出来，不另外记）
+export const cityOf = (p: Member) => cities.find((c) => c.id === offices.find((o) => o.id === p.office)?.city)!;
 // 没有照片时显示的英文名缩写，例如 Lim Hui Ying → LH
 export const initials = (name: Bi) => name.en.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
@@ -123,6 +146,7 @@ export const services: { slug: string; category: ServiceCategory; title: Bi; sho
 export const common = {
   home: { zh: "首页", en: "Home" },
   services: { zh: "离婚服务", en: "Divorce Services" },
+  people: { zh: "律师团队", en: "Our People" },
   viewAll: { zh: "查看全部服务", en: "View All Services" },
   askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
   readMore: { zh: "阅读详情", en: "Read More" },

@@ -9,7 +9,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, common, firm, isLang, mapsLink, offices, team, whatsappLink } from "@/lib/site";
+import { cities, cityOf, common, firm, isLang, mapsLink, offices, team, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -60,7 +60,7 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
         <div className="container stack">
           {cities.map((c) => {
             const list = offices.filter((o) => o.city === c.id);
-            const hasTeam = team.some((p) => p.city === c.id);
+            const hasTeam = team.some((p) => cityOf(p).id === c.id);
             return (
               <div key={c.id}>
                 <div className="list-head">

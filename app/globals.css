@@ -116,7 +116,7 @@ p { max-width: var(--measure); }
 /* 卡片网格：每张至少 300px，自动决定一行几张（手机 1、平板 2、电脑 3） */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: calc(var(--spacing) * 4); }
 /* 照片卡片：照片当背景。固定排版：标题 + 说明在左上，按钮在右下（不管荧幕大小、字数多少都一样） */
-.photo-card { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: calc(var(--spacing) * 4); overflow: hidden; padding: calc(var(--spacing) * 5); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); }
+.photo-card { aspect-ratio: 3 / 2; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: calc(var(--spacing) * 4); overflow: hidden; padding: calc(var(--spacing) * 5); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); }
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
 .photo-card > img { z-index: -2; object-fit: cover; }
 .photo-card > img { transition: transform var(--motion) var(--ease); }
@@ -146,6 +146,7 @@ p { max-width: var(--measure); }
 .rule-list > li { padding: calc(var(--spacing) * 4) 0; border-bottom: 1px solid var(--color-line); }
 .rule-list > li:first-child { border-top: 1px solid var(--color-line); }
 .list-head + .rule-list > li:first-child { border-top: 0; padding-top: 0; } /* 紧接横线标题时，标题的线就是清单的第一条线 */
+.rule-list > li > h3 + p { margin-top: calc(var(--spacing) * 1); color: var(--color-ink-muted); font-size: var(--text-small); } /* 清单项目可以是「标题 + 说明」 */
 
 /* ── 积木：面包屑（首页 › 离婚服务 › 孩子） ─────────── */
 .breadcrumb { display: flex; flex-wrap: wrap; align-items: center; column-gap: calc(var(--spacing) * 2); font-size: var(--text-caption); color: var(--color-ink-muted); }

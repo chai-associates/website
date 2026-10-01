@@ -13,7 +13,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, common, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, whatsappLink, type Lang } from "@/lib/site";
+import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, whatsappLink, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -151,7 +151,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           {/* 5 个服务分类（内容在 lib/site.ts）· 卡片比例固定 3:2 */}
           <div className="card-grid">
             {serviceCategories.map((c) => (
-              <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card aspect-[3/2]">
+              <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card">
                 {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
                 <div>
                   <h3>{c.title[lang]}</h3>
@@ -176,11 +176,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             {team.filter((p) => roles[p.role].group !== "support").map((p) => (
               <Link key={p.slug} href={`/${lang}/people/${p.slug}`} className="person-card">
                 <div className="person-photo">
-                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" /> : initials(p.name)}
+                  {p.image ? <Image src={p.image} alt={displayName(p, lang)} fill sizes="(min-width: 860px) 33vw, 80vw" /> : initials(p.name)}
                 </div>
-                <h3>{p.name[lang]}</h3>
+                <h3>{displayName(p, lang)}</h3>
                 <strong>{roles[p.role].label[lang]}</strong>
-                <p>{cities.find((c) => c.id === p.city)?.label[lang]} · {p.languages[lang]}</p>
+                <p>{cityOf(p).full[lang]} · {p.languages[lang]}</p>
               </Link>
             ))}
           </div>

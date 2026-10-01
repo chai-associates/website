@@ -111,7 +111,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
               </div>
               <div className="card-grid">
                 {services.filter((s) => s.category === c.slug).map((s) => (
-                  <Link key={s.slug} href={href(s.slug)} className="card card-link">
+                  <Link key={s.slug} href={href(s.slug)} className="card card-link reveal">
                     <h3>{s.title[lang]}</h3>
                     <p>{s.short[lang]}</p>
                   </Link>

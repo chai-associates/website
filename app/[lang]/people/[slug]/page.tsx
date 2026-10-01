@@ -12,7 +12,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, common, initials, isLang, roles, services, team, whatsappLink, type Bi } from "@/lib/site";
+import { cityOf, common, displayName, initials, isLang, roles, services, team, whatsappLink, type Bi } from "@/lib/site";
 
 type Profile = {
   admitted?: number;                         // 执业年份
@@ -30,7 +30,7 @@ type Profile = {
 const text = {
   // 每位成员的个人内容（key = lib/site.ts 里的 slug）。⚠ 下面是示范版面用的占位文字。
   profiles: {
-    "partner-1": {
+    "lim-hui-ying": {
       admitted: 2010,
       tagline: { zh: "[一句话介绍，由律师本人确认]", en: "[One-line introduction, confirmed by the lawyer]" },
       about: [
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/people/[sl
   const { lang, slug } = await params;
   const p = team.find((x) => x.slug === slug);
   if (!isLang(lang) || !p) return {};
-  return { title: p.name[lang], description: text.profiles[p.slug]?.tagline?.[lang] ?? roles[p.role].label[lang] };
+  return { title: displayName(p, lang), description: text.profiles[p.slug]?.tagline?.[lang] ?? roles[p.role].label[lang] };
 }
 
 export default async function PersonPage({ params }: PageProps<"/[lang]/people/[slug]">) {
@@ -88,13 +88,13 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
   const p = team.find((x) => x.slug === slug);
   if (!isLang(lang) || !p) notFound();
   const profile = text.profiles[p.slug] ?? {};
-  const name = p.name[lang];
-  const city = cities.find((c) => c.id === p.city)?.label[lang] ?? "";
+  const name = displayName(p, lang);
+  const city = cityOf(p).full[lang];
   const role = roles[p.role].label[lang];
   const fill = (t: Bi) => t[lang].replace("{name}", name).replace("{city}", city);
   const bookHref = whatsappLink(lang, fill(text.bookMessage));
   const helps = services.filter((s) => p.services.includes(s.slug));
-  const others = team.filter((x) => x.city === p.city && x.slug !== p.slug).slice(0, 4);
+  const others = team.filter((x) => cityOf(x).id === cityOf(p).id && x.slug !== p.slug).slice(0, 4);
 
   return (
     <>
@@ -103,7 +103,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
         <div className="container">
           <ol className="breadcrumb">
             <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li><Link href={`/${lang}/people`}>{lang === "zh" ? "律师团队" : "Our People"}</Link></li>
+            <li><Link href={`/${lang}/people`}>{common.people[lang]}</Link></li>
             <li aria-current="page">{name}</li>
           </ol>
           <div className="profile-head">
@@ -196,9 +196,9 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
               {others.map((o) => (
                 <Link key={o.slug} href={`/${lang}/people/${o.slug}`} className="person-card reveal">
                   <div className="person-photo">
-                    {o.image ? <Image src={o.image} alt={o.name[lang]} fill sizes="(min-width: 860px) 25vw, 50vw" /> : initials(o.name)}
+                    {o.image ? <Image src={o.image} alt={displayName(o, lang)} fill sizes="(min-width: 860px) 25vw, 50vw" /> : initials(o.name)}
                   </div>
-                  <h3>{o.name[lang]}</h3>
+                  <h3>{displayName(o, lang)}</h3>
                   <strong>{roles[o.role].label[lang]}</strong>
                   <p>{city} · {o.languages[lang]}</p>
                 </Link>

@@ -9,13 +9,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TeamFilter } from "@/lib/interactive";
-import { cities, common, initials, isLang, roles, team, teamGroups, whatsappLink } from "@/lib/site";
+import { cities, cityOf, common, displayName, initials, isLang, roles, team, teamGroups, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
 // ─────────────────────────────────────────────
 const text = {
-  title: { zh: "律师团队", en: "Our People" },
   // ① 标题
   heading: { zh: "在人生转折的时候，\n陪在你身边的人。", en: "The people beside you\nthrough a difficult chapter." },
   lead: {
@@ -36,13 +35,12 @@ const text = {
 export async function generateMetadata({ params }: PageProps<"/[lang]/people">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: text.title[lang], description: text.lead[lang] };
+  return { title: common.people[lang], description: text.lead[lang] };
 }
 
 export default async function PeoplePage({ params }: PageProps<"/[lang]/people">) {
   const { lang } = await params;
   if (!isLang(lang)) notFound();
-  const cityLabel = (id: string) => cities.find((c) => c.id === id)?.label[lang] ?? "";
 
   return (
     <>
@@ -51,7 +49,7 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
         <div className="container">
           <ol className="breadcrumb">
             <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li aria-current="page">{text.title[lang]}</li>
+            <li aria-current="page">{common.people[lang]}</li>
           </ol>
           <h1>{text.heading[lang]}</h1>
           <p>{text.lead[lang]}</p>
@@ -71,12 +69,12 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
               people: team.filter((p) => roles[p.role].group === g.id).map((p) => ({
                 key: p.slug,
                 href: `/${lang}/people/${p.slug}`,
-                city: p.city,
+                city: cityOf(p).id,
                 image: p.image,
                 initials: initials(p.name),
-                name: p.name[lang],
+                name: displayName(p, lang),
                 role: roles[p.role].label[lang],
-                meta: `${cityLabel(p.city)} · ${p.languages[lang]}`,
+                meta: `${cityOf(p).full[lang]} · ${p.languages[lang]}`,
               })),
             }))}
           />

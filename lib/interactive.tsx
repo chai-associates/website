@@ -66,7 +66,7 @@ export function SituationPicker({ label, placeholder, readMore, options }: {
       {cards.length > 0 && (
         <div className="card-grid" aria-live="polite">
           {cards.map((c) => (
-            <Link key={c.href} href={c.href} className="card card-link">
+            <Link key={c.href} href={c.href} className="card card-link reveal">
               <h3>{c.title}</h3>
               <p>{c.short}</p>
               <span className="text-link">{readMore} →</span>
