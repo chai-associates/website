@@ -67,7 +67,7 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .quote figcaption { margin-top: calc(var(--spacing) * 6); color: var(--color-ink-muted); font-size: var(--text-small); font-weight: 600; }
 .quote + .text-link { margin-top: calc(var(--spacing) * 4); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
-.stack { display: grid; gap: calc(var(--spacing) * 12); }
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--spacing) * 12); } /* minmax(0, 1fr)：里面的滑动列、长字不会把整页撑宽 */
 /* 正文段落 */
 .prose > * + * { margin-top: 1em; }
 /* 品牌语法 4：一组清单的开头 = 左标题、右边副标题或链接、下面一条细线 */

@@ -6,6 +6,7 @@
 // /zh/styleguide 和 /en/styleguide 对照看：英文版的大标题是 Garamond。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLang } from "@/lib/site";
@@ -154,6 +155,31 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                   <strong>{p.role[lang]}</strong>
                   <p>{p.meta[lang]}</p>
                 </article>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="list-head"><h2>照片框</h2><span>photo-frame · 圆角裁切</span></div>
+            <div className="photo-frame aspect-[3/2] max-w-md">
+              <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="448px" />
+            </div>
+          </div>
+          <div>
+            <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 --cols 栏</span></div>
+            <div className="scroll-row [--cols:3]">
+              {["01", "02", "03", "04"].map((n) => <div key={n} className="card"><h3>{n}</h3><p>scroll-row 里的项目</p></div>)}
+            </div>
+            <p className="muted mt-3">muted：次要文字用灰色</p>
+          </div>
+          <div>
+            <div className="list-head"><h2>分页选择</h2><span>tabs · 不用 JavaScript</span></div>
+            <div className="tabs" style={{ "--tabs": 3 } as React.CSSProperties}>
+              {["新山", "吉隆坡", "马六甲"].map((c, i) => (
+                <div key={c} className="tab">
+                  <input type="radio" name="sg-tabs" id={`sg-tab-${i}`} defaultChecked={i === 0} />
+                  <label htmlFor={`sg-tab-${i}`} className="chip">{c} <em>{3 - i}</em></label>
+                  <div className="tab-panel"><div className="card"><h3>{c}</h3><p>tab-panel：只显示选中的那一项</p></div></div>
+                </div>
               ))}
             </div>
           </div>
