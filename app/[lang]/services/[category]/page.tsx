@@ -36,6 +36,9 @@ const text = {
       en: "When you're not ready to divorce yet, or need to keep yourself and your children safe first.",
     },
   } satisfies Record<ServiceCategory, Bi>,
+  // ② 清单标题
+  list: { zh: "这一类的服务", en: "Services in this area" },
+  count: { zh: "{n} 项服务", en: "{n} services" },
 };
 
 // 预先生成 5 个分类页；不在清单里的网址 → 404
@@ -55,43 +58,54 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
   const { lang, category } = await params;
   const c = serviceCategories.find((x) => x.slug === category);
   if (!isLang(lang) || !c) notFound();
+  const list = services.filter((s) => s.category === c.slug);
 
   return (
     <>
       {/* ═══ ① 标题 ═══ */}
-      <section className="pt-4 pb-10">
+      <section className="page-head">
         <div className="container">
           <ol className="breadcrumb">
             <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
             <li><Link href={`/${lang}/services`}>{common.services[lang]}</Link></li>
             <li aria-current="page">{c.title[lang]}</li>
           </ol>
-          <h1 className="mt-4">{c.title[lang]}</h1>
-          <p className="muted mt-3 text-lead">{text.intro[c.slug][lang]}</p>
+          <h1>{c.title[lang]}</h1>
+          <p>{text.intro[c.slug][lang]}</p>
         </div>
       </section>
 
       {/* ═══ ② 这一类的服务 ═══ */}
-      <section className="pb-16">
-        <div className="container card-grid">
-          {services.filter((s) => s.category === c.slug).map((s) => (
-            <Link key={s.slug} href={`/${lang}/services/${c.slug}/${s.slug}`} className="card card-link">
-              <h3>{s.title[lang]}</h3>
-              <p className="muted text-small">{s.short[lang]}</p>
-              <span className="text-link text-small">{common.readMore[lang]} →</span>
-            </Link>
-          ))}
+      <section className="section">
+        <div className="container">
+          <div className="list-head">
+            <h2>{text.list[lang]}</h2>
+            <span>{text.count[lang].replace("{n}", String(list.length))}</span>
+          </div>
+          <div className="card-grid">
+            {list.map((s) => (
+              <Link key={s.slug} href={`/${lang}/services/${c.slug}/${s.slug}`} className="card card-link reveal">
+                <h3>{s.title[lang]}</h3>
+                <p>{s.short[lang]}</p>
+                <span className="text-link">{common.readMore[lang]} →</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ═══ ③ 不是你的情况？ ═══ */}
-      <section className="section section-muted">
+      <section className="section">
         <div className="container">
-          <h2>{common.notYours.title[lang]}</h2>
-          <p className="muted mt-2 text-lead">{common.notYours.desc[lang]}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link className="btn btn-ghost" href={`/${lang}/services`}>{common.viewAll[lang]}</Link>
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <div className="cta-band">
+            <div>
+              <h2>{common.notYours.title[lang]}</h2>
+              <p>{common.notYours.desc[lang]}</p>
+            </div>
+            <div className="btn-row">
+              <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+              <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
+            </div>
           </div>
         </div>
       </section>

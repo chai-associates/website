@@ -193,9 +193,12 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div className="cta-band">
             <div>
               <h2>{lang === "en" ? "Not sure who to speak to?" : "不确定该找谁？"}</h2>
-              <p>cta-band：一句话 + 一个按钮。每页最多一个。</p>
+              <p>cta-band：一句话 + 一个主要按钮（可以再加一个文字链接）。每页最多一个。</p>
             </div>
-            <a className="btn btn-cta" href="#">直接咨询律师</a>
+            <div className="btn-row">
+              <a className="btn btn-cta" href="#">直接咨询律师</a>
+              <a className="text-link" href="#">查看全部服务 →</a>
+            </div>
           </div>
         </div>
       </section>

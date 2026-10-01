@@ -34,6 +34,10 @@ p { max-width: var(--measure); }
 @layer components {
 /* ── 积木：版面 ─────────────────────────────────── */
 .section { padding: var(--section-y) 0; }
+/* 区块节奏：同样底色的两个区块相连时共用一个留白；页面标题区后面接白色区块时不再加留白 */
+.section:not(.section-muted) + .section:not(.section-muted),
+.section-muted + .section-muted,
+.page-head + .section:not(.section-muted) { padding-top: 0; }
 .section-muted { background: var(--color-subtle); }
 .section-head { margin-bottom: calc(var(--spacing) * 6); }
 .section-head .tag + :is(h2, h3) { margin-top: calc(var(--spacing) * 2); }
@@ -71,7 +75,7 @@ p { max-width: var(--measure); }
 .btn-outline { background: transparent; color: var(--color-accent); border-color: var(--color-accent); }
 .btn-sm { min-height: var(--tap-min); padding: 0 calc(var(--spacing) * 4); font-size: var(--text-small); }
 /* 按钮并排（放不下自动换行） */
-.btn-row { display: flex; flex-wrap: wrap; gap: calc(var(--spacing) * 3); }
+.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--spacing) * 3); }
 .text-link { display: inline-flex; align-items: center; gap: calc(var(--spacing) * 1); min-height: var(--tap-min); font-weight: 600; }
 .chip { display: inline-flex; align-items: center; gap: calc(var(--spacing) * 2); min-height: var(--tap-min); padding: 0 calc(var(--spacing) * 4); border: var(--border) solid var(--color-line); border-radius: 999px; font-size: var(--text-small); font-weight: 600; white-space: nowrap; }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
