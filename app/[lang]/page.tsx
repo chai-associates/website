@@ -116,7 +116,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       {/* ═════════ ① 首屏 ═════════
           占满第一个画面（扣掉页首），底部让出浮动 WhatsApp 按钮的位置。
           左文字 : 右照片 = 1.618 : 1（黄金比例），手机和电脑都左右并排。 */}
-      <section className="flex min-h-[calc(100svh-var(--header-h))] pt-6 pb-(--fab-clearance)">
+      <section className="flex min-h-[calc(100svh-var(--header-h))] py-6">
         <div className="container flex flex-col gap-8">
           <div className="grid flex-1 grid-cols-[1.618fr_1fr] gap-3 md:gap-12">
             <div className="flex min-w-0 flex-col justify-center">

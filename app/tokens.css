@@ -81,7 +81,5 @@
   --tap: 52px;             /* 主要按钮高度 */
   --tap-min: 44px;         /* 最小可点击尺寸（HIG） */
   --header-h: 64px;        /* 页首高度 */
-  --fab-h: 56px;           /* 浮动 WhatsApp 按钮高度 */
-  --fab-clearance: calc(var(--fab-h) + 32px); /* 页面底部要让出给浮动按钮的空间 */
   --scrim-photo: linear-gradient(180deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.2) 55%, rgb(0 0 0 / 0.45) 100%); /* 照片卡片的暗角：上方放文字、下方放按钮 */
 }

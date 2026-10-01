@@ -7,7 +7,7 @@
    只放「任何页面都会重复用到」的东西，所有数值来自 tokens.css。
    · 基础：字体、标题、段落
    · 积木：container、section、按钮、卡片、照片卡片、滑动列……
-   · 外框：页首、页脚、浮动 WhatsApp（layout.tsx 用）
+   · 外框：页首、选单、页脚（layout.tsx 用）
    某一页的版面（几栏、间距、谁在左谁在右）写在那一页的 page.tsx，
    用 Tailwind class + tokens，不写在这里。所以页面变多，这个文件也不会变长。
    ═══════════════════════════════════════════════════════════════ */
@@ -82,40 +82,44 @@ p { max-width: var(--measure); }
 .tab > input:checked ~ .tab-panel { display: block; }
 
 /* ── 外框：页首 ─────────────────────────────────── */
-.site-header { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--color-bg) 92%, transparent); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--color-line); }
+.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: 1px solid var(--color-line); }
 .nav { display: flex; align-items: center; justify-content: space-between; gap: calc(var(--spacing) * 3); height: var(--header-h); }
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
 .logo-wm { font-family: var(--font-logo); font-size: var(--text-small); font-weight: 500; letter-spacing: 0.04em; }
 .logo-sub { font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: 0.08em; }
-.nav-links { display: none; gap: calc(var(--spacing) * 8); white-space: nowrap; font-size: var(--text-small); font-weight: 500; }
-.nav-links a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
 .nav-right { display: flex; align-items: center; gap: calc(var(--spacing) * 2); }
-.lang-switch { display: flex; padding: calc(var(--spacing) * 1); border-radius: 999px; background: var(--color-subtle); }
-.lang-switch a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 calc(var(--spacing) * 2); border-radius: 999px; font-family: var(--font-en); font-size: var(--text-caption); font-weight: 600; color: var(--color-ink-muted); white-space: nowrap; }
-.lang-switch a[aria-current="true"] { background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-soft); }
-.nav-cta { display: none; }
-/* 手机选单：浏览器原生的 <details>，不需要 JavaScript */
-.menu-btn { display: grid; place-items: center; width: var(--tap-min); height: var(--tap-min); list-style: none; cursor: pointer; }
-.menu-btn::-webkit-details-marker { display: none; }
-.menu-btn span { width: 22px; height: 2px; background: var(--color-ink); box-shadow: 0 7px 0 var(--color-ink), 0 -7px 0 var(--color-ink); }
-/* 选单打开时页首不再固定：点了选单里的链接跳到下面，选单会跟着页首一起滑走，不会挡住内容 */
-.site-header:has(.menu[open]) { position: relative; }
-.drawer { position: absolute; top: var(--header-h); left: 0; right: 0; background: var(--color-bg); border-top: 1px solid var(--color-line); box-shadow: var(--shadow-float); }
-.drawer a { display: flex; align-items: center; min-height: var(--tap); padding: 0 var(--gutter); border-bottom: 1px solid var(--color-line); font-size: var(--text-body); font-weight: 500; }
 @media (min-width: 860px) {
   .logo-wm { font-size: var(--text-subtitle); }
-  .nav-links, .nav-cta { display: flex; }
-  .menu { display: none; }
+}
+
+/* ── 外框：选单（打开 / 关闭由 lib/menu.tsx 切换 data-open） ── */
+.menu-btn { display: grid; place-content: center; gap: 5px; width: var(--tap-min); height: var(--tap-min); cursor: pointer; }
+.menu-btn span { display: block; width: 22px; height: 2px; border-radius: 2px; background: var(--color-ink); transition: transform 0.3s ease, opacity 0.2s ease; }
+.menu[data-open="true"] .menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu[data-open="true"] .menu-btn span:nth-child(2) { opacity: 0; }
+.menu[data-open="true"] .menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* 后面变暗的部分：点它就关闭 */
+.menu-backdrop { position: fixed; inset: var(--header-h) 0 0 0; background: rgb(0 0 0 / 0.4); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s; }
+/* 从右边滑进来的面板 */
+.menu-panel { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: min(360px, 85vw); display: flex; flex-direction: column; justify-content: space-between; gap: calc(var(--spacing) * 8); overflow-y: auto; padding: calc(var(--spacing) * 4) var(--gutter) calc(var(--spacing) * 8); background: var(--color-bg); box-shadow: var(--shadow-float); transform: translateX(100%); visibility: hidden; transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.35s; }
+.menu-panel > * { opacity: 0; transform: translateX(24px); transition: opacity 0.3s ease, transform 0.3s ease; }
+.menu[data-open="true"] .menu-backdrop { opacity: 1; visibility: visible; }
+.menu[data-open="true"] .menu-panel { transform: none; visibility: visible; }
+.menu[data-open="true"] .menu-panel > * { opacity: 1; transform: none; transition-delay: 0.12s; }
+.menu-links { display: flex; flex-direction: column; }
+.menu-links a { display: flex; align-items: center; min-height: var(--tap); border-bottom: 1px solid var(--color-line); font-size: var(--text-subtitle); font-weight: 600; }
+.lang-switch { display: flex; align-self: flex-start; padding: calc(var(--spacing) * 1); border-radius: 999px; background: var(--color-subtle); }
+.lang-switch a { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 calc(var(--spacing) * 4); border-radius: 999px; font-size: var(--text-small); font-weight: 600; color: var(--color-ink-muted); white-space: nowrap; }
+.lang-switch a[aria-current="true"] { background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-soft); }
+@media (prefers-reduced-motion: reduce) {
+  .menu-btn span, .menu-backdrop, .menu-panel, .menu-panel > * { transition: none; }
 }
 
 /* ── 外框：页脚 ─────────────────────────────────── */
-.site-footer { padding: calc(var(--spacing) * 12) 0 var(--fab-clearance); border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--color-inverse); color: var(--color-inverse-muted); font-size: var(--text-small); }
+.site-footer { padding: calc(var(--spacing) * 12) 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--color-inverse); color: var(--color-inverse-muted); font-size: var(--text-small); }
 .site-footer .logo { color: var(--color-inverse-ink); }
 .site-footer .logo-sub { color: var(--color-inverse-muted); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 calc(var(--spacing) * 6); margin: calc(var(--spacing) * 5) 0; }
 .footer-links a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
 .footer-disc { padding-top: calc(var(--spacing) * 4); border-top: 1px solid color-mix(in srgb, var(--color-inverse-ink) 15%, transparent); font-size: var(--text-caption); }
-
-/* ── 外框：浮动 WhatsApp ─────────────────────────── */
-.fab { position: fixed; right: calc(var(--spacing) * 4); bottom: calc(var(--spacing) * 4 + env(safe-area-inset-bottom)); z-index: 40; display: flex; align-items: center; gap: calc(var(--spacing) * 2); height: var(--fab-h); padding: 0 calc(var(--spacing) * 5) 0 calc(var(--spacing) * 4); border-radius: 999px; background: var(--color-accent); color: var(--color-on-accent); font-size: var(--text-small); font-weight: 600; box-shadow: var(--shadow-float); }
 }
