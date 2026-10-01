@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS · 设计变量（全站唯一的设计控制中心）
+   ───────────────────────────────────────────────────────────────
+   要改设计 → 只改这里，全站自动统一。
+   globals.css 只能使用 var(--xxx)，不写死任何数值或颜色。
+
+   依据：
+   · Apple Human Interface Guidelines（HIG）
+     - 字号阶梯采用 HIG Dynamic Type：15 / 16 / 17 / 20 / 22 / 28 / 34
+     - 正文 17px；可点击区域最少 44×44
+   · 8pt 网格：所有间距、尺寸都是 4 或 8 的倍数
+   · 黄金比例 1.618：首屏左右两栏比例、电脑版首屏标题（34 × 1.618 ≈ 56）
+   · 60-30-10 配色：白 60% · 黑/灰 30% · 古铜 10%（只给按钮）
+   · WCAG AA 对比度：所有文字 ≥ 4.5 : 1
+   · 行宽：正文每行约 45–75 个英文字母 / 20–35 个中文字
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── 颜色 Colors ───────────────────────────────────────── */
+  --color-bg: #ffffff;              /* 60% · 页面底色 */
+  --color-bg-muted: #f5f5f7;        /* Apple 系统浅灰 · 区块底色 */
+  --color-text: #1d1d1f;            /* 30% · 主要文字（Apple 标准深色，对比 16.8:1） */
+  --color-text-muted: #515154;      /* 次要文字（对比 7.9:1） */
+  --color-line: #d2d2d7;            /* 分隔线、边框 */
+  --color-accent: #6e5526;          /* 10% · 古铜，只给按钮（白字对比 7.0:1） */
+  --color-on-accent: #ffffff;
+  --color-inverse-bg: #1d1d1f;      /* 页脚 */
+  --color-inverse-text: #f5f5f7;
+  --color-inverse-muted: #a1a1a6;   /* 深底上的次要文字（对比 6.5:1） */
+  --color-on-photo: #ffffff;
+  --color-on-photo-muted: #f5f5f7;
+  --scrim-photo: linear-gradient(180deg, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0.7) 100%); /* 照片上放字时的暗角，确保可读 */
+
+  /* ── 字体 Fonts（在 lib/fonts.ts 载入） ─────────────────── */
+  --font-zh: var(--font-noto-sc), "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-en: var(--font-jakarta), var(--font-noto-sc), -apple-system, sans-serif;
+  --font-logo: var(--font-garamond), "Times New Roman", serif;
+
+  /* ── 字号 Type scale（Apple HIG · 手机） ────────────────── */
+  --text-subhead: 0.9375rem;  /* 15 · 最小字号：标签、备注 */
+  --text-callout: 1rem;       /* 16 · 次要内容、说明 */
+  --text-body: 1.0625rem;     /* 17 · 正文 */
+  --text-title3: 1.25rem;     /* 20 · 卡片标题 h3 */
+  --text-title2: 1.375rem;    /* 22 · */
+  --text-title1: 1.75rem;     /* 28 · 区块标题 h2、首屏标题（手机） */
+  --text-large: 2.125rem;     /* 34 · 页面标题 h1 */
+  --text-display: 1.75rem;    /* 首屏标题（手机与照片并排，用 28） */
+  --text-logo: 1rem;          /* Logo 字标 */
+
+  --leading-body-zh: 1.75;    /* 中文正文行距 */
+  --leading-body-en: 1.5;     /* 英文正文行距 */
+  --leading-heading: 1.25;
+  --tracking-heading: -0.01em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --measure: 34em;            /* 正文最大行宽 */
+
+  /* ── 间距 Spacing（8pt 网格） ───────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  --gutter: 20px;             /* 页面左右边距（HIG 手机标准 16–20） */
+  --container: 1152px;        /* 内容最大宽度 */
+  --section-y: var(--space-16);   /* 区块上下留白 64 */
+  --stack: var(--space-6);        /* 标题与内容的距离 24 */
+
+  /* ── 版面比例 Layout ratio ─────────────────────────────── */
+  --golden: 1.618;
+  --hero-columns: 1.618fr 1fr;    /* 首屏：文字 : 照片 = 黄金比例 */
+  --hero-gap: var(--space-3);
+  --hero-min-h: calc(100svh - var(--header-h));  /* 首屏占满第一个画面（扣掉页首） */
+  --hero-pad-bottom: calc(var(--fab-h) + var(--space-6)); /* 首屏底部让出位置给浮动 WhatsApp 按钮 */
+  --hero-pop: 6%;                 /* 人物去背图超出照片框的距离（手机小一点，避免压到文字） */
+  --points-gap: var(--space-4);   /* 三个优点之间的距离 */
+
+  /* ── 圆角 Radius（8pt） ────────────────────────────────── */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* ── 尺寸 Sizes ───────────────────────────────────────── */
+  --tap-min: 44px;            /* HIG 最小可点击尺寸 */
+  --tap: 52px;                /* 主要按钮高度 */
+  --control-sm: 36px;         /* 语言切换等小控件（外框仍 ≥ 44） */
+  --grid-min: 300px;          /* 卡片最小宽度（自动决定一行几张） */
+  --border: 1.5px;            /* 边框粗细 */
+  --header-h: 64px;
+  --fab-h: 56px;
+  --card-h: 192px;            /* 服务卡片高度 */
+  --footer-safe: 96px;        /* 页脚底部留空，避开浮动按钮 */
+
+  /* ── 阴影 Shadow ──────────────────────────────────────── */
+  --shadow-soft: 0 1px 3px rgb(0 0 0 / 0.12);
+  --shadow-float: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+
+/* 电脑版（≥ 860px）：只改需要变大的变量，其他自动沿用 */
+@media (min-width: 860px) {
+  :root {
+    --text-title1: 2.5rem;    /* 40 · 区块标题 */
+    --text-large: 2.75rem;    /* 44 · 页面标题 */
+    --text-display: 3.5rem;   /* 56 · 首屏标题（34 × 1.618） */
+    --text-logo: 1.375rem;
+    --gutter: 32px;
+    --section-y: var(--space-24);   /* 96 */
+    --stack: var(--space-10);       /* 40 */
+    --hero-gap: var(--space-12);
+    --hero-pop: 16%;
+    --points-gap: var(--space-16);
+    --card-h: 288px;
+    --footer-safe: var(--space-10);
+  }
+}
