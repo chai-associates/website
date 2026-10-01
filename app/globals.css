@@ -171,6 +171,14 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .timeline > li:last-child::after { display: none; }
 .timeline > li > h3 + p { margin-top: calc(var(--spacing) * 1); color: var(--color-ink-muted); }
 
+/* ── 积木：常见问题（可展开；不用 JavaScript）：结构 .faq > details > summary（问题）+ p（答案）
+   「+」图示和选单的母目录共用（写在下面「外框：选单」） ── */
+.faq > details { border-bottom: 1px solid var(--color-line); }
+.faq > details:first-child { border-top: 1px solid var(--color-line); }
+.list-head + .faq > details:first-child { border-top: 0; } /* 紧接横线标题时，标题的线就是第一条线 */
+.faq summary { display: flex; align-items: center; justify-content: space-between; gap: calc(var(--spacing) * 4); min-height: var(--tap); padding: calc(var(--spacing) * 3) 0; font-weight: 600; cursor: pointer; list-style: none; }
+.faq details > p { padding-bottom: calc(var(--spacing) * 4); color: var(--color-ink-muted); }
+
 /* ── 积木：面包屑（首页 › 离婚服务 › 孩子） ─────────── */
 .breadcrumb { display: flex; flex-wrap: wrap; align-items: center; column-gap: calc(var(--spacing) * 2); font-size: var(--text-caption); color: var(--color-ink-muted); }
 .breadcrumb li + li::before { content: "›"; margin-right: calc(var(--spacing) * 2); }
@@ -229,9 +237,10 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .menu-links { display: flex; flex-direction: column; }
 /* 第一层：直接进页面的链接 + 可展开的母目录，长得一样 */
 .menu-links > a, .menu-group > summary { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap); border-bottom: 1px solid var(--color-line); font-size: var(--text-lead); font-weight: 600; cursor: pointer; list-style: none; }
-.menu-group > summary::-webkit-details-marker { display: none; }
-.menu-group > summary::after { content: "+"; font-size: var(--text-title); font-weight: 300; line-height: 1; transition: transform var(--motion-fast) var(--ease); }
-.menu-group[open] > summary::after { transform: rotate(45deg); }
+/* 「+」展开图示：选单母目录、常见问题（.faq）共用 */
+.menu-group > summary::-webkit-details-marker, .faq summary::-webkit-details-marker { display: none; }
+.menu-group > summary::after, .faq summary::after { content: "+"; flex-shrink: 0; font-size: var(--text-title); font-weight: 300; line-height: 1; transition: transform var(--motion-fast) var(--ease); }
+.menu-group[open] > summary::after, .faq details[open] > summary::after { transform: rotate(45deg); }
 /* 第二层：子目录 */
 .menu-sub { display: flex; flex-direction: column; padding: calc(var(--spacing) * 2) 0; border-bottom: 1px solid var(--color-line); }
 .menu-sub a { display: flex; align-items: center; min-height: var(--tap-min); padding-left: calc(var(--spacing) * 4); font-size: var(--text-body); color: var(--color-ink-muted); }

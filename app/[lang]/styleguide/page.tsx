@@ -239,6 +239,13 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </ol>
           </div>
           <div>
+            <div className="list-head"><h2>常见问题</h2><span>faq · 点问题展开</span></div>
+            <div className="faq">
+              <details open><summary>协议离婚需要先经过婚姻辅导吗？</summary><p>faq：问题一行，答案在下面；「+」和选单共用。</p></details>
+              <details><summary>结婚多久才能申请离婚？</summary><p>答案。</p></details>
+            </div>
+          </div>
+          <div>
             <div className="list-head"><h2>正文段落</h2><span>prose · stack</span></div>
             <div className="prose">
               <p>prose：段落之间自动留一行的距离，用在个人介绍、离婚百科文章。</p>
