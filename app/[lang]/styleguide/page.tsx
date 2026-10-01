@@ -175,9 +175,11 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               </ul>
             </div>
           </div>
-          <aside className="card grid gap-5">
-            <h3>侧栏（with-aside）</h3>
-            <p className="muted text-small">电脑版在右边并跟着滑动；手机版排在正文下面。</p>
+          <aside>
+            <div>
+              <h3>侧栏（with-aside）</h3>
+              <p>侧栏本身就是卡片。电脑版在右边并跟着滑动；手机版排在正文下面。</p>
+            </div>
             <label className="field">
               栏位（field + select）
               <select className="select" defaultValue=""><option value="" disabled>请选择</option><option>丈夫</option><option>妻子</option></select>

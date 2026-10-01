@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 你需要知道的（只写到重点）  ③ 询问表格
+// 区块顺序：① 标题  ② 你需要知道的（只写到重点，左）+ ③ 询问表格（右侧栏）
 //          ④ 不是你的情况？  ⑤ 相关服务
 // 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
 // 还没写内容的服务会显示「内容准备中」。
@@ -99,7 +99,7 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
   return (
     <>
       {/* ═══ ① 标题 ═══ */}
-      <section className="pt-4 pb-10">
+      <section className="page-head">
         <div className="container">
           <ol className="breadcrumb">
             <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
@@ -107,54 +107,52 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
             <li><Link href={`/${lang}/services/${c.slug}`}>{c.title[lang]}</Link></li>
             <li aria-current="page">{s.title[lang]}</li>
           </ol>
-          <h1 className="mt-4">{s.title[lang]}</h1>
-          <p className="muted mt-3 text-lead">{(content?.intro ?? s.short)[lang]}</p>
+          <h1>{s.title[lang]}</h1>
+          <p>{(content?.intro ?? s.short)[lang]}</p>
         </div>
       </section>
 
-      {/* ═══ ② 你需要知道的 ═══ */}
-      <section className="pb-16">
-        <div className="container">
-          {content ? (
-            <>
-              <h2>{text.know[lang]}</h2>
-              <ul className="mt-6 grid gap-4">
-                {content.points.map((p) => (
-                  <li key={p.zh} className="border-l-2 border-line pl-4">{p[lang]}</li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <p className="muted">{text.pending[lang]}</p>
-          )}
-        </div>
-      </section>
-
-      {/* ═══ ③ 询问表格 ═══ */}
-      <section className="section section-muted">
-        <div className="container grid gap-8 md:grid-cols-[1fr_1.618fr] md:gap-16">
+      {/* ═══ ② 你需要知道的（左）+ ③ 询问表格（右侧栏；手机排在下面） ═══ */}
+      <section className="section">
+        <div className="container with-aside">
           <div>
-            <h2>{text.form.title[lang]}</h2>
-            <p className="muted mt-2">{text.form.desc[lang]}</p>
+            <div className="list-head"><h2>{text.know[lang]}</h2></div>
+            {content ? (
+              <ul className="rule-list">
+                {content.points.map((p) => <li key={p.zh}>{p[lang]}</li>)}
+              </ul>
+            ) : (
+              <p className="muted">{text.pending[lang]}</p>
+            )}
           </div>
-          <InquiryForm
-            lang={lang}
-            intro={text.form.intro[lang].replace("{service}", s.title[lang])}
-            placeholder={text.form.placeholder[lang]}
-            submit={text.form.submit[lang]}
-            questions={text.form.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) }))}
-          />
+          <aside>
+            <div>
+              <h3>{text.form.title[lang]}</h3>
+              <p>{text.form.desc[lang]}</p>
+            </div>
+            <InquiryForm
+              lang={lang}
+              intro={text.form.intro[lang].replace("{service}", s.title[lang])}
+              placeholder={text.form.placeholder[lang]}
+              submit={text.form.submit[lang]}
+              questions={text.form.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) }))}
+            />
+          </aside>
         </div>
       </section>
 
       {/* ═══ ④ 不是你的情况？ ═══ */}
       <section className="section">
         <div className="container">
-          <h2>{common.notYours.title[lang]}</h2>
-          <p className="muted mt-2 text-lead">{common.notYours.desc[lang]}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link className="btn btn-ghost" href={`/${lang}/services`}>{common.viewAll[lang]}</Link>
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <div className="cta-band">
+            <div>
+              <h2>{common.notYours.title[lang]}</h2>
+              <p>{common.notYours.desc[lang]}</p>
+            </div>
+            <div className="btn-row">
+              <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+              <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
+            </div>
           </div>
         </div>
       </section>
@@ -163,13 +161,16 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
       {related.length > 0 && (
         <section className="section section-muted">
           <div className="container">
-            <h2>{text.related[lang]}</h2>
-            <div className="card-grid mt-6">
+            <div className="list-head">
+              <h2>{text.related[lang]}</h2>
+              <Link className="text-link" href={`/${lang}/services/${c.slug}`}>{c.title[lang]} →</Link>
+            </div>
+            <div className="card-grid">
               {related.map((r) => (
-                <Link key={r.slug} href={`/${lang}/services/${r.category}/${r.slug}`} className="card card-link bg-bg">
+                <Link key={r.slug} href={`/${lang}/services/${r.category}/${r.slug}`} className="card card-link reveal">
                   <h3>{r.title[lang]}</h3>
-                  <p className="muted text-small">{r.short[lang]}</p>
-                  <span className="text-link text-small">{common.readMore[lang]} →</span>
+                  <p>{r.short[lang]}</p>
+                  <span className="text-link">{common.readMore[lang]} →</span>
                 </Link>
               ))}
             </div>
