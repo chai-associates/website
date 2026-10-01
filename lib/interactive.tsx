@@ -131,7 +131,7 @@ export function TeamFilter({ label, allLabel, countLabel, cities, groups }: {
   return (
     <div className="stack">
       <div className="btn-row" role="group" aria-label={label}>
-        <span className="muted text-small">{label}</span>
+        <span className="filter-label">{label}</span>
         {[{ id: "all", label: allLabel }, ...cities].map((c) => (
           <button key={c.id} type="button" className="chip" aria-pressed={city === c.id} onClick={() => setCity(c.id)}>{c.label}</button>
         ))}

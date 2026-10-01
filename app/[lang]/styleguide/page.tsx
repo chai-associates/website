@@ -110,8 +110,9 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <a className="btn btn-ghost btn-sm" href="#">小按钮（btn-sm）</a>
             <a className="text-link" href="#">文字链接（text-link）→</a>
           </div>
-          <div className="list-head mt-12"><h3>小按钮</h3><span>chip · 选中或主要领域（data-lead）变黑</span></div>
+          <div className="list-head mt-12"><h3>小按钮</h3><span>chip · 选中或主要领域（data-lead）变黑 · 前面可加 filter-label</span></div>
           <div className="btn-row">
+            <span className="filter-label">筛选说明（filter-label）</span>
             <a className="chip" data-lead href="#">抚养权与监护权（data-lead）→</a>
             <a className="chip" href="#">探视权（chip）→</a>
             <button type="button" className="chip" aria-pressed="true">新山（aria-pressed）</button>

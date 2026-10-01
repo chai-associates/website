@@ -107,6 +107,8 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .text-link { display: inline-flex; align-items: center; gap: calc(var(--spacing) * 1); min-height: var(--tap-min); font-weight: 600; }
 .chip { cursor: pointer; display: inline-flex; align-items: center; gap: calc(var(--spacing) * 2); min-height: var(--tap-min); padding: 0 calc(var(--spacing) * 4); border: var(--border) solid var(--color-line); border-radius: 999px; font-size: var(--text-small); font-weight: 600; white-space: nowrap; }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
+/* 筛选说明：一排 chip 前面的灰色小字，例如团队页的「办事处」 */
+.filter-label { color: var(--color-ink-muted); font-size: var(--text-small); }
 /* 选中的按钮变黑（城市分页、团队筛选共用）；data-lead = 主要领域（个人页），一样变黑 */
 .chip[aria-pressed="true"], .chip[data-lead], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
 .chip[aria-pressed="true"] em, .tab > input:checked + label em { color: var(--color-inverse-muted); }
