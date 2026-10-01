@@ -63,8 +63,8 @@ const text = {
   },
 };
 
-// 线条图标（只有这一页用）
-function Icon({ name, size = 20 }: { name: string; size?: number }) {
+// 线条图标（只有这一页用）：大小跟着旁边文字的字号走（1em = 一个字的大小），不另外设固定尺寸
+function Icon({ name }: { name: string }) {
   const paths: Record<string, React.ReactNode> = {
     award: <><circle cx="12" cy="8" r="5" /><path d="M8.5 12.5 7 21l5-3 5 3-1.5-8.5" /></>,
     receipt: <><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></>,
@@ -72,7 +72,7 @@ function Icon({ name, size = 20 }: { name: string; size?: number }) {
     arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   };
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
+    <svg width="1.15em" height="1.15em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
       {paths[name]}
     </svg>
   );
@@ -93,24 +93,24 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   return (
     <>
       {/* ═════════ ① 首屏 ═════════
-          照片占满第一个画面（扣掉页首），文字压在照片下半部：小标签（城市）→ 标题 → 说明 → 按钮。
-          下面接 3 点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
-      <section className="hero">
+          照片约占画面 40% 高，下缘淡出成白色，小标签（城市）+ 标题压在上面；
+          下面接说明 → 按钮 → 3 点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
+      <section className="hero min-h-[52svh]">
         <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" style={{ objectPosition: "40% 30%" }} />
         <div className="container">
           <p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>
           <h1>{hero.title[lang]}</h1>
-          <p>{hero.sub[lang]}</p>
-          <div className="btn-row">
-            <Link className="btn btn-cta" href={`/${lang}/services`}>
-              {hero.cta[lang]} <Icon name="arrow" size={18} />
-            </Link>
-          </div>
         </div>
       </section>
-      <div className="container py-6">
+      <div className="container hero-intro">
+        <p>{hero.sub[lang]}</p>
+        <div className="btn-row">
+          <Link className="btn btn-outline" href={`/${lang}/services`}>
+            {hero.cta[lang]} <Icon name="arrow" />
+          </Link>
+        </div>
         <ul className="points">
-          {hero.points.map((p) => <li key={p.icon}><Icon name={p.icon} /> {p.title[lang]}</li>)}
+          {hero.points.map((p) => <li key={p.icon} className="flex-row items-center gap-2"><Icon name={p.icon} /> {p.title[lang]}</li>)}
         </ul>
       </div>
 
@@ -131,7 +131,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   <h3>{c.title[lang]}</h3>
                   <p>{c.short[lang]}</p>
                 </div>
-                <span className="btn btn-light btn-sm photo-card-action">{common.readMore[lang]} <Icon name="arrow" size={16} /></span>
+                <span className="btn btn-light btn-sm photo-card-action">{common.readMore[lang]} <Icon name="arrow" /></span>
               </Link>
             ))}
           </div>
