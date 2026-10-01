@@ -31,8 +31,8 @@ export const mapsLink = (address: string) =>
 
 // ── 办事处（新增城市或办事处只改这里） ──────────
 export const cities: { id: string; label: Bi }[] = [
-  { id: "jb", label: { zh: "新山", en: "Johor Bahru" } },
-  { id: "kl", label: { zh: "吉隆坡", en: "Kuala Lumpur" } },
+  { id: "jb", label: { zh: "新山", en: "JB" } },
+  { id: "kl", label: { zh: "吉隆坡", en: "KL" } },
   { id: "mlk", label: { zh: "马六甲", en: "Melaka" } },
 ];
 

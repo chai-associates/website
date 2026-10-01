@@ -4,7 +4,8 @@
 // 区块顺序：① 首屏  ② 服务范围  ③ 我们的团队  ④ 联系我们
 //   用 Cmd + F 搜「① 首屏」等标题就能跳到该区块。
 // 样式规则：
-// · 颜色 / 字号 / 间距 只用 tokens（例如 text-ink-muted、text-sm、gap-4、md:gap-12）
+// · 颜色 / 字号 / 间距 只用 tokens（例如 text-ink-muted、text-lead、gap-4、md:gap-12）
+//   字号是流体的，会跟着荧幕大小自动缩放，不需要另外写手机版 / 电脑版字号
 // · 共用积木（按钮、卡片、照片卡片、滑动列）来自 globals.css
 // · 只属于这一页的调整（几栏、比例、位置）直接写在下面的 className
 // 律所资料、服务清单、办事处来自 lib/site.ts（全站共用）。
@@ -119,8 +120,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <div className="container flex flex-col gap-8">
           <div className="grid flex-1 grid-cols-[1.618fr_1fr] gap-3 md:gap-12">
             <div className="flex min-w-0 flex-col justify-center">
-              <h1 className="text-2xl md:text-5xl">{hero.title[lang]}</h1>
-              <p className="muted mt-3 text-md md:text-base">{hero.sub[lang]}</p>
+              <h1>{hero.title[lang]}</h1>
+              <p className="muted mt-3 text-lead">{hero.sub[lang]}</p>
               <div className="mt-6">
                 <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">
                   {hero.cta[lang]} <Icon name="arrow" size={18} />
@@ -128,7 +129,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               </div>
               <nav className="mt-3 flex flex-col items-start md:flex-row md:gap-6" aria-label={lang === "zh" ? "快速跳转" : "Jump to"}>
                 {hero.jumps.map((j) => (
-                  <a key={j.href} className="text-link text-md" href={j.href}>{j.label[lang]} <Icon name="arrow" size={16} /></a>
+                  <a key={j.href} className="text-link text-small" href={j.href}>{j.label[lang]} <Icon name="arrow" size={16} /></a>
                 ))}
               </nav>
             </div>
@@ -142,8 +143,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <ul className="grid grid-cols-3 gap-4 border-y border-line py-5 md:gap-16">
             {hero.points.map((p) => (
               <li key={p.icon} className="min-w-0">
-                <p className="flex flex-col gap-1 text-md font-semibold md:flex-row md:items-center md:gap-2 md:text-lg"><Icon name={p.icon} /> {p.title[lang]}</p>
-                <p className="muted mt-2 text-sm md:text-md">{p.desc[lang]}</p>
+                <p className="flex flex-col gap-1 text-body font-semibold md:flex-row md:items-center md:gap-2"><Icon name={p.icon} /> {p.title[lang]}</p>
+                <p className="muted mt-2 text-caption">{p.desc[lang]}</p>
               </li>
             ))}
           </ul>
@@ -158,17 +159,16 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <p className="tag">{text.services.tag[lang]}</p>
             <h2>{text.services.title[lang]}</h2>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
+          {/* 卡片宽度至少 300px，自动决定一行几张（手机 1 张、平板 2 张、电脑 3 张），比例固定 3:2 */}
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4">
             {services.map((s) => (
-              <Link key={s.slug} href={`/${lang}/${s.slug}`} className="photo-card h-48 md:h-72">
+              <Link key={s.slug} href={`/${lang}/${s.slug}`} className="photo-card aspect-[3/2]">
                 {s.image && <Image src={s.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
-                <div className="flex w-full flex-wrap items-end justify-between gap-3 p-5">
-                  <div>
-                    <h3>{s.title[lang]}</h3>
-                    <p className="mt-1 text-md">{s.short[lang]}</p>
-                  </div>
-                  <span className="btn btn-light btn-sm">{text.services.more[lang]} <Icon name="arrow" size={16} /></span>
+                <div>
+                  <h3>{s.title[lang]}</h3>
+                  <p className="mt-1 text-small">{s.short[lang]}</p>
                 </div>
+                <span className="btn btn-light btn-sm photo-card-action">{text.services.more[lang]} <Icon name="arrow" size={16} /></span>
               </Link>
             ))}
           </div>
@@ -187,55 +187,52 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             {people.list.map((p, i) => (
               <article key={i} className="overflow-hidden rounded-lg bg-bg">
                 <div className="relative flex aspect-[4/5] items-end bg-line p-3">
-                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" className="object-cover" /> : <span className="muted text-sm">{lang === "zh" ? "照片" : "Photo"}</span>}
+                  {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" className="object-cover" /> : <span className="muted text-caption">{lang === "zh" ? "照片" : "Photo"}</span>}
                 </div>
                 <div className="px-4 pt-4 pb-5">
                   <h3>{p.name[lang]}</h3>
-                  <p className="text-md font-semibold">{p.role[lang]}</p>
-                  <p className="muted mt-1 text-sm">{p.since ? `${people.since[lang]} ${p.since} · ` : ""}{p.languages[lang]}</p>
+                  <p className="text-small font-semibold">{p.role[lang]}</p>
+                  <p className="muted mt-1 text-caption">{p.since ? `${people.since[lang]} ${p.since} · ` : ""}{p.languages[lang]}</p>
                 </div>
               </article>
             ))}
           </div>
-          <p className="muted mt-3 text-sm md:hidden">{people.swipe[lang]}</p>
+          <p className="muted mt-3 text-caption md:hidden">{people.swipe[lang]}</p>
         </div>
       </section>
 
       {/* ═════════ ④ 联系我们 ═════════
-          按城市分组显示；上面的城市按钮是跳到该组的链接（不需要 JavaScript）。
-          新增办事处或城市：只改 lib/site.ts。 */}
+          城市按钮：选中的变黑底，只显示该城市的办事处。新增办事处或城市：只改 lib/site.ts。 */}
       <section id="contact" className="section">
         <div className="container">
           <div className="section-head">
             <p className="tag">{contact.tag[lang]}</p>
             <h2>{contact.title[lang]}</h2>
-            <p className="muted mt-2 text-md">{firm.hours[lang]}</p>
+            <p className="muted mt-2 text-lead">{firm.hours[lang]}</p>
           </div>
 
-          <nav className="mb-8 flex gap-2 overflow-x-auto" aria-label={lang === "zh" ? "城市" : "Cities"}>
-            {cities.map((c) => (
-              <a key={c.id} href={`#office-${c.id}`} className="chip">
-                {c.label[lang]} <em>{offices.filter((o) => o.city === c.id).length}</em>
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex flex-col gap-10">
-            {cities.map((c) => (
-              <div key={c.id} id={`office-${c.id}`}>
-                <h3 className="mb-4">{c.label[lang]}</h3>
-                <div className="grid gap-4 md:grid-cols-3">
-                  {offices.filter((o) => o.city === c.id).map((o) => (
-                    <div key={o.address} className="card">
-                      <p className="font-semibold">{o.name[lang]}</p>
-                      <p className="muted mt-1 text-md">{o.address}</p>
-                      <p className="mt-1 text-md">{o.phoneDisplay}</p>
-                      <div className="mt-4 flex gap-2">
-                        <a className="btn btn-ghost btn-sm flex-1" href={`tel:${o.phone}`}>{contact.call[lang]}</a>
-                        <a className="btn btn-ghost btn-sm flex-1" href={mapsLink(o.address)} target="_blank" rel="noopener">{contact.directions[lang]}</a>
+          {/* 选城市：选中的变黑底，下面只显示该城市的办事处（不需要 JavaScript） */}
+          <div className="tabs" style={{ "--tabs": cities.length } as React.CSSProperties}>
+            {cities.map((c, i) => (
+              <div key={c.id} className="tab">
+                <input type="radio" name="office-city" id={`city-${c.id}`} defaultChecked={i === 0} />
+                <label htmlFor={`city-${c.id}`} className="chip">
+                  {c.label[lang]} <em>{offices.filter((o) => o.city === c.id).length}</em>
+                </label>
+                <div className="tab-panel">
+                  <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4">
+                    {offices.filter((o) => o.city === c.id).map((o) => (
+                      <div key={o.address} className="card">
+                        <p className="font-semibold">{o.name[lang]}</p>
+                        <p className="muted mt-1 text-small">{o.address}</p>
+                        <p className="mt-1 text-small">{o.phoneDisplay}</p>
+                        <div className="mt-4 flex gap-2">
+                          <a className="btn btn-ghost btn-sm flex-1" href={`tel:${o.phone}`}>{contact.call[lang]}</a>
+                          <a className="btn btn-ghost btn-sm flex-1" href={mapsLink(o.address)} target="_blank" rel="noopener">{contact.directions[lang]}</a>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
