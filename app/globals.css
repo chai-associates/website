@@ -44,9 +44,23 @@ p { max-width: var(--measure); }
 .section-head :is(h2, h3) + p { margin-top: calc(var(--spacing) * 2); color: var(--color-ink-muted); font-size: var(--text-lead); }
 /* 内页最上方：面包屑 → 大标题 → 说明（第二段说明用小字） */
 .page-head { padding: calc(var(--spacing) * 4) 0 calc(var(--section-y) / 2); }
-.page-head h1 { margin-top: calc(var(--spacing) * 4); }
-.page-head p { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-lead); }
-.page-head p + p { margin-top: calc(var(--spacing) * 2); font-size: var(--text-small); }
+.page-head .container > h1 { margin-top: calc(var(--spacing) * 4); }
+.page-head .container > p { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-lead); }
+.page-head .container > p + p { margin-top: calc(var(--spacing) * 2); font-size: var(--text-small); }
+/* 个人页的标题区：照片（左）+ 职位、名字、介绍、资料列、按钮（右）；手机上下排 */
+.profile-head { display: grid; gap: calc(var(--spacing) * 8); margin-top: calc(var(--spacing) * 6); }
+.profile-head .person-photo { margin-bottom: 0; font-size: var(--text-display); }
+.profile-head .tag + h1 { margin-top: calc(var(--spacing) * 3); }
+.profile-head h1 + p { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-lead); }
+.profile-head .facts, .profile-head .btn-row { margin-top: calc(var(--spacing) * 6); }
+.profile-head .btn-row + p { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-caption); }
+@media (min-width: 860px) {
+  .profile-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: center; gap: calc(var(--spacing) * 16); }
+}
+/* 一组一组往下排（例如多个横线标题 + 内容） */
+.stack { display: grid; gap: calc(var(--spacing) * 12); }
+/* 正文段落 */
+.prose > * + * { margin-top: 1em; }
 /* 品牌语法 4：一组清单的开头 = 左标题、右边副标题或链接、下面一条细线 */
 .list-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: calc(var(--spacing) * 2) calc(var(--spacing) * 4); margin-bottom: calc(var(--spacing) * 6); padding-bottom: calc(var(--spacing) * 3); border-bottom: 1px solid var(--color-line); }
 .list-head > :not(:first-child) { color: var(--color-ink-muted); font-size: var(--text-small); }
@@ -54,6 +68,8 @@ p { max-width: var(--measure); }
 .with-aside { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--spacing) * 12); }
 .with-aside > aside { display: grid; gap: calc(var(--spacing) * 5); padding: calc(var(--spacing) * 5); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
 .with-aside > aside h3 + p { margin-top: calc(var(--spacing) * 2); color: var(--color-ink-muted); font-size: var(--text-small); }
+.with-aside > aside h3 + .facts { margin-top: calc(var(--spacing) * 4); }
+.with-aside > aside .facts { grid-template-columns: minmax(0, 1fr); } /* 侧栏太窄，资料列一律单栏 */
 @media (min-width: 860px) {
   .with-aside { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; }
   .with-aside > aside { position: sticky; top: calc(var(--header-h) + var(--spacing) * 6); }
@@ -69,7 +85,8 @@ p { max-width: var(--measure); }
 .muted { color: var(--color-ink-muted); }
 
 /* ── 积木：按钮与链接 ─────────────────────────────── */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: calc(var(--spacing) * 2); min-height: var(--tap); padding: 0 calc(var(--spacing) * 6); border: var(--border) solid transparent; border-radius: 999px; font: inherit; font-size: var(--text-body); font-weight: 600; white-space: nowrap; cursor: pointer; }
+/* 按钮文字太长时（例如长的律师名字）会换行，不会撑出画面 */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: calc(var(--spacing) * 2); min-height: var(--tap); padding: calc(var(--spacing) * 2) calc(var(--spacing) * 6); border: var(--border) solid transparent; border-radius: 999px; font: inherit; font-size: var(--text-body); font-weight: 600; line-height: var(--leading-heading); text-align: center; cursor: pointer; }
 .btn-cta { background: var(--color-accent); color: var(--color-on-accent); }
 .btn-cta:hover { filter: brightness(1.12); }
 .btn-ghost { background: var(--color-bg); color: var(--color-ink); border-color: var(--color-ink); }
@@ -86,13 +103,16 @@ p { max-width: var(--measure); }
 .chip[aria-pressed="true"] em, .tab > input:checked + label em { color: var(--color-inverse-muted); }
 
 /* ── 积木：卡片 ─────────────────────────────────── */
-.card { padding: calc(var(--spacing) * 5); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
+.card { display: flex; flex-direction: column; gap: calc(var(--spacing) * 2); padding: calc(var(--spacing) * 5); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
+/* 卡片里的字：标题 → 说明（灰色小字）→ 最下面放链接或按钮 */
+.card > h3 { font-size: var(--text-lead); }
+.card > p { color: var(--color-ink-muted); font-size: var(--text-small); }
+.card > .text-link { margin-top: auto; font-size: var(--text-small); }
+.card > .btn-row { margin-top: auto; padding-top: calc(var(--spacing) * 2); }
+.card > .btn-row > .btn { flex: 1; }
 /* 可以点的卡片（服务卡片等） */
-.card-link { display: flex; flex-direction: column; gap: calc(var(--spacing) * 2); transition: border-color var(--motion-fast) var(--ease); }
+.card-link { transition: border-color var(--motion-fast) var(--ease); }
 .card-link:hover { border-color: var(--color-ink); }
-.card-link > h3 { font-size: var(--text-lead); }
-.card-link > p { color: var(--color-ink-muted); font-size: var(--text-small); }
-.card-link > .text-link { margin-top: auto; font-size: var(--text-small); }
 /* 卡片网格：每张至少 300px，自动决定一行几张（手机 1、平板 2、电脑 3） */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: calc(var(--spacing) * 4); }
 /* 照片卡片：照片当背景。固定排版：标题 + 说明在左上，按钮在右下（不管荧幕大小、字数多少都一样） */

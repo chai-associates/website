@@ -75,7 +75,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
 
       {/* ═══ 颜色、字号 ═══ */}
       <section className="section">
-        <div className="container grid gap-16">
+        <div className="container stack">
           <div>
             <div className="list-head"><h2>颜色</h2><span>tokens.css</span></div>
             <div className="card-grid">
@@ -114,7 +114,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
 
       {/* ═══ 卡片 ═══ */}
       <section className="section">
-        <div className="container grid gap-16">
+        <div className="container stack">
           <div>
             <div className="list-head"><h2>服务卡片</h2><a className="text-link" href="#">查看全部 →</a></div>
             <div className="card-grid">
@@ -157,7 +157,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       {/* ═══ 资料列、横线清单、左右两栏 ═══ */}
       <section className="section section-muted">
         <div className="container with-aside">
-          <div className="grid gap-12">
+          <div className="stack">
             <div>
               <div className="list-head"><h2>资料列</h2><span>facts</span></div>
               <dl className="facts">
@@ -186,6 +186,36 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </label>
             <a className="btn btn-cta w-full" href="#">发送我的资料到 WhatsApp 咨询</a>
           </aside>
+        </div>
+      </section>
+
+      {/* ═══ 个人页标题区、正文段落 ═══ */}
+      <section className="section">
+        <div className="container stack">
+          <div>
+            <div className="list-head"><h2>个人页标题区</h2><span>profile-head</span></div>
+            <div className="profile-head">
+              <div className="person-photo">LH</div>
+              <div>
+                <p className="tag">{lang === "en" ? "Partner · Johor Bahru" : "合伙人 · 新山"}</p>
+                <h1>{lang === "en" ? "Lim Hui Ying" : "林慧盈"}</h1>
+                <p>小标签 → 名字 → 一句话介绍 → 资料列 → 按钮 → 小字说明</p>
+                <dl className="facts">
+                  <div><dt>{lang === "en" ? "Languages" : "语言"}</dt><dd>English · 华语</dd></div>
+                  <div><dt>{lang === "en" ? "Admitted" : "执业年份"}</dt><dd>2010</dd></div>
+                </dl>
+                <div className="btn-row"><a className="btn btn-cta" href="#">预约林慧盈的咨询</a></div>
+                <p>按钮下面的小字说明</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="list-head"><h2>正文段落</h2><span>prose · stack</span></div>
+            <div className="prose">
+              <p>prose：段落之间自动留一行的距离，用在个人介绍、离婚百科文章。</p>
+              <p>stack：好几组「横线标题 + 内容」往下排时，组和组之间的距离统一。</p>
+            </div>
+          </div>
         </div>
       </section>
 

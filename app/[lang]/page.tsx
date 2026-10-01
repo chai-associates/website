@@ -13,7 +13,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, whatsappLink, type Lang } from "@/lib/site";
+import { cities, common, firm, initials, isLang, mapsLink, offices, roles, serviceCategories, team, whatsappLink, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -67,8 +67,6 @@ const text = {
   contact: {
     tag: { zh: "联系我们", en: "Contact" },
     title: { zh: "5 间办事处，就近找我们", en: "Come and see us — 5 offices" },
-    call: { zh: "致电", en: "Call" },
-    directions: { zh: "导航", en: "Directions" },
   },
 };
 
@@ -176,14 +174,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           </div>
           <div className="scroll-row [--cols:3]">
             {team.filter((p) => roles[p.role].group !== "support").map((p) => (
-              <article key={p.slug} className="person-card">
+              <Link key={p.slug} href={`/${lang}/people/${p.slug}`} className="person-card">
                 <div className="person-photo">
                   {p.image ? <Image src={p.image} alt={p.name[lang]} fill sizes="(min-width: 860px) 33vw, 80vw" /> : initials(p.name)}
                 </div>
                 <h3>{p.name[lang]}</h3>
                 <strong>{roles[p.role].label[lang]}</strong>
                 <p>{cities.find((c) => c.id === p.city)?.label[lang]} · {p.languages[lang]}</p>
-              </article>
+              </Link>
             ))}
           </div>
           <p className="muted mt-3 text-caption md:hidden">{people.swipe[lang]}</p>
@@ -212,12 +210,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   <div className="card-grid">
                     {offices.filter((o) => o.city === c.id).map((o) => (
                       <div key={o.address} className="card">
-                        <p className="font-semibold">{o.name[lang]}</p>
-                        <p className="muted mt-1 text-small">{o.address}</p>
-                        <p className="mt-1 text-small">{o.phoneDisplay}</p>
-                        <div className="mt-4 flex gap-2">
-                          <a className="btn btn-ghost btn-sm flex-1" href={`tel:${o.phone}`}>{contact.call[lang]}</a>
-                          <a className="btn btn-ghost btn-sm flex-1" href={mapsLink(o.address)} target="_blank" rel="noopener">{contact.directions[lang]}</a>
+                        <h3>{o.name[lang]}</h3>
+                        <p>{o.address}</p>
+                        <p>{o.phoneDisplay}</p>
+                        <div className="btn-row">
+                          <a className="btn btn-ghost btn-sm" href={`tel:${o.phone}`}>{common.call[lang]}</a>
+                          <a className="btn btn-ghost btn-sm" href={mapsLink(o.address)} target="_blank" rel="noopener">{common.directions[lang]}</a>
                         </div>
                       </div>
                     ))}

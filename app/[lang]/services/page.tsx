@@ -101,7 +101,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
 
       {/* ═══ ③ 5 个分类与全部服务 ═══ */}
       <section className="section">
-        <div className="container grid gap-12">
+        <div className="container stack">
           <h2>{text.all[lang]}</h2>
           {serviceCategories.map((c) => (
             <div key={c.slug}>

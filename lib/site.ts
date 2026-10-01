@@ -31,10 +31,11 @@ export const mapsLink = (address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${firm.name} ${address}`)}`;
 
 // ── 办事处（新增城市或办事处只改这里） ──────────
-export const cities: { id: string; label: Bi }[] = [
-  { id: "jb", label: { zh: "新山", en: "JB" } },
-  { id: "kl", label: { zh: "吉隆坡", en: "KL" } },
-  { id: "mlk", label: { zh: "马六甲", en: "Melaka" } },
+// label：短名（按钮用）· full：全名（标题用）
+export const cities: { id: string; label: Bi; full: Bi }[] = [
+  { id: "jb", label: { zh: "新山", en: "JB" }, full: { zh: "新山", en: "Johor Bahru" } },
+  { id: "kl", label: { zh: "吉隆坡", en: "KL" }, full: { zh: "吉隆坡（八打灵再也）", en: "Petaling Jaya" } },
+  { id: "mlk", label: { zh: "马六甲", en: "Melaka" }, full: { zh: "马六甲", en: "Melaka" } },
 ];
 
 export const offices: { city: string; name: Bi; address: string; phone: string; phoneDisplay: string }[] = [
@@ -66,7 +67,7 @@ export const teamGroups = [
 // city：所属城市（对应上面的 cities）· services：负责的服务（服务的 slug，个人页用）
 // image：照片放进 public/images/people/ 后填上路径（人像 4:5）
 export const team: { slug: string; name: Bi; role: Role; city: string; languages: Bi; services: string[]; image: string | null }[] = [
-  { slug: "partner-1", name: { zh: "律师姓名", en: "Partner Name" }, role: "partner", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
+  { slug: "partner-1", name: { zh: "律师姓名", en: "Partner Name" }, role: "partner", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: ["joint-petition", "custody", "matrimonial-assets"], image: null },
   { slug: "consultant-1", name: { zh: "律师姓名", en: "Consultant Name" }, role: "consultant", city: "kl", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
   { slug: "senior-associate-1", name: { zh: "律师姓名", en: "Senior Associate" }, role: "senior-associate", city: "jb", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
   { slug: "senior-associate-2", name: { zh: "律师姓名", en: "Senior Associate" }, role: "senior-associate", city: "mlk", languages: { zh: "English · 华语", en: "English · Mandarin" }, services: [], image: null },
@@ -125,6 +126,8 @@ export const common = {
   viewAll: { zh: "查看全部服务", en: "View All Services" },
   askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
   readMore: { zh: "阅读详情", en: "Read More" },
+  call: { zh: "拨打电话", en: "Call Now" },
+  directions: { zh: "开始导航", en: "Get Directions" },
   notYours: {
     title: { zh: "不是你的情况？", en: "Not quite your situation?" },
     desc: { zh: "看看我们的全部服务，或直接问律师。", en: "Browse all our services, or ask a lawyer directly." },

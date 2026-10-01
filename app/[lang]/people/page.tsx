@@ -70,6 +70,7 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
               title: g.title[lang],
               people: team.filter((p) => roles[p.role].group === g.id).map((p) => ({
                 key: p.slug,
+                href: `/${lang}/people/${p.slug}`,
                 city: p.city,
                 image: p.image,
                 initials: initials(p.name),

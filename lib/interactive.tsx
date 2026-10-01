@@ -115,7 +115,7 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
 // ── 律师团队按办事处筛选 ─────────────────────────
 // 点城市 → 只显示那个城市的成员；某一组没有人就整组隐藏。
 // 没有 JavaScript 时显示全部成员。
-type Person = { key: string; city: string; image: string | null; initials: string; name: string; role: string; meta: string };
+type Person = { key: string; href: string; city: string; image: string | null; initials: string; name: string; role: string; meta: string };
 export function TeamFilter({ label, allLabel, countLabel, cities, groups }: {
   label: string;
   allLabel: string;
@@ -129,7 +129,7 @@ export function TeamFilter({ label, allLabel, countLabel, cities, groups }: {
     .filter((g) => g.people.length > 0);
 
   return (
-    <div className="grid gap-12">
+    <div className="stack">
       <div className="btn-row" role="group" aria-label={label}>
         <span className="muted text-small">{label}</span>
         {[{ id: "all", label: allLabel }, ...cities].map((c) => (
@@ -144,14 +144,14 @@ export function TeamFilter({ label, allLabel, countLabel, cities, groups }: {
           </div>
           <div className="person-grid">
             {g.people.map((p) => (
-              <article key={p.key} className="person-card reveal">
+              <Link key={p.key} href={p.href} className="person-card reveal">
                 <div className="person-photo">
                   {p.image ? <Image src={p.image} alt={p.name} fill sizes="(min-width: 860px) 25vw, 50vw" /> : p.initials}
                 </div>
                 <h3>{p.name}</h3>
                 <strong>{p.role}</strong>
                 <p>{p.meta}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
