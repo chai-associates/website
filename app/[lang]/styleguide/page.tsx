@@ -109,6 +109,12 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <a className="btn btn-ghost btn-sm" href="#">小按钮（btn-sm）</a>
             <a className="text-link" href="#">文字链接（text-link）→</a>
           </div>
+          <div className="list-head mt-12"><h3>小按钮</h3><span>chip · 选中或主要领域（data-lead）变黑</span></div>
+          <div className="btn-row">
+            <a className="chip" data-lead href="#">抚养权与监护权（data-lead）→</a>
+            <a className="chip" href="#">探视权（chip）→</a>
+            <button type="button" className="chip" aria-pressed="true">新山（aria-pressed）</button>
+          </div>
         </div>
       </section>
 
@@ -208,6 +214,29 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 <p>按钮下面的小字说明</p>
               </div>
             </div>
+          </div>
+          <div>
+            <div className="list-head"><h2>引言</h2><span>quote · 英文 Garamond · 不用斜体</span></div>
+            <figure className="quote">
+              <blockquote><p>{lang === "en" ? "Every family is different. We listen first, then explain your options in plain words." : "每个家庭都不一样。我们先听，再用简单的话告诉你有哪些选择。"}</p></blockquote>
+              <figcaption>— {lang === "en" ? "Lim Hui Ying" : "林慧盈"}</figcaption>
+            </figure>
+          </div>
+          <div>
+            <div className="list-head"><h2>步骤</h2><span>steps · 编号用小标签</span></div>
+            <ol className="steps">
+              {["联系我们", "初次咨询", "报价与委托", "办理案件"].map((t, i) => (
+                <li key={t}><span className="tag">{String(i + 1).padStart(2, "0")}</span><h3>{t}</h3><p>steps：手机一栏，电脑自动并排</p></li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <div className="list-head"><h2>时间线</h2><span>timeline · 年份 → 说明</span></div>
+            <ol className="timeline">
+              {[["2010", "律所成立"], ["2015", "开设第二间办事处"], ["2024", "第五间办事处开业"]].map(([y, t]) => (
+                <li key={y}><h3>{y}</h3><p>{t}</p></li>
+              ))}
+            </ol>
           </div>
           <div>
             <div className="list-head"><h2>正文段落</h2><span>prose · stack</span></div>

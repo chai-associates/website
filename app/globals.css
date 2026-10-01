@@ -49,6 +49,7 @@ p { max-width: var(--measure); }
 .page-head .container > p + p { margin-top: calc(var(--spacing) * 2); font-size: var(--text-small); }
 /* 个人页的标题区：照片（左）+ 职位、名字、介绍、资料列、按钮（右）；手机上下排 */
 .profile-head { display: grid; gap: calc(var(--spacing) * 8); margin-top: calc(var(--spacing) * 6); }
+.list-head + .profile-head { margin-top: 0; } /* 关于我们的「主管合伙人的话」：横线标题下面直接接 */
 .profile-head .person-photo { margin-bottom: 0; font-size: var(--text-display); }
 .profile-head .tag + h1 { margin-top: calc(var(--spacing) * 3); }
 .profile-head h1 + p { margin-top: calc(var(--spacing) * 3); color: var(--color-ink-muted); font-size: var(--text-lead); }
@@ -57,6 +58,14 @@ p { max-width: var(--measure); }
 @media (min-width: 860px) {
   .profile-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: center; gap: calc(var(--spacing) * 16); }
 }
+/* 引言：一段大字（个人页「用自己的话」、以后主管合伙人的话）→ 下面署名。
+   英文版用 Garamond，中文版用无衬线；不用斜体，引号由浏览器依语言自动加上 */
+.quote blockquote p { max-width: 24em; font-size: var(--text-title); font-weight: 500; line-height: var(--leading-heading); letter-spacing: -0.01em; }
+.quote blockquote p::before { content: open-quote; }
+.quote blockquote p::after { content: close-quote; }
+body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacing: -0.005em; }
+.quote figcaption { margin-top: calc(var(--spacing) * 6); color: var(--color-ink-muted); font-size: var(--text-small); font-weight: 600; }
+.quote + .text-link { margin-top: calc(var(--spacing) * 4); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
 .stack { display: grid; gap: calc(var(--spacing) * 12); }
 /* 正文段落 */
@@ -98,8 +107,8 @@ p { max-width: var(--measure); }
 .text-link { display: inline-flex; align-items: center; gap: calc(var(--spacing) * 1); min-height: var(--tap-min); font-weight: 600; }
 .chip { cursor: pointer; display: inline-flex; align-items: center; gap: calc(var(--spacing) * 2); min-height: var(--tap-min); padding: 0 calc(var(--spacing) * 4); border: var(--border) solid var(--color-line); border-radius: 999px; font-size: var(--text-small); font-weight: 600; white-space: nowrap; }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
-/* 选中的按钮变黑（城市分页、团队筛选共用） */
-.chip[aria-pressed="true"], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
+/* 选中的按钮变黑（城市分页、团队筛选共用）；data-lead = 主要领域（个人页），一样变黑 */
+.chip[aria-pressed="true"], .chip[data-lead], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
 .chip[aria-pressed="true"] em, .tab > input:checked + label em { color: var(--color-inverse-muted); }
 
 /* ── 积木：卡片 ─────────────────────────────────── */
@@ -147,6 +156,20 @@ p { max-width: var(--measure); }
 .rule-list > li:first-child { border-top: 1px solid var(--color-line); }
 .list-head + .rule-list > li:first-child { border-top: 0; padding-top: 0; } /* 紧接横线标题时，标题的线就是清单的第一条线 */
 .rule-list > li > h3 + p { margin-top: calc(var(--spacing) * 1); color: var(--color-ink-muted); font-size: var(--text-small); } /* 清单项目可以是「标题 + 说明」 */
+
+/* ── 积木：步骤（合作流程）：每一步 = 小标签编号 → h3 → 说明；手机一栏，电脑自动并排 ── */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: calc(var(--spacing) * 8) calc(var(--spacing) * 6); }
+.steps > li { display: flex; flex-direction: column; gap: calc(var(--spacing) * 2); padding-top: calc(var(--spacing) * 4); border-top: var(--border) solid var(--color-ink); }
+.steps > li > h3 { font-size: var(--text-lead); }
+.steps > li > p { color: var(--color-ink-muted); font-size: var(--text-small); }
+
+/* ── 积木：时间线（里程碑）：左边一条线 + 圆点，每一项 = 年份 h3 → 说明 ── */
+.timeline > li { position: relative; padding: 0 0 calc(var(--spacing) * 8) calc(var(--spacing) * 8); }
+.timeline > li::before { content: ""; position: absolute; left: 0; top: calc(var(--text-subtitle) * 0.6 - var(--spacing)); width: calc(var(--spacing) * 2); height: calc(var(--spacing) * 2); border-radius: 50%; background: var(--color-ink); }
+.timeline > li::after { content: ""; position: absolute; left: calc(var(--spacing) - 0.5px); top: calc(var(--text-subtitle) * 0.6 + var(--spacing) * 2); bottom: calc(var(--spacing) - var(--text-subtitle) * 0.6); width: 1px; background: var(--color-line); }
+.timeline > li:last-child { padding-bottom: 0; }
+.timeline > li:last-child::after { display: none; }
+.timeline > li > h3 + p { margin-top: calc(var(--spacing) * 1); color: var(--color-ink-muted); }
 
 /* ── 积木：面包屑（首页 › 离婚服务 › 孩子） ─────────── */
 .breadcrumb { display: flex; flex-wrap: wrap; align-items: center; column-gap: calc(var(--spacing) * 2); font-size: var(--text-caption); color: var(--color-ink-muted); }

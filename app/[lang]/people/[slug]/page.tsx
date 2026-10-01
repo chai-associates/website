@@ -2,11 +2,14 @@
 // 律师个人页 /people/[slug]（所有成员共用这一个模板）
 // ───────────────────────────────────────────────────────────────
 // 区块顺序：① 照片 + 名字 + 资料列 + 预约按钮
-//          ② 关于 · 我可以帮你 · 经历 · 会员与讲座 · 工作以外（左）+ 资历与预约（右侧栏）
-//          ③ 同一个城市的其他成员
+//          ② 用自己的话（引言）
+//          ③ 关于 · 可以帮你的事（主要领域排第一、变黑）· 经历 · 奖项 · 讲座与著作 · 会员资格 · 工作以外（左）
+//            + 资历与预约（右侧栏）
+//          ④ 同一个城市的其他成员
 // 名字、职位、城市、语言、负责的服务在 lib/site.ts（team）；
-// 个人介绍等较长的内容写在下面 text.profiles，没有写的区块会自动隐藏。
-// ⚠ 「经历」等内容要符合律师公会的宣传规定：不写客户评价、不暗示胜诉，上线前由律所核准。
+// 个人介绍等较长的内容写在下面 text.profiles（对应「律师问卷」），没有写的区块会自动隐藏。
+// ⚠ 「经历」「奖项」等内容要符合律师公会的宣传规定：不写客户评价、不暗示胜诉、不自夸，
+//   奖项只写「名称 · 颁发机构 · 年份」，上线前由律所核准。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -15,12 +18,15 @@ import { notFound } from "next/navigation";
 import { cityOf, common, displayName, initials, isLang, roles, services, team, whatsappLink, type Bi } from "@/lib/site";
 
 type Profile = {
-  admitted?: number;                         // 执业年份
+  admitted?: number;                         // 执业年份（只显示在标题区的资料列）
   tagline?: Bi;                              // 一句话介绍
+  quote?: Bi;                                // 用自己的话（In your own words）
   about?: Bi[];                              // 关于（每个元素一段）
-  qualifications?: { label: Bi; value: Bi }[]; // 资历：执业资格、学历、其他
+  qualifications?: { label: Bi; value: Bi }[]; // 资历：执业资格、其他资格（学历也放在其他资格）
   experience?: Bi[];                         // 经历（律所核准后才放）
-  memberships?: Bi[];                        // 会员与讲座
+  awards?: Bi[];                             // 奖项：名称 · 颁发机构 · 年份
+  talks?: Bi[];                              // 讲座与著作
+  memberships?: Bi[];                        // 会员资格
   outside?: Bi;                              // 工作以外
 };
 
@@ -33,19 +39,25 @@ const text = {
     "lim-hui-ying": {
       admitted: 2010,
       tagline: { zh: "[一句话介绍，由律师本人确认]", en: "[One-line introduction, confirmed by the lawyer]" },
+      quote: { zh: "[用自己的话：为什么做家事法、想对正在经历离婚的人说什么（两三句）]", en: "[In your own words: why family law, and what you would say to someone going through a divorce (two or three sentences)]" },
       about: [
         { zh: "[第一段：负责的案件类型、所在办事处]", en: "[Paragraph 1: the matters they handle and their office]" },
         { zh: "[第二段：执业背景与处理案件的方式]", en: "[Paragraph 2: background and how they approach a matter]" },
       ],
       qualifications: [
         { label: { zh: "执业资格", en: "Admitted as" }, value: { zh: "[马来亚高等法院辩护律师兼事务律师（年份）]", en: "[Advocate & Solicitor, High Court of Malaya (year)]" } },
-        { label: { zh: "学历", en: "Education" }, value: { zh: "[学位、大学、年份]", en: "[Degree, university, year]" } },
+        { label: { zh: "其他资格", en: "Other qualifications" }, value: { zh: "[学位、大学、年份；调解员等认证]", en: "[Degree, university, year; mediator or other accreditation]" } },
       ],
       experience: [
         { zh: "[经历 1，律所核准后填写]", en: "[Experience 1, approved by the firm]" },
         { zh: "[经历 2，律所核准后填写]", en: "[Experience 2, approved by the firm]" },
       ],
-      memberships: [{ zh: "[会员资格或讲座]", en: "[Membership or talk]" }],
+      awards: [{ zh: "[奖项名称 · 颁发机构 · 年份]", en: "[Award · Awarding body · Year]" }],
+      talks: [
+        { zh: "[讲座题目 · 主办单位 · 年份]", en: "[Talk title · Organiser · Year]" },
+        { zh: "[文章或著作题目 · 刊物 · 年份]", en: "[Article or publication · Publisher · Year]" },
+      ],
+      memberships: [{ zh: "[会员资格，例如所属的律师公会委员会]", en: "[Membership, e.g. a Bar committee]" }],
       outside: { zh: "[工作以外的一句话，可不填]", en: "[One line outside the office, optional]" },
     },
   } as Record<string, Profile>,
@@ -61,11 +73,13 @@ const text = {
   about: { zh: "关于{name}", en: "About {name}" },
   help: { zh: "可以帮你的事", en: "How {name} can help" },
   experience: { zh: "经历", en: "Experience" },
-  memberships: { zh: "会员与讲座", en: "Memberships & talks" },
+  awards: { zh: "奖项", en: "Awards" },
+  talks: { zh: "讲座与著作", en: "Talks & publications" },
+  memberships: { zh: "会员资格", en: "Memberships" },
   outside: { zh: "工作以外", en: "Outside the office" },
   qualifications: { zh: "资历", en: "Qualifications" },
   ready: { zh: "准备好聊聊了吗？", en: "Ready to talk it through?" },
-  // ③ 同城成员
+  // ④ 同城成员
   alsoIn: { zh: "{city}的其他成员", en: "Also in {city}" },
   allPeople: { zh: "全部成员", en: "All our people" },
 };
@@ -93,7 +107,8 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
   const role = roles[p.role].label[lang];
   const fill = (t: Bi) => t[lang].replace("{name}", name).replace("{city}", city);
   const bookHref = whatsappLink(lang, fill(text.bookMessage));
-  const helps = services.filter((s) => p.services.includes(s.slug));
+  // 主要领域排第一（data-lead 会让它变黑）
+  const helps = services.filter((s) => p.services.includes(s.slug)).sort((a, b) => Number(b.slug === p.lead) - Number(a.slug === p.lead));
   const others = team.filter((x) => cityOf(x).id === cityOf(p).id && x.slug !== p.slug).slice(0, 4);
 
   return (
@@ -128,7 +143,19 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
         </div>
       </section>
 
-      {/* ═══ ② 内容（左）+ 资历与预约（右侧栏） ═══ */}
+      {/* ═══ ② 用自己的话 ═══ */}
+      {profile.quote && (
+        <section className="section">
+          <div className="container">
+            <figure className="quote reveal">
+              <blockquote><p>{profile.quote[lang]}</p></blockquote>
+              <figcaption>— {name}</figcaption>
+            </figure>
+          </div>
+        </section>
+      )}
+
+      {/* ═══ ③ 内容（左）+ 资历与预约（右侧栏） ═══ */}
       <section className="section section-muted">
         <div className="container with-aside">
           <div className="stack">
@@ -144,7 +171,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
               <div>
                 <div className="list-head"><h2>{fill(text.help)}</h2></div>
                 <div className="btn-row">
-                  {helps.map((s) => <Link key={s.slug} className="chip" href={`/${lang}/services/${s.category}/${s.slug}`}>{s.title[lang]} →</Link>)}
+                  {helps.map((s) => <Link key={s.slug} className="chip" data-lead={s.slug === p.lead || undefined} href={`/${lang}/services/${s.category}/${s.slug}`}>{s.title[lang]} →</Link>)}
                 </div>
               </div>
             )}
@@ -152,6 +179,18 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
               <div>
                 <div className="list-head"><h2>{text.experience[lang]}</h2></div>
                 <ul className="rule-list">{profile.experience.map((e) => <li key={e.zh}>{e[lang]}</li>)}</ul>
+              </div>
+            )}
+            {profile.awards && (
+              <div>
+                <div className="list-head"><h2>{text.awards[lang]}</h2></div>
+                <ul className="rule-list">{profile.awards.map((a) => <li key={a.zh}>{a[lang]}</li>)}</ul>
+              </div>
+            )}
+            {profile.talks && (
+              <div>
+                <div className="list-head"><h2>{text.talks[lang]}</h2></div>
+                <ul className="rule-list">{profile.talks.map((t) => <li key={t.zh}>{t[lang]}</li>)}</ul>
               </div>
             )}
             {profile.memberships && (
@@ -184,7 +223,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
         </div>
       </section>
 
-      {/* ═══ ③ 同一个城市的其他成员 ═══ */}
+      {/* ═══ ④ 同一个城市的其他成员 ═══ */}
       {others.length > 0 && (
         <section className="section">
           <div className="container">

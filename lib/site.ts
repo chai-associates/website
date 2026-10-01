@@ -99,6 +99,8 @@ export const displayName = (p: Member, lang: Lang) => (p.honorific ? `${p.honori
 export const cityOf = (p: Member) => cities.find((c) => c.id === offices.find((o) => o.id === p.office)?.city)!;
 // 没有照片时显示的英文名缩写，例如 Lim Hui Ying → LH
 export const initials = (name: Bi) => name.en.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+// 律师人数（合伙人、顾问律师、律师；法律支援团队不算律师）
+export const lawyerCount = team.filter((p) => roles[p.role].group !== "support").length;
 
 // ── 离婚服务：5 个分类（首页卡片、选单、服务页都读这里） ──
 // 网址：/services（全部）→ /services/分类 → /services/分类/服务
