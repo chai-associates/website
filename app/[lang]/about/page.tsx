@@ -2,9 +2,11 @@
 // 关于我们 /about（选单「关于我们」的三个子项连到 #firm、#values、#recognitions）
 // ───────────────────────────────────────────────────────────────
 // 母页。品牌语法 4：段落 = 色带，相邻不同色；一条色带只做一件事。内容依「律所问卷」。
-// 色带顺序：① 标题 + 目录（白）  ② 律所简介：照片 + 文字 + 资料（浅灰）  ③ 我们的理念：使命 → 愿景 → 3 个理念（白）
-//   ④ 合作流程（深色）  ⑤ 主管合伙人的话（白）  ⑥ 里程碑（浅灰）  ⑦ 荣誉与认可（白）
-//   ⑧ 更多关于我们：媒体报道 / 公益活动 / 活动与讲座，照片卡片（浅灰）  ⑨ 认识我们的团队（深色）  ⑩ 想先聊聊（白）
+// 色带顺序：① 标题（白）  ② 律所简介：照片 + 文字 + 资料（浅灰）  ③ 我们的理念：使命 → 愿景 → 3 个理念（白）
+//   ④ 合作流程（深色）  ⑤ 主管合伙人的话（白）
+//   ⑥ 更多关于我们：媒体报道 / 公益活动 / 活动与讲座，照片卡片（浅灰）  ⑦ 荣誉与认可（白；清空就隐藏）
+//   ⑧ 认识我们的团队（深色）  ⑨ 想先聊聊（白）
+// 「里程碑」已删除（减法：成立年份已在律所资料里）。
 // 成立年份、办事处、团队在 lib/site.ts（律师人数由 team 自动算）；这里只放这一页的文字。
 // ⚠ 中括号 [ ] 里的都是占位，等律所问卷回来后照题目替换。
 // ⚠ 荣誉与认可要符合律师公会的宣传规定（不自夸、不比较，只写「名称 · 颁发单位 · 年份」）；
@@ -73,14 +75,14 @@ const text = {
     quote: { zh: "[主管合伙人想对客户说的话，两三句，由本人确认]", en: "[A short message to clients from the Managing Partner, two or three sentences, confirmed by them]" },
     profile: { zh: "阅读个人介绍", en: "Read profile" },
   },
-  // ⑥ 里程碑（第一项的年份 = 成立年份；[YYYY] = 年份占位）
-  milestones: {
-    title: { zh: "里程碑", en: "Milestones" },
-    list: [
-      { year: String(firm.founded), title: { zh: "[律所成立]", en: "[The firm is founded]" } },
-      { year: "[YYYY]", title: { zh: "[里程碑，例如：开设第二间办事处]", en: "[Milestone, e.g. second office opens]" } },
-      { year: "[YYYY]", title: { zh: "[里程碑]", en: "[Milestone]" } },
-    ] as { year: string; title: Bi }[],
+  // ⑥ 更多关于我们（三个子页面的一句话介绍；名称在 lib/site.ts 的 aboutSections）
+  more: {
+    title: { zh: "更多关于我们", en: "More about us" },
+    desc: {
+      media: { zh: "[一句话：律师接受访问、发表意见的媒体报道]", en: "[One line: our lawyers in the media]" },
+      community: { zh: "[一句话：律所参与的公益活动]", en: "[One line: our community work]" },
+      events: { zh: "[一句话：律所举办或受邀主讲的讲座]", en: "[One line: talks and events]" },
+    } as Record<AboutSection, Bi>,
   },
   // ⑦ 荣誉与认可（含合作伙伴与会员资格；kind = 小标签。清空 list 就会整段隐藏）
   recognitions: {
@@ -90,23 +92,14 @@ const text = {
       { kind: { zh: "会员资格", en: "Membership" }, title: { zh: "[机构名称]", en: "[Organisation]" }, desc: { zh: "[合作或会员关系，一句话]", en: "[The partnership or membership, in one line]" } },
     ] as (Item & { kind: Bi })[],
   },
-  // ⑧ 更多关于我们（三个子页面的一句话介绍；名称在 lib/site.ts 的 aboutSections）
-  more: {
-    title: { zh: "更多关于我们", en: "More about us" },
-    desc: {
-      media: { zh: "[一句话：律师接受访问、发表意见的媒体报道]", en: "[One line: our lawyers in the media]" },
-      community: { zh: "[一句话：律所参与的公益活动]", en: "[One line: our community work]" },
-      events: { zh: "[一句话：律所举办或受邀主讲的讲座]", en: "[One line: talks and events]" },
-    } as Record<AboutSection, Bi>,
-  },
-  // ⑨ 认识我们的团队
+  // ⑧ 认识我们的团队
   team: {
     tag: { zh: "我们的团队", en: "Our People" },
     title: { zh: "认识我们的团队", en: "Meet our people" },
     desc: { zh: "{n} 位律师，分布在 {m} 间办事处。", en: "{n} lawyers across {m} offices." },
     cta: { zh: "认识我们的团队", en: "Meet Our People" },
   },
-  // ⑩ 直接咨询
+  // ⑨ 直接咨询
   ask: {
     title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
     desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
@@ -124,18 +117,10 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
   if (!isLang(lang)) notFound();
   const md = team.find((p) => p.role === "managing-partner");
   const count = (t: Bi) => t[lang].replace("{n}", String(lawyerCount)).replace("{m}", String(offices.length));
-  // 目录：只列出这一页真的有的段落
-  const toc = [
-    { id: "firm", label: text.firm.title },
-    { id: "values", label: text.values.title },
-    { id: "process", label: text.process.title },
-    ...(text.recognitions.list.length > 0 ? [{ id: "recognitions", label: text.recognitions.title }] : []),
-    { id: "team", label: text.team.tag },
-  ];
 
   return (
     <>
-      {/* ═══ ① 标题 + 目录（白） ═══ */}
+      {/* ═══ ① 标题（白） ═══ */}
       <section className="page-head">
         <div className="container">
           <ol className="breadcrumb">
@@ -144,10 +129,6 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
           </ol>
           <h1>{text.heading[lang]}</h1>
           <p>{text.lead[lang]}</p>
-          <nav className="toc" aria-label={common.onThisPage[lang]}>
-            <p className="tag">{common.onThisPage[lang]}</p>
-            <ol>{toc.map((t) => <li key={t.id}><a href={`#${t.id}`}>{t.label[lang]}</a></li>)}</ol>
-          </nav>
         </div>
       </section>
 
@@ -228,35 +209,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </section>
       )}
 
-      {/* ═══ ⑥ 里程碑（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head"><h2>{text.milestones.title[lang]}</h2></div>
-          <ol className="timeline">
-            {text.milestones.list.map((m) => <li key={m.title.en} className="reveal"><h3>{m.year}</h3><p>{m.title[lang]}</p></li>)}
-          </ol>
-        </div>
-      </section>
-
-      {/* ═══ ⑦ 荣誉与认可（白；没有资料就整段隐藏） ═══ */}
-      {text.recognitions.list.length > 0 && (
-        <section id="recognitions" className="section">
-          <div className="container">
-            <div className="section-head"><h2>{text.recognitions.title[lang]}</h2></div>
-            <div className="card-grid">
-              {text.recognitions.list.map((r) => (
-                <article key={r.title.zh} className="feature reveal">
-                  <span className="tag">{r.kind[lang]}</span>
-                  <h3>{r.title[lang]}</h3>
-                  <p>{r.desc[lang]}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ═══ ⑧ 更多关于我们：三个子页面（浅灰） ═══ */}
+      {/* ═══ ⑥ 更多关于我们：三个子页面（浅灰） ═══ */}
       <section className="section section-muted">
         <div className="container">
           <div className="section-head"><h2>{text.more.title[lang]}</h2></div>
@@ -275,7 +228,25 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </section>
 
-      {/* ═══ ⑨ 认识我们的团队（深色） ═══ */}
+      {/* ═══ ⑦ 荣誉与认可（白；没有资料就整段隐藏，团队深色带直接接在浅灰后面） ═══ */}
+      {text.recognitions.list.length > 0 && (
+        <section id="recognitions" className="section">
+          <div className="container">
+            <div className="section-head"><h2>{text.recognitions.title[lang]}</h2></div>
+            <div className="card-grid">
+              {text.recognitions.list.map((r) => (
+                <article key={r.title.zh} className="feature reveal">
+                  <span className="tag">{r.kind[lang]}</span>
+                  <h3>{r.title[lang]}</h3>
+                  <p>{r.desc[lang]}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══ ⑧ 认识我们的团队（深色） ═══ */}
       <section id="team" className="section section-dark">
         <div className="container">
           <div className="section-head">
@@ -287,7 +258,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </section>
 
-      {/* ═══ ⑩ 想先聊聊你的情况？（白） ═══ */}
+      {/* ═══ ⑨ 想先聊聊你的情况？（白） ═══ */}
       <section className="section">
         <div className="container">
           <div className="section-head">

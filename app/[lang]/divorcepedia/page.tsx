@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 离婚百科 /divorcepedia（文章列表）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 每个服务分类一组：横线标题（右边连到该分类的服务）+ 文章卡片
+// 区块顺序：① 标题  ② 分类按钮（一次只看一个分类；不需要 JavaScript）→ 文章卡片 + 该分类的服务连结
 //          ③ 想先聊聊你的情况？
 // 文章资料在 lib/divorcepedia.ts；分类跟服务一样读 lib/site.ts。没有文章的分类自动隐藏。
 // ═══════════════════════════════════════════════════════════════
@@ -20,7 +20,7 @@ const text = {
   heading: { zh: "离婚前后，\n你会想知道的事。", en: "What you'll want to know,\nbefore and after divorce." },
   lead: { zh: "用简单的话，解释马来西亚非穆斯林离婚的常见问题。", en: "Plain answers to common questions about non-Muslim divorce in Malaysia." },
   // ② 分类
-  services: { zh: "相关服务", en: "Related services" },
+  services: { zh: "{category}的相关服务", en: "Related services: {category}" },
   // ③ 想先聊聊你的情况？
   ask: {
     title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
@@ -55,26 +55,33 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
         </div>
       </section>
 
-      {/* ═══ ② 每个分类一组 ═══ */}
-      <section className="section">
-        <div className="container stack">
-          {groups.map((g) => (
-            <div key={g.slug} id={g.slug}>
-              <div className="list-head">
-                <h2>{g.title[lang]}</h2>
-                <Link className="text-link" href={`/${lang}/services/${g.slug}`}>{text.services[lang]} →</Link>
+      {/* ═══ ② 分类按钮 → 该分类的文章（浅灰色带） ═══ */}
+      <section className="section section-muted">
+        <div className="container">
+          <div className="tabs">
+            {groups.map((g, i) => (
+              <div key={g.slug} className="tab">
+                <input type="radio" name="pedia-category" id={`pedia-${g.slug}`} defaultChecked={i === 0} />
+                <label htmlFor={`pedia-${g.slug}`} className="chip">
+                  {g.title[lang]} <em>{g.list.length}</em>
+                </label>
+                <div className="tab-panel">
+                  <div className="stack">
+                    <div className="card-grid">
+                      {g.list.map((a) => (
+                        <Link key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} className="card card-link">
+                          <h3>{a.title[lang]}</h3>
+                          <p>{a.summary[lang]}</p>
+                          <span className="text-link">{common.readMore[lang]} →</span>
+                        </Link>
+                      ))}
+                    </div>
+                    <Link className="text-link" href={`/${lang}/services/${g.slug}`}>{text.services[lang].replace("{category}", g.title[lang])} →</Link>
+                  </div>
+                </div>
               </div>
-              <div className="card-grid">
-                {g.list.map((a) => (
-                  <Link key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} className="card card-link reveal">
-                    <h3>{a.title[lang]}</h3>
-                    <p>{a.summary[lang]}</p>
-                    <span className="text-link">{common.readMore[lang]} →</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 

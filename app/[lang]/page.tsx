@@ -173,7 +173,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           </div>
 
           {/* 选城市：选中的变黑底，下面只显示该城市的办事处（不需要 JavaScript） */}
-          <div className="tabs" style={{ "--tabs": cities.length } as React.CSSProperties}>
+          <div className="tabs">
             {cities.map((c, i) => (
               <div key={c.id} className="tab">
                 <input type="radio" name="office-city" id={`city-${c.id}`} defaultChecked={i === 0} />

@@ -1,9 +1,9 @@
 // ═══════════════════════════════════════════════════════════════
 // 律师个人页 /people/[slug]（所有成员共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 照片 + 名字 + 资料列 + 预约按钮（这一页唯一的主要行动）+ 目录
+// 区块顺序：① 照片 + 名字 + 资料列 + 预约按钮（这一页唯一的主要行动）
 //          ② 用自己的话（引言）
-//          ③ 三个大段落（目录连到这里）：关于（含工作以外）· 可以帮你的事（主要领域排第一、变黑）·
+//          ③ 三个大段落：关于（含工作以外）· 可以帮你的事（主要领域排第一、变黑）·
 //            资历与经历（小组：资格 · 经历 · 奖项 · 讲座与著作 · 会员资格）
 //          ④ 同一个城市的其他成员
 // 名字、职位、城市、语言、负责的服务在 lib/site.ts（team）；
@@ -110,12 +110,6 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
   // 主要领域排第一（data-lead 会让它变黑）
   const helps = services.filter((s) => p.services.includes(s.slug)).sort((a, b) => Number(b.slug === p.lead) - Number(a.slug === p.lead));
   const hasCredentials = [profile.qualifications, profile.experience, profile.awards, profile.talks, profile.memberships].some((x) => x && x.length > 0);
-  // 目录：只列出这一页真的有的段落
-  const toc = [
-    { id: "about", label: fill(text.about) },
-    ...(helps.length > 0 ? [{ id: "help", label: fill(text.help) }] : []),
-    ...(hasCredentials ? [{ id: "credentials", label: text.credentials[lang] }] : []),
-  ];
   // 资历与经历的小组（没有资料的小组自动隐藏）
   const lists = [
     { key: "experience", title: text.experience, items: profile.experience },
@@ -152,10 +146,6 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
                 <a className="btn btn-cta" href={bookHref} target="_blank" rel="noopener">{fill(text.book)}</a>
               </div>
               <p>{text.note[lang]}</p>
-              <nav className="toc" aria-label={common.onThisPage[lang]}>
-                <p className="tag">{common.onThisPage[lang]}</p>
-                <ol>{toc.map((t) => <li key={t.id}><a href={`#${t.id}`}>{t.label}</a></li>)}</ol>
-              </nav>
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ export function Menu({ label, children }: { label: string; children: React.React
 // 选一个情况 → 下面显示相关的服务卡片
 type Card = { href: string; title: string; short: string };
 export function SituationPicker({ label, placeholder, readMore, options }: {
-  label: string;
+  label: string; // 不显示，给读屏软件用（选单的预设文字本身就是问题，例如「我们可以怎么帮你？」）
   placeholder: string;
   readMore: string;
   options: { label: string; cards: Card[] }[];
@@ -58,13 +58,10 @@ export function SituationPicker({ label, placeholder, readMore, options }: {
 
   return (
     <div className="form">
-      <label className="field">
-        {label}
-        <select className="select" value={picked} onChange={(e) => setPicked(Number(e.target.value))}>
-          <option value={-1} disabled>{placeholder}</option>
-          {options.map((o, i) => <option key={o.label} value={i}>{o.label}</option>)}
-        </select>
-      </label>
+      <select className="select" aria-label={label} value={picked} onChange={(e) => setPicked(Number(e.target.value))}>
+        <option value={-1} disabled>{placeholder}</option>
+        {options.map((o, i) => <option key={o.label} value={i}>{o.label}</option>)}
+      </select>
       {cards.length > 0 && (
         <div className="card-grid" aria-live="polite">
           {cards.map((c) => (

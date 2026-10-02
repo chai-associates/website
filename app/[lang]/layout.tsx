@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import { fontVariables } from "@/lib/fonts";
 import { Menu, PageTransition } from "@/lib/interactive";
-import { aboutSections, common, disclaimer, firm, isLang, launched, locales, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { aboutSections, common, disclaimer, firm, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
 const text = {
@@ -128,7 +128,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
               {text.nav.map((l) => <Link key={l.href} href={`${home}${l.href}`}>{l.label[lang]}</Link>)}
               {socials.map((s) => <a key={s.label} href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
             </nav>
-            <p className="footer-disc">{disclaimer[lang]} © {new Date().getFullYear()} {firm.name}.</p>
+            <p className="footer-disc">{scope[lang]} {disclaimer[lang]} © {new Date().getFullYear()} {firm.name}.</p>
           </div>
         </footer>
       </body>

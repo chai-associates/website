@@ -180,7 +180,6 @@ export const common = {
   viewAll: { zh: "查看全部服务", en: "View All Services" },
   askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
   readMore: { zh: "阅读详情", en: "Read More" },
-  onThisPage: { zh: "本页内容", en: "On this page" },
   call: { zh: "拨打电话", en: "Call Now" },
   directions: { zh: "开始导航", en: "Get Directions" },
   notYours: {
@@ -188,6 +187,9 @@ export const common = {
     desc: { zh: "看看我们的全部服务，或直接问律师。", en: "Browse all our services, or ask a lawyer directly." },
   },
 };
+
+// ── 业务范围（页脚的附注，全站每一页都看得到） ──
+export const scope: Bi = { zh: "本所处理非穆斯林的离婚与家事案件。", en: "We act in divorce and family matters for non-Muslims." };
 
 // ── 法律声明（页脚、以后的服务页和文章页共用） ──
 export const disclaimer: Bi = {

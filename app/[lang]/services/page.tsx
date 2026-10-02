@@ -2,7 +2,7 @@
 // 全部服务 /services
 // ───────────────────────────────────────────────────────────────
 // 母页：只做导览，带人到分类页（每个分类的服务清单在分类页）。品牌语法 4：一条色带只做一件事。
-// 色带顺序：① 标题（白）  ② 从你的情况开始（浅灰）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白）  ④ 找不到你的情况？（浅灰）
+// 色带顺序：① 标题（白）  ② 选单「我们可以怎么帮你？」（浅灰）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白）  ④ 找不到你的情况？（浅灰）
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -24,12 +24,10 @@ const text = {
   },
   // ① 标题
   lead: { zh: "从你的情况开始，找到对应的服务。", en: "Start with your situation and find the right service." },
-  scope: { zh: "本所处理非穆斯林的离婚与家事案件。", en: "We act in divorce and family matters for non-Muslims." },
   // ② 我的情况是
-  situation: { zh: "从你的情况开始", en: "Start with your situation" },
   picker: {
-    label: { zh: "我的情况是", en: "My situation is" },
-    placeholder: { zh: "请选择", en: "Choose one" },
+    label: { zh: "选择你的情况", en: "Choose your situation" }, // 不显示，给读屏软件用
+    placeholder: { zh: "我们可以怎么帮你？", en: "How can we help?" },
     // 每个情况对应哪些服务（写服务的 slug，顺序 = 显示顺序）
     options: [
       { label: { zh: "我们都同意离婚", en: "We both agree to divorce" }, slugs: ["joint-petition"] },
@@ -82,14 +80,12 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           </ol>
           <h1>{common.services[lang]}</h1>
           <p>{text.lead[lang]}</p>
-          <p>{text.scope[lang]}</p>
         </div>
       </section>
 
-      {/* ═══ ② 从你的情况开始（浅灰） ═══ */}
+      {/* ═══ ② 选单「我们可以怎么帮你？」（浅灰） ═══ */}
       <section className="section section-muted">
         <div className="container">
-          <div className="section-head"><h2>{text.situation[lang]}</h2></div>
           <SituationPicker
             label={text.picker.label[lang]}
             placeholder={text.picker.placeholder[lang]}

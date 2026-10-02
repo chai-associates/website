@@ -196,7 +196,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           <div>
             <div className="list-head"><h2>分页选择</h2><span>tabs · 不用 JavaScript</span></div>
-            <div className="tabs" style={{ "--tabs": 3 } as React.CSSProperties}>
+            <div className="tabs">
               {["新山", "吉隆坡", "马六甲"].map((c, i) => (
                 <div key={c} className="tab">
                   <input type="radio" name="sg-tabs" id={`sg-tab-${i}`} defaultChecked={i === 0} />
@@ -286,13 +286,6 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 <li key={y}><h3>{y}</h3><p>{t}</p></li>
               ))}
             </ol>
-          </div>
-          <div>
-            <div className="list-head"><h2>目录</h2><span>toc · 长页面最上面，点了跳到那一段</span></div>
-            <nav className="toc" aria-label="目录示范">
-              <p className="tag">本页内容</p>
-              <ol>{["关于林慧盈", "可以帮你的事", "资历与经历"].map((t) => <li key={t}><a href="#">{t}</a></li>)}</ol>
-            </nav>
           </div>
           <div>
             <div className="list-head"><h2>链接清单</h2><span>link-list · 不加框，一行一个链接</span></div>
