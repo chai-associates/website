@@ -1,7 +1,8 @@
 // ═══════════════════════════════════════════════════════════════
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 你需要知道的（跟百科文章同一个阅读排版：小标题 + 圆点清单）→ 延伸阅读（左）+ ③ 询问表格（右侧栏）
+// 色带顺序：① 标题（白）  ② 你需要知道的：跟百科文章同一个阅读排版，小标题 + 圆点清单（白）
+//          ③ 延伸阅读（左）+ 询问表格（右侧栏；手机排在下面）（深色）
 // 一页只有一个主要行动：询问表格。其他都是文字链接。
 // 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
 // 延伸阅读 = 相关文章（lib/divorcepedia.ts，文章的 services 有这项服务）+ 同分类的其他服务（最多 3 项）。
@@ -118,27 +119,31 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
         </div>
       </section>
 
-      {/* ═══ ② 你需要知道的（左）+ ③ 询问表格（右侧栏；手机排在下面） ═══ */}
+      {/* ═══ ② 你需要知道的（白，接在标题下面） ═══ */}
       <section className="section">
-        <div className="container with-aside">
-          <div className="stack">
-            <div className="prose">
-              <h2>{text.know[lang]}</h2>
-              {content ? (
-                <ul>{content.points.map((p) => <li key={p.zh}>{p[lang]}</li>)}</ul>
-              ) : (
-                <p className="muted">{text.pending[lang]}</p>
-              )}
-            </div>
-            {further.length > 0 && (
-              <div>
-                <div className="list-head"><h2>{text.reads[lang]}</h2></div>
-                <ul className="link-list">
-                  {further.map((f) => <li key={f.href}><Link href={f.href}>{f.title}</Link></li>)}
-                </ul>
-              </div>
+        <div className="container">
+          <div className="prose">
+            <h2>{text.know[lang]}</h2>
+            {content ? (
+              <ul>{content.points.map((p) => <li key={p.zh}>{p[lang]}</li>)}</ul>
+            ) : (
+              <p className="muted">{text.pending[lang]}</p>
             )}
           </div>
+        </div>
+      </section>
+
+      {/* ═══ ③ 延伸阅读（左）+ 询问表格（右侧栏；手机排在下面）（深色） ═══ */}
+      <section className="section section-dark">
+        <div className="container with-aside">
+          {further.length > 0 && (
+            <div>
+              <div className="list-head"><h2>{text.reads[lang]}</h2></div>
+              <ul className="link-list">
+                {further.map((f) => <li key={f.href}><Link href={f.href}>{f.title}</Link></li>)}
+              </ul>
+            </div>
+          )}
           <aside>
             <div>
               <h3>{text.form.title[lang]}</h3>
@@ -154,7 +159,6 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
           </aside>
         </div>
       </section>
-
     </>
   );
 }

@@ -46,7 +46,14 @@ p { max-width: var(--measure); }
 .section-dark .section-head :is(h2, h3) + p,
 .section-dark .section-head p + p,
 .section-dark .feature > p,
-.section-dark .steps > li > p { color: var(--color-inverse-muted); }
+.section-dark .steps > li > p,
+.section-dark .list-head > :not(:first-child),
+.section-dark .link-list a::after,
+.section-dark .with-aside > aside h3 + p { color: var(--color-inverse-muted); }
+/* 深色带里的细线、侧栏：线改成深底用的细线，侧栏不再是白底卡片 */
+.section-dark :is(.list-head, .link-list a, .with-aside > aside) { border-color: var(--color-inverse-line); }
+.section-dark .with-aside > aside { background: transparent; }
+.section-dark .select:focus-visible { outline-color: var(--color-inverse-ink); }
 .section-dark .steps > li { border-top-color: var(--color-inverse-ink); }
 .section-head { margin-bottom: var(--space-4); }
 .section-head :is(h2, h3) + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
@@ -314,7 +321,7 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .site-footer .logo-sub { color: var(--color-inverse-muted); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: var(--space-4) 0; }
 .footer-links a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
-.footer-disc { padding-top: var(--space-3); border-top: 1px solid color-mix(in srgb, var(--color-inverse-ink) 15%, transparent); font-size: var(--text-caption); }
+.footer-disc { padding-top: var(--space-3); border-top: 1px solid var(--color-inverse-line); font-size: var(--text-caption); }
 
 /* ── 品牌语法 8：往下滑时轻轻浮现（加 class="reveal"；不支援的浏览器直接显示，不影响阅读） ── */
 @supports (animation-timeline: view()) {
