@@ -52,7 +52,7 @@ p { max-width: var(--measure); }
 .section-head :is(h2, h3) + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
 .section-head p + p { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); } /* 第二段 = 备注：caption（跟 page-head 一样） */
 /* 内页最上方：面包屑 → 大标题 → 说明（第二段说明用小字） */
-.page-head { padding: var(--space-3) 0 calc(var(--section-y) / 2); }
+.page-head { padding: var(--space-3) 0 var(--space-5); } /* 标题区和内容之间固定 48：手机上也看得出「标题区结束、内容开始」 */
 .page-head .container > h1 { margin-top: var(--space-3); }
 .page-head .container > p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
 .page-head .container > p + p { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); } /* 第二段 = 备注：灰色 caption；跟副标题相隔 16（标题 ↔ 副标题才是 8） */
@@ -102,12 +102,15 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .split .section-head + * { margin-top: var(--space-4); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); } /* minmax(0, 1fr)：里面的滑动列、长字不会把整页撑宽 */
-/* 正文段落（个人介绍、离婚百科文章）：段落 · 小标题 h2 · 清单 ul；整块限制在一个阅读行宽（读文章的感觉） */
+/* 正文段落（个人介绍、离婚百科文章、服务重点）：段落 · 小标题 h2 · 清单 ul；整块限制在一个阅读行宽（读文章的感觉）
+   间距层级：新的小节前 48 → 小标题 ↔ 它的内容 8 → 段落 ↔ 段落 16 → 「如下：」↔ 清单 8 → 清单项目之间 8 */
 .prose { max-width: var(--measure); }
-.prose > * + * { margin-top: 1em; }
-.prose > * + h2 { margin-top: 2em; }
+.prose > * + * { margin-top: var(--space-3); }
+.prose > * + h2 { margin-top: var(--space-5); }
+.prose > h2 + * { margin-top: var(--space-2); }
+.prose > p + ul { margin-top: var(--space-2); }
 .prose > ul { padding-left: 1.25em; list-style: disc; }
-.prose > ul > li + li { margin-top: 0.5em; }
+.prose > ul > li + li { margin-top: var(--space-2); }
 .prose > ul > li::marker { color: var(--color-ink-muted); }
 /* 品牌语法 4：一组清单的开头 = 左标题、右边副标题或链接、下面一条细线 */
 .list-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: 1px solid var(--color-line); }
@@ -216,6 +219,7 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 /* ── 积木：链接清单（不加框）：每一行一个链接，细线分隔；用在分类下的服务、延伸阅读 ── */
 .link-list a { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-line); }
 .link-list a::after { content: "→"; color: var(--color-ink-muted); }
+:is(.btn, .btn-row) + .link-list { margin-top: var(--space-4); } /* 主要按钮下面再列几个去处（百科读完 → 相关服务） */
 .list-head + .link-list > li:first-child > a { border-top: 0; } /* 紧接横线标题时，标题的线就是第一条线 */
 
 /* ── 积木：小组（同一个大段落里分几组）：小标题 h3 → 内容；只有大段落开头才用横线标题 ── */

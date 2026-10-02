@@ -4,7 +4,7 @@
 // 百科 = 读文章的感觉（服务页才有侧栏表格）：一栏、不放侧栏、不放照片。
 // 色带顺序：① 标题 → 资料备注「离婚百科 · 分类 · 约 N 分钟」（白）
 //          ② 文章：一栏，行宽固定（白，接在标题下面）
-//          ③ 想请律师帮你办？：问律师按钮 + 查看相关服务（浅灰）
+//          ③ 想请律师帮你办？：问律师按钮 → 下面一行一个「查看 X 服务」（浅灰）
 //          ④ 同一个分类的其他文章（白）
 // 法律声明在页尾（全站共用），这里不再重复。
 // 文章内容在 lib/divorcepedia.ts；这里只放这一页的固定文字。
@@ -96,10 +96,12 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             <h2>{text.handoff.title[lang]}</h2>
             <p>{text.handoff.desc[lang]}</p>
           </div>
-          <div className="btn-row">
-            <a className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
-            {related.map((r) => <Link key={r.slug} className="text-link" href={`/${lang}/services/${r.category}/${r.slug}`}>{text.viewService[lang].replace("{service}", r.title[lang])} →</Link>)}
-          </div>
+          <a className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          {related.length > 0 && (
+            <ul className="link-list">
+              {related.map((r) => <li key={r.slug}><Link href={`/${lang}/services/${r.category}/${r.slug}`}>{text.viewService[lang].replace("{service}", r.title[lang])}</Link></li>)}
+            </ul>
+          )}
         </div>
       </section>
 

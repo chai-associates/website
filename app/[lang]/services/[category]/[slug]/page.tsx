@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 你需要知道的 → 延伸阅读 → 不是你的情况？（左）+ ③ 询问表格（右侧栏）
+// 区块顺序：① 标题  ② 你需要知道的（跟百科文章同一个阅读排版：小标题 + 圆点清单）→ 延伸阅读（左）+ ③ 询问表格（右侧栏）
 // 一页只有一个主要行动：询问表格。其他都是文字链接。
 // 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
 // 延伸阅读 = 相关文章（lib/divorcepedia.ts，文章的 services 有这项服务）+ 同分类的其他服务（最多 3 项）。
@@ -122,12 +122,10 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
       <section className="section">
         <div className="container with-aside">
           <div className="stack">
-            <div>
-              <div className="list-head"><h2>{text.know[lang]}</h2></div>
+            <div className="prose">
+              <h2>{text.know[lang]}</h2>
               {content ? (
-                <ul className="rule-list">
-                  {content.points.map((p) => <li key={p.zh}>{p[lang]}</li>)}
-                </ul>
+                <ul>{content.points.map((p) => <li key={p.zh}>{p[lang]}</li>)}</ul>
               ) : (
                 <p className="muted">{text.pending[lang]}</p>
               )}
@@ -140,9 +138,6 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
                 </ul>
               </div>
             )}
-            <p>
-              {common.notYours.title[lang]} <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
-            </p>
           </div>
           <aside>
             <div>
