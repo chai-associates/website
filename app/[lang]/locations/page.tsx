@@ -68,12 +68,12 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
                   <h2>{c.full[lang]}</h2>
                   <span>{list.length === 1 ? text.countOne[lang] : text.count[lang].replace("{n}", String(list.length))}</span>
                 </div>
-                <div className="grid gap-12">
+                <div className="stack">
                   {list.map((o) => {
                     const lawyers = team.filter((p) => p.office === o.id && roles[p.role].group !== "support");
                     return (
                       // 一行：办事处卡片（左）+ 律师（右），比例 1 : 1.618
-                      <div key={o.id} className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.618fr)] md:items-start">
+                      <div key={o.id} className="split-golden">
                         <div className="card reveal">
                           <h3>{o.name[lang]}</h3>
                           <p>{o.address}</p>

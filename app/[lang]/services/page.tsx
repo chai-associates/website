@@ -1,10 +1,12 @@
 // ═══════════════════════════════════════════════════════════════
 // 全部服务 /services
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题 + 目录  ② 我的情况是（选择器）  ③ 5 个分类（每个分类一张卡片，里面列出服务）  ④ 直接咨询
+// 母页：只做导览，带人到分类页（每个分类的服务清单在分类页）。品牌语法 4：一条色带只做一件事。
+// 色带顺序：① 标题（白）  ② 从你的情况开始（浅灰）  ③ 5 个分类：照片 → 标题 → 一句 → 链接（白）  ④ 找不到你的情况？（浅灰）
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SituationPicker } from "@/lib/interactive";
@@ -24,6 +26,7 @@ const text = {
   lead: { zh: "从你的情况开始，找到对应的服务。", en: "Start with your situation and find the right service." },
   scope: { zh: "本所处理非穆斯林的离婚与家事案件。", en: "We act in divorce and family matters for non-Muslims." },
   // ② 我的情况是
+  situation: { zh: "从你的情况开始", en: "Start with your situation" },
   picker: {
     label: { zh: "我的情况是", en: "My situation is" },
     placeholder: { zh: "请选择", en: "Choose one" },
@@ -43,8 +46,9 @@ const text = {
       { label: { zh: "我的婚姻可能一开始就无效", en: "My marriage may not be valid" }, slugs: ["annulment"] },
     ] as { label: Bi; slugs: string[] }[],
   },
-  // ③ 全部服务
+  // ③ 全部服务（5 个分类）
   all: { zh: "全部服务", en: "All services" },
+  allDesc: { zh: "离婚相关的服务分成 5 类，点进去看每一类的服务。", en: "Our services fall into five areas. Open one to see the services in it." },
   viewCategory: { zh: "查看这个分类", en: "View this category" },
   // ④ 直接咨询
   ask: {
@@ -69,7 +73,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
 
   return (
     <>
-      {/* ═══ ① 标题 ═══ */}
+      {/* ═══ ① 标题（白） ═══ */}
       <section className="page-head">
         <div className="container">
           <ol className="breadcrumb">
@@ -79,19 +83,13 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           <h1>{common.services[lang]}</h1>
           <p>{text.lead[lang]}</p>
           <p>{text.scope[lang]}</p>
-          <nav className="toc" aria-label={common.onThisPage[lang]}>
-            <p className="tag">{common.onThisPage[lang]}</p>
-            <ol>
-              <li><a href="#situation">{text.picker.label[lang]}</a></li>
-              {serviceCategories.map((c) => <li key={c.slug}><a href={`#${c.slug}`}>{c.title[lang]}</a></li>)}
-            </ol>
-          </nav>
         </div>
       </section>
 
-      {/* ═══ ② 我的情况是 ═══ */}
-      <section id="situation" className="section section-muted">
+      {/* ═══ ② 从你的情况开始（浅灰） ═══ */}
+      <section className="section section-muted">
         <div className="container">
+          <div className="section-head"><h2>{text.situation[lang]}</h2></div>
           <SituationPicker
             label={text.picker.label[lang]}
             placeholder={text.picker.placeholder[lang]}
@@ -107,26 +105,27 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
         </div>
       </section>
 
-      {/* ═══ ③ 5 个分类：一张卡片 = 分类名称 → 一句话 → 这个分类的服务（链接清单）→ 查看这个分类 ═══ */}
+      {/* ═══ ③ 5 个分类：照片 → 标题 → 一句 → 链接（白） ═══ */}
       <section className="section">
         <div className="container">
-          <div className="list-head"><h2>{text.all[lang]}</h2></div>
+          <div className="section-head">
+            <h2>{text.all[lang]}</h2>
+            <p>{text.allDesc[lang]}</p>
+          </div>
           <div className="card-grid">
             {serviceCategories.map((c) => (
-              <div key={c.slug} id={c.slug} className="card reveal">
+              <article key={c.slug} className="feature reveal">
+                <div className="photo-frame">{c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}</div>
                 <h3>{c.title[lang]}</h3>
                 <p>{c.short[lang]}</p>
-                <ul className="link-list">
-                  {services.filter((s) => s.category === c.slug).map((s) => <li key={s.slug}><Link href={href(s.slug)}>{s.title[lang]}</Link></li>)}
-                </ul>
                 <Link className="text-link" href={`/${lang}/services/${c.slug}`}>{text.viewCategory[lang]} →</Link>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ ④ 直接咨询 ═══ */}
+      {/* ═══ ④ 找不到你的情况？（浅灰；页脚是深色，最后一条色带不用深色） ═══ */}
       <section className="section section-muted">
         <div className="container">
           <div className="section-head">

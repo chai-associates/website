@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
 // 关于我们 /about（选单「关于我们」的三个子项连到 #firm、#values、#recognitions）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序（依「律所问卷」）：
-//   ① 标题  ② 律所简介（左）+ 律所资料（右侧栏）  ③ 使命与愿景 + 我们的理念
-//   ④ 合作流程  ⑤ 主管合伙人的话  ⑥ 里程碑  ⑦ 荣誉与认可 + 合作伙伴与会员资格
-//   ⑧ 我们的团队（前 4 位）  ⑨ 直接咨询
+// 母页。品牌语法 4：段落 = 色带，相邻不同色；一条色带只做一件事。内容依「律所问卷」。
+// 色带顺序：① 标题 + 目录（白）  ② 律所简介：照片 + 文字 + 资料（浅灰）  ③ 我们的理念：使命 → 愿景 → 3 个理念（白）
+//   ④ 合作流程（深色）  ⑤ 主管合伙人的话（白）  ⑥ 里程碑（浅灰）  ⑦ 荣誉与认可（白）
+//   ⑧ 更多关于我们：媒体报道 / 公益活动 / 活动与讲座（浅灰）  ⑨ 认识我们的团队（深色）  ⑩ 想先聊聊（白）
 // 成立年份、办事处、团队在 lib/site.ts（律师人数由 team 自动算）；这里只放这一页的文字。
 // ⚠ 中括号 [ ] 里的都是占位，等律所问卷回来后照题目替换。
 // ⚠ 荣誉与认可要符合律师公会的宣传规定（不自夸、不比较，只写「名称 · 颁发单位 · 年份」）；
@@ -14,7 +14,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, cityOf, common, displayName, firm, initials, isLang, lawyerCount, offices, pageMeta, roles, team, whatsappLink, type Bi } from "@/lib/site";
+import { aboutSections, cities, common, displayName, firm, initials, isLang, lawyerCount, offices, pageMeta, roles, team, whatsappLink, type AboutSection, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
 
@@ -38,26 +38,18 @@ const text = {
     ] as Bi[],
   },
   facts: {
-    title: { zh: "律所资料", en: "At a glance" },
     founded: { zh: "成立", en: "Est." },
     size: { zh: "规模", en: "Size" },
     sizeValue: { zh: "{n} 位律师 · {m} 间办事处", en: "{n} lawyers · {m} offices" },
     cities: { zh: "城市", en: "Cities" },
     practice: { zh: "业务", en: "Practice" },
     practiceValue: { zh: "离婚与家事（非穆斯林）", en: "Divorce & family law (non-Muslim)" },
-    hours: { zh: "营业时间", en: "Hours" },
-    team: { zh: "认识我们的团队", en: "Meet Our People" },
   },
-  // ③ 使命与愿景 + 我们的理念
-  purpose: {
-    title: { zh: "使命与愿景", en: "Mission & Vision" },
-    list: [
-      { title: { zh: "使命", en: "Mission" }, desc: { zh: "[律所的使命，一两句，由律所提供]", en: "[The firm's mission in one or two sentences, provided by the firm]" } },
-      { title: { zh: "愿景", en: "Vision" }, desc: { zh: "[律所的愿景，一两句，由律所提供]", en: "[The firm's vision in one or two sentences, provided by the firm]" } },
-    ] as Item[],
-  },
+  // ③ 我们的理念：使命当大标题、愿景当说明，下面 3 个理念
   values: {
     title: { zh: "我们的理念", en: "Our Values" },
+    mission: { zh: "[律所的使命，一句话，由律所提供]", en: "[The firm's mission in one sentence, provided by the firm]" },
+    vision: { zh: "[律所的愿景，一两句，由律所提供]", en: "[The firm's vision in one or two sentences, provided by the firm]" },
     list: [
       { title: { zh: "[理念 1]", en: "[Value 1]" }, desc: { zh: "[一句话说明，由律所提供]", en: "[One-line description, provided by the firm]" } },
       { title: { zh: "[理念 2]", en: "[Value 2]" }, desc: { zh: "[一句话说明，由律所提供]", en: "[One-line description, provided by the firm]" } },
@@ -90,23 +82,31 @@ const text = {
       { year: "[YYYY]", title: { zh: "[里程碑]", en: "[Milestone]" } },
     ] as { year: string; title: Bi }[],
   },
-  // ⑦ 荣誉与认可 + 合作伙伴与会员资格（清空 list 就会整段隐藏）
+  // ⑦ 荣誉与认可（含合作伙伴与会员资格；kind = 小标签。清空 list 就会整段隐藏）
   recognitions: {
     title: { zh: "荣誉与认可", en: "Recognitions" },
     list: [
-      { title: { zh: "[奖项或认可名称]", en: "[Award or recognition]" }, desc: { zh: "[颁发单位 · 年份]", en: "[Awarding body · Year]" } },
-    ] as Item[],
+      { kind: { zh: "荣誉", en: "Award" }, title: { zh: "[奖项或认可名称]", en: "[Award or recognition]" }, desc: { zh: "[颁发单位 · 年份]", en: "[Awarding body · Year]" } },
+      { kind: { zh: "会员资格", en: "Membership" }, title: { zh: "[机构名称]", en: "[Organisation]" }, desc: { zh: "[合作或会员关系，一句话]", en: "[The partnership or membership, in one line]" } },
+    ] as (Item & { kind: Bi })[],
   },
-  partners: {
-    title: { zh: "合作伙伴与会员资格", en: "Partners & Memberships" },
-    list: [
-      { title: { zh: "[机构名称]", en: "[Organisation]" }, desc: { zh: "[合作或会员关系，一句话]", en: "[The partnership or membership, in one line]" } },
-    ] as Item[],
+  // ⑧ 更多关于我们（三个子页面的一句话介绍；名称在 lib/site.ts 的 aboutSections）
+  more: {
+    title: { zh: "更多关于我们", en: "More about us" },
+    desc: {
+      media: { zh: "[一句话：律师接受访问、发表意见的媒体报道]", en: "[One line: our lawyers in the media]" },
+      community: { zh: "[一句话：律所参与的公益活动]", en: "[One line: our community work]" },
+      events: { zh: "[一句话：律所举办或受邀主讲的讲座]", en: "[One line: talks and events]" },
+    } as Record<AboutSection, Bi>,
   },
-  // ⑧ 我们的团队
-  team: { zh: "我们的团队", en: "Our People" },
-  allPeople: { zh: "全部成员", en: "All our people" },
-  // ⑨ 直接咨询
+  // ⑨ 认识我们的团队
+  team: {
+    tag: { zh: "我们的团队", en: "Our People" },
+    title: { zh: "认识我们的团队", en: "Meet our people" },
+    desc: { zh: "{n} 位律师，分布在 {m} 间办事处。", en: "{n} lawyers across {m} offices." },
+    cta: { zh: "认识我们的团队", en: "Meet Our People" },
+  },
+  // ⑩ 直接咨询
   ask: {
     title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
     desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
@@ -122,13 +122,20 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/about">): 
 export default async function AboutPage({ params }: PageProps<"/[lang]/about">) {
   const { lang } = await params;
   if (!isLang(lang)) notFound();
-  const preview = team.filter((p) => roles[p.role].group !== "support").slice(0, 4);
   const md = team.find((p) => p.role === "managing-partner");
-  const hasRecognitions = text.recognitions.list.length > 0 || text.partners.list.length > 0;
+  const count = (t: Bi) => t[lang].replace("{n}", String(lawyerCount)).replace("{m}", String(offices.length));
+  // 目录：只列出这一页真的有的段落
+  const toc = [
+    { id: "firm", label: text.firm.title },
+    { id: "values", label: text.values.title },
+    { id: "process", label: text.process.title },
+    ...(text.recognitions.list.length > 0 ? [{ id: "recognitions", label: text.recognitions.title }] : []),
+    { id: "team", label: text.team.tag },
+  ];
 
   return (
     <>
-      {/* ═══ ① 标题 ═══ */}
+      {/* ═══ ① 标题 + 目录（白） ═══ */}
       <section className="page-head">
         <div className="container">
           <ol className="breadcrumb">
@@ -137,50 +144,58 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
           </ol>
           <h1>{text.heading[lang]}</h1>
           <p>{text.lead[lang]}</p>
+          <nav className="toc" aria-label={common.onThisPage[lang]}>
+            <p className="tag">{common.onThisPage[lang]}</p>
+            <ol>{toc.map((t) => <li key={t.id}><a href={`#${t.id}`}>{t.label[lang]}</a></li>)}</ol>
+          </nav>
         </div>
       </section>
 
-      {/* ═══ ② 律所简介 + 律所资料 ═══ */}
+      {/* ═══ ② 律所简介：照片 + 文字 + 资料（浅灰） ═══ */}
       <section id="firm" className="section section-muted">
-        <div className="container with-aside">
+        <div className="container split">
+          <div className="photo-frame">{/* 律所照片：放进 public/images/ 后加 <Image fill /> */}</div>
           <div>
-            <div className="list-head"><h2>{text.firm.title[lang]}</h2></div>
+            <div className="section-head">
+              <p className="tag">{text.firm.title[lang]}</p>
+              <h2>{firm.name}</h2>
+            </div>
             <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
-          </div>
-          <aside>
-            <h3>{text.facts.title[lang]}</h3>
             <dl className="facts">
               <div><dt>{text.facts.founded[lang]}</dt><dd>{firm.founded}</dd></div>
-              <div><dt>{text.facts.size[lang]}</dt><dd>{text.facts.sizeValue[lang].replace("{n}", String(lawyerCount)).replace("{m}", String(offices.length))}</dd></div>
+              <div><dt>{text.facts.size[lang]}</dt><dd>{count(text.facts.sizeValue)}</dd></div>
               <div><dt>{text.facts.cities[lang]}</dt><dd>{cities.map((c) => c.full[lang]).join(" · ")}</dd></div>
               <div><dt>{text.facts.practice[lang]}</dt><dd>{text.facts.practiceValue[lang]}</dd></div>
-              <div><dt>{text.facts.hours[lang]}</dt><dd>{firm.hours[lang]}</dd></div>
             </dl>
-            <Link className="btn btn-ghost" href={`/${lang}/people`}>{text.facts.team[lang]}</Link>
-          </aside>
+          </div>
         </div>
       </section>
 
-      {/* ═══ ③ 使命与愿景 + 我们的理念 ═══ */}
+      {/* ═══ ③ 我们的理念：使命 → 愿景 → 3 个理念（白） ═══ */}
       <section id="values" className="section">
-        <div className="container stack">
-          {[text.purpose, text.values].map((group) => (
-            <div key={group.title.en}>
-              <div className="list-head"><h2>{group.title[lang]}</h2></div>
-              <ul className="rule-list">
-                {group.list.map((v) => <li key={v.title.zh}><h3>{v.title[lang]}</h3><p>{v.desc[lang]}</p></li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ═══ ④ 合作流程 ═══ */}
-      <section className="section section-muted">
         <div className="container">
           <div className="section-head">
-            <h2>{text.process.title[lang]}</h2>
-            <p>{text.process.desc[lang]}</p>
+            <p className="tag">{text.values.title[lang]}</p>
+            <h2>{text.values.mission[lang]}</h2>
+            <p>{text.values.vision[lang]}</p>
+          </div>
+          <div className="card-grid">
+            {text.values.list.map((v) => (
+              <article key={v.title.zh} className="feature reveal">
+                <h3>{v.title[lang]}</h3>
+                <p>{v.desc[lang]}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ ④ 合作流程（深色） ═══ */}
+      <section id="process" className="section section-dark">
+        <div className="container">
+          <div className="section-head">
+            <p className="tag">{text.process.title[lang]}</p>
+            <h2>{text.process.desc[lang]}</h2>
           </div>
           <ol className="steps">
             {text.process.list.map((s, i) => (
@@ -194,85 +209,90 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </section>
 
-      {/* ═══ ⑤ 主管合伙人的话 ═══ */}
+      {/* ═══ ⑤ 主管合伙人的话（白） ═══ */}
       {md && (
         <section className="section">
-          <div className="container">
-            <div className="list-head"><h2>{text.message.title[lang]}</h2></div>
-            <div className="profile-head">
-              <div className="person-photo">
-                {md.image ? <Image src={md.image} alt={displayName(md, lang)} fill sizes="(min-width: 860px) 40vw, 100vw" /> : initials(md.name)}
-              </div>
-              <div>
-                <figure className="quote">
-                  <blockquote><p>{text.message.quote[lang]}</p></blockquote>
-                  <figcaption>— {displayName(md, lang)} · {roles[md.role].label[lang]}</figcaption>
-                </figure>
-                <Link className="text-link" href={`/${lang}/people/${md.slug}`}>{text.message.profile[lang]} →</Link>
-              </div>
+          <div className="container profile-head">
+            <div className="person-photo">
+              {md.image ? <Image src={md.image} alt={displayName(md, lang)} fill sizes="(min-width: 860px) 40vw, 100vw" /> : initials(md.name)}
+            </div>
+            <div>
+              <p className="tag">{text.message.title[lang]}</p>
+              <figure className="quote">
+                <blockquote><p>{text.message.quote[lang]}</p></blockquote>
+                <figcaption>— {displayName(md, lang)} · {roles[md.role].label[lang]}</figcaption>
+              </figure>
+              <Link className="text-link" href={`/${lang}/people/${md.slug}`}>{text.message.profile[lang]} →</Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* ═══ ⑥ 里程碑 ═══ */}
+      {/* ═══ ⑥ 里程碑（浅灰） ═══ */}
       <section className="section section-muted">
         <div className="container">
-          <div className="list-head"><h2>{text.milestones.title[lang]}</h2></div>
+          <div className="section-head"><h2>{text.milestones.title[lang]}</h2></div>
           <ol className="timeline">
             {text.milestones.list.map((m) => <li key={m.title.en} className="reveal"><h3>{m.year}</h3><p>{m.title[lang]}</p></li>)}
           </ol>
         </div>
       </section>
 
-      {/* ═══ ⑦ 荣誉与认可 + 合作伙伴与会员资格 ═══ */}
-      {hasRecognitions && (
+      {/* ═══ ⑦ 荣誉与认可（白；没有资料就整段隐藏） ═══ */}
+      {text.recognitions.list.length > 0 && (
         <section id="recognitions" className="section">
-          <div className="container stack">
-            {[text.recognitions, text.partners].filter((g) => g.list.length > 0).map((group) => (
-              <div key={group.title.en}>
-                <div className="list-head"><h2>{group.title[lang]}</h2></div>
-                <ul className="rule-list">
-                  {group.list.map((r) => <li key={r.title.zh}><h3>{r.title[lang]}</h3><p>{r.desc[lang]}</p></li>)}
-                </ul>
-              </div>
-            ))}
+          <div className="container">
+            <div className="section-head"><h2>{text.recognitions.title[lang]}</h2></div>
+            <div className="card-grid">
+              {text.recognitions.list.map((r) => (
+                <article key={r.title.zh} className="feature reveal">
+                  <span className="tag">{r.kind[lang]}</span>
+                  <h3>{r.title[lang]}</h3>
+                  <p>{r.desc[lang]}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-      {/* ═══ ⑧ 我们的团队（前 4 位） ═══ */}
+      {/* ═══ ⑧ 更多关于我们：三个子页面（浅灰） ═══ */}
       <section className="section section-muted">
         <div className="container">
-          <div className="list-head">
-            <h2>{text.team[lang]}</h2>
-            <Link className="text-link" href={`/${lang}/people`}>{text.allPeople[lang]} →</Link>
-          </div>
-          <div className="person-grid">
-            {preview.map((p) => (
-              <Link key={p.slug} href={`/${lang}/people/${p.slug}`} className="person-card reveal">
-                <div className="person-photo">
-                  {p.image ? <Image src={p.image} alt={displayName(p, lang)} fill sizes="(min-width: 860px) 25vw, 50vw" /> : initials(p.name)}
-                </div>
-                <h3>{displayName(p, lang)}</h3>
-                <strong>{roles[p.role].label[lang]}</strong>
-                <p>{cityOf(p).full[lang]} · {p.languages[lang]}</p>
-              </Link>
+          <div className="section-head"><h2>{text.more.title[lang]}</h2></div>
+          <div className="card-grid">
+            {aboutSections.map((a) => (
+              <article key={a.slug} className="feature reveal">
+                <div className="photo-frame">{/* 照片之后加 */}</div>
+                <h3>{a.title[lang]}</h3>
+                <p>{text.more.desc[a.slug][lang]}</p>
+                <Link className="text-link" href={`/${lang}/about/${a.slug}`}>{common.readMore[lang]} →</Link>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ ⑨ 直接咨询 ═══ */}
+      {/* ═══ ⑨ 认识我们的团队（深色） ═══ */}
+      <section id="team" className="section section-dark">
+        <div className="container">
+          <div className="section-head">
+            <p className="tag">{text.team.tag[lang]}</p>
+            <h2>{text.team.title[lang]}</h2>
+            <p>{count(text.team.desc)}</p>
+          </div>
+          <Link className="btn btn-light" href={`/${lang}/people`}>{text.team.cta[lang]} →</Link>
+        </div>
+      </section>
+
+      {/* ═══ ⑩ 想先聊聊你的情况？（白） ═══ */}
       <section className="section">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{text.ask.title[lang]}</h2>
-              <p>{text.ask.desc[lang]}</p>
-            </div>
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <div className="section-head">
+            <h2>{text.ask.title[lang]}</h2>
+            <p>{text.ask.desc[lang]}</p>
           </div>
+          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
         </div>
       </section>
     </>

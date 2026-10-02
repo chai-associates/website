@@ -57,7 +57,7 @@ export function SituationPicker({ label, placeholder, readMore, options }: {
   const cards = options[picked]?.cards ?? [];
 
   return (
-    <div className="grid gap-6">
+    <div className="form">
       <label className="field">
         {label}
         <select className="select" value={picked} onChange={(e) => setPicked(Number(e.target.value))}>
@@ -99,7 +99,7 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
   };
 
   return (
-    <form className="grid gap-5" onSubmit={send}>
+    <form className="form" onSubmit={send}>
       {questions.map((q, i) => (
         <label key={q.label} className="field">
           {q.label}
@@ -109,7 +109,7 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
           </select>
         </label>
       ))}
-      <button type="submit" className="btn btn-cta w-full">{submit}</button>
+      <button type="submit" className="btn btn-cta">{submit}</button>
     </form>
   );
 }

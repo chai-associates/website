@@ -6,7 +6,8 @@
    · @theme 里的值同时变成 Tailwind class，可以直接在 page.tsx 用：
        颜色  bg-accent  text-ink  text-ink-muted  border-line  bg-subtle
        字号  text-caption text-small text-body text-lead text-subtitle text-title text-display（流体）
-       间距  p-4 = 16px（1 格 = 4px，符合 8pt 网格：2=8 4=16 6=24 8=32 12=48 16=64 24=96）
+       间距  积木只用下面的 7 级阶梯 --space-1 … --space-6 + --section-y（见「间距阶梯」）；
+             Tailwind 的 p-4、gap-6 只给页面版面用（1 格 = 4px）
        圆角  rounded-sm（栏位）  rounded-md（卡片、照片）
        电脑版 md:（≥ 860px）
    · 下面已关闭 Tailwind 自带的颜色、字号、圆角、断点，只能用这里定义的，确保全站统一。
@@ -18,8 +19,10 @@
      1 圆角 12px（卡片、照片）· 栏位 8px
      2 按钮一律胶囊形
      3 英文大标题（h1、h2）用 Garamond 衬线；中文标题、h3 以下用无衬线
-     4 灰色区块 = 换话题；细横线标题 = 一组清单的开头
-     5 小标签：大写、拉开字距、古铜色
+     4 段落 = 色带：白 / 浅灰 / 深色交替，相邻两段不同色；一条色带只做一件事（一个标题、一两句、一个行动）；
+       页脚是深色，所以最后一条色带不用深色；母页只放「图 → 标题 → 一两句 → 一个链接」，长文字只在子页；
+       细横线标题只给清单用
+     5 小标签：大写、拉开字距、古铜色（深色色带上用浅古铜）
      6 照片比例：人像 4:5，场景 3:2（首页首屏满版照片例外）
      7 古铜只用在主要按钮和小标签
      8 动态要轻：用下面的 --motion / --ease；手机设定「减少动态」时全部关闭
@@ -30,12 +33,13 @@
   --color-*: initial;
   --color-white: #ffffff;
   --color-bg: #ffffff;             /* 页面底色 */
-  --color-subtle: #f5f5f7;         /* 浅灰区块 */
+  --color-subtle: #ebebeb;         /* 浅灰色带 · 跟白色要一眼分得出来 · 次要文字在上面对比 6.7:1 */
   --color-ink: #1d1d1f;            /* 主要文字 · 对比 16.8:1 */
   --color-ink-muted: #515154;      /* 次要文字 · 对比 7.9:1 */
   --color-line: #d2d2d7;           /* 线、边框 */
   --color-accent: #6e5526;         /* 古铜 · 只给按钮和小标签 · 白底对比 7.0:1 */
   --color-on-accent: #ffffff;
+  --color-accent-on-dark: #c9a96e; /* 浅古铜 · 只给深色色带上的小标签 · 深底对比 7.6:1 */
   --color-inverse: #1d1d1f;        /* 深色底（页脚） */
   --color-inverse-ink: #f5f5f7;
   --color-inverse-muted: #a1a1a6;  /* 深底上的次要文字 · 对比 6.5:1 */
@@ -59,7 +63,7 @@
   --text-title:    clamp(1.375rem, 1.054rem + 1.607vw, 2.5rem);       /* 22 → 40 · 区块标题 h2 */
   --text-display:  clamp(1.5rem, 0.9286rem + 2.857vw, 3.5rem);        /* 24 → 56 · 首屏大标题 h1 */
 
-  /* ── 间距：1 格 = 4px ───────────────────────── */
+  /* ── Tailwind 版面单位：1 格 = 4px（只给页面的 grid / gap 等版面 class 用；积木不用，积木用下面的间距阶梯） ── */
   --spacing: 4px;
 
   /* ── 圆角 ──────────────────────────────────── */
@@ -79,6 +83,14 @@
 
 /* ── 全站尺寸（不属于 Tailwind 分类的共用值） ──── */
 :root {
+  /* 间距阶梯（8pt 网格；每一级约是上一级的 2 倍，层级才看得出来）。积木里的距离只准用这 7 级：
+     越有关系的东西靠越近 → 标题 ↔ 副标题 8 → 副标题 ↔ 内文 16 → 内文 ↔ 按钮、容器内距 24 → 组 ↔ 组 48 → 段落 ↔ 段落 --section-y */
+  --space-1: 4px;    /* 只用在文字之间：标签 ↔ 内容、图示 ↔ 文字、名字 ↔ 职位 */
+  --space-2: 8px;    /* 同一组：标题 ↔ 副标题、小标签 ↔ 标题、按钮里的图示 */
+  --space-3: 16px;   /* 副标题 ↔ 内文、清单项目、并排的卡片之间 */
+  --space-4: 24px;   /* 内文 ↔ 按钮、卡片 / 侧栏内距、段落标题 ↔ 段落内容 */
+  --space-5: 48px;   /* 组 ↔ 组（.stack、.groups） */
+  --space-6: 64px;   /* 电脑版左右并排的照片 ↔ 文字 */
   --gutter: clamp(1rem, 0.7143rem + 1.429vw, 2rem);      /* 页面左右边距 16 → 32（流体） */
   --container: 1152px;     /* 内容最大宽度 */
   --section-y: clamp(3rem, 2.143rem + 4.286vw, 6rem);   /* 区块上下留白 48 → 96（流体） */
@@ -87,7 +99,7 @@
   --leading-en: 1.5;       /* 英文行距 */
   --leading-heading: 1.2;  /* 标题行距 */
   --border: 1.5px;         /* 边框粗细 */
-  --tap: 52px;             /* 主要按钮高度 */
+  --tap: 48px;             /* 主要按钮、栏位高度（8pt 网格；Apple 最小 44） */
   --tap-min: 44px;         /* 最小可点击尺寸（HIG） */
   --header-h: 64px;        /* 页首高度 */
   --motion: 0.35s;         /* 动态：一般（选单、卡片） */

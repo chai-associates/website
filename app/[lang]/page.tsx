@@ -95,7 +95,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       {/* ═════════ ① 首屏 ═════════
           照片约占画面 40% 高，下缘淡出成白色，小标签（城市）+ 标题压在上面；
           下面接说明 → 按钮 → 3 点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
-      <section className="hero min-h-[52svh]">
+      <section className="hero">
         <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" style={{ objectPosition: "40% 30%" }} />
         <div className="container">
           <p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>
@@ -110,7 +110,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           </Link>
         </div>
         <ul className="points">
-          {hero.points.map((p) => <li key={p.icon} className="flex-row items-center gap-2"><Icon name={p.icon} /> {p.title[lang]}</li>)}
+          {hero.points.map((p) => <li key={p.icon}><Icon name={p.icon} /> {p.title[lang]}</li>)}
         </ul>
       </div>
 

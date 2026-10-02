@@ -24,8 +24,8 @@ const text = {
     "圆角 12px（卡片、照片）· 栏位 8px",
     "按钮一律胶囊形",
     "英文大标题（h1、h2）用 Garamond 衬线；中文标题、h3 以下用无衬线",
-    "灰色区块 = 换话题；细横线标题 = 一组清单的开头",
-    "小标签：大写、拉开字距、古铜色",
+    "段落 = 色带：白 / 浅灰 / 深色交替，相邻不同色；一条色带只做一件事；母页只放「图 → 标题 → 一两句 → 一个链接」",
+    "小标签：大写、拉开字距、古铜色（深色色带上用浅古铜）",
     "照片比例：人像 4:5，场景 3:2（首页首屏满版照片例外）",
     "古铜只用在主要按钮和小标签",
     "动态要轻；手机设定「减少动态」时全部关闭",
@@ -81,7 +81,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="list-head"><h2>颜色</h2><span>tokens.css</span></div>
             <div className="card-grid">
               {text.colors.map(([cls, label]) => (
-                <div key={cls}><div className={`${cls} h-16 rounded-md border border-line`} /><p className="mt-2 text-small">{label}</p></div>
+                <div key={cls} className="feature"><div className={`photo-frame ${cls}`} /><p>{label}</p></div>
               ))}
             </div>
           </div>
@@ -102,6 +102,8 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <h2>section-head：小标签 → 标题 → 说明</h2>
             <p>区块开头用这个；一组清单的开头用下面的 list-head。</p>
           </div>
+          <div className="stack">
+          <div>
           <div className="list-head"><h3>按钮</h3><span>全部胶囊形 · 文字一律用动词</span></div>
           <div className="btn-row">
             <a className="btn btn-cta" href="#">立即咨询（btn-cta · 主要）</a>
@@ -110,12 +112,16 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <a className="btn btn-ghost btn-sm" href="#">小按钮（btn-sm）</a>
             <a className="text-link" href="#">文字链接（text-link）→</a>
           </div>
-          <div className="list-head mt-12"><h3>小按钮</h3><span>chip · 选中或主要领域（data-lead）变黑 · 前面可加 filter-label</span></div>
+          </div>
+          <div>
+          <div className="list-head"><h3>小按钮</h3><span>chip · 选中或主要领域（data-lead）变黑 · 前面可加 filter-label</span></div>
           <div className="btn-row">
             <span className="filter-label">筛选说明（filter-label）</span>
             <a className="chip" data-lead href="#">抚养权与监护权（data-lead）→</a>
             <a className="chip" href="#">探视权（chip）→</a>
             <button type="button" className="chip" aria-pressed="true">新山（aria-pressed）</button>
+          </div>
+          </div>
           </div>
         </div>
       </section>
@@ -183,10 +189,10 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="hero-intro">
               <p>hero-intro：照片下面接说明 → 按钮</p>
               <div className="btn-row"><a className="btn btn-outline" href="#">了解我们的服务 →</a></div>
+              <ul className="points">
+                {["多年经验", "收费透明", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
+              </ul>
             </div>
-            <ul className="points mt-8">
-              {["多年经验", "收费透明", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
-            </ul>
           </div>
           <div>
             <div className="list-head"><h2>分页选择</h2><span>tabs · 不用 JavaScript</span></div>
@@ -233,7 +239,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               栏位（field + select）
               <select className="select" defaultValue=""><option value="" disabled>请选择</option><option>丈夫</option><option>妻子</option></select>
             </label>
-            <a className="btn btn-cta w-full" href="#">发送我的资料到 WhatsApp 咨询</a>
+            <a className="btn btn-cta" href="#">发送我的资料到 WhatsApp 咨询</a>
           </aside>
         </div>
       </section>
@@ -309,6 +315,37 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 <li>prose 里的清单（ul）有圆点</li>
                 <li>项目之间有一点距离</li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 色带：深色 + 导览项目 + 左右并排 ═══ */}
+      <section className="section section-dark">
+        <div className="container">
+          <div className="section-head">
+            <p className="tag">section-dark</p>
+            <h2>深色色带：留给重点时刻</h2>
+            <p>小标签自动变浅古铜，说明文字变浅灰。最后一条色带不用深色（页脚是深色）。</p>
+          </div>
+          <a className="btn btn-light" href="#">btn-light（深色上的次要按钮）</a>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container stack">
+          <div>
+            <div className="section-head"><h2>导览项目</h2><p>feature：照片 3:2 → 标题 → 一两句 → 一个链接；母页用，不加框</p></div>
+            <div className="card-grid">
+              {["办理离婚", "孩子", "财产与赡养费"].map((t) => (
+                <article key={t} className="feature"><div className="photo-frame" /><h3>{t}</h3><p>一句话说明</p><a className="text-link" href="#">查看这个分类 →</a></article>
+              ))}
+            </div>
+          </div>
+          <div className="split">
+            <div className="photo-frame" />
+            <div>
+              <div className="section-head"><p className="tag">split</p><h2>左右并排</h2></div>
+              <p>照片（左）+ 文字（右）；手机上下排。</p>
             </div>
           </div>
         </div>
