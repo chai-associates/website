@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
 // 律师个人页 /people/[slug]（所有成员共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 照片 + 名字 + 资料列 + 预约按钮
+// 区块顺序：① 照片 + 名字 + 资料列 + 预约按钮（这一页唯一的主要行动）+ 目录
 //          ② 用自己的话（引言）
-//          ③ 关于 · 可以帮你的事（主要领域排第一、变黑）· 经历 · 奖项 · 讲座与著作 · 会员资格 · 工作以外（左）
-//            + 资历与预约（右侧栏）
+//          ③ 三个大段落（目录连到这里）：关于（含工作以外）· 可以帮你的事（主要领域排第一、变黑）·
+//            资历与经历（小组：资格 · 经历 · 奖项 · 讲座与著作 · 会员资格）
 //          ④ 同一个城市的其他成员
 // 名字、职位、城市、语言、负责的服务在 lib/site.ts（team）；
 // 个人介绍等较长的内容写在下面 text.profiles（对应「律师问卷」），没有写的区块会自动隐藏。
@@ -77,8 +77,8 @@ const text = {
   talks: { zh: "讲座与著作", en: "Talks & publications" },
   memberships: { zh: "会员资格", en: "Memberships" },
   outside: { zh: "工作以外", en: "Outside the office" },
-  qualifications: { zh: "资历", en: "Qualifications" },
-  ready: { zh: "准备好聊聊了吗？", en: "Ready to talk it through?" },
+  qualifications: { zh: "资格", en: "Qualifications" },
+  credentials: { zh: "资历与经历", en: "Credentials & experience" },
   // ④ 同城成员
   alsoIn: { zh: "{city}的其他成员", en: "Also in {city}" },
   allPeople: { zh: "全部成员", en: "All our people" },
@@ -109,6 +109,20 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
   const bookHref = whatsappLink(lang, fill(text.bookMessage));
   // 主要领域排第一（data-lead 会让它变黑）
   const helps = services.filter((s) => p.services.includes(s.slug)).sort((a, b) => Number(b.slug === p.lead) - Number(a.slug === p.lead));
+  const hasCredentials = [profile.qualifications, profile.experience, profile.awards, profile.talks, profile.memberships].some((x) => x && x.length > 0);
+  // 目录：只列出这一页真的有的段落
+  const toc = [
+    { id: "about", label: fill(text.about) },
+    ...(helps.length > 0 ? [{ id: "help", label: fill(text.help) }] : []),
+    ...(hasCredentials ? [{ id: "credentials", label: text.credentials[lang] }] : []),
+  ];
+  // 资历与经历的小组（没有资料的小组自动隐藏）
+  const lists = [
+    { key: "experience", title: text.experience, items: profile.experience },
+    { key: "awards", title: text.awards, items: profile.awards },
+    { key: "talks", title: text.talks, items: profile.talks },
+    { key: "memberships", title: text.memberships, items: profile.memberships },
+  ].filter((g) => g.items && g.items.length > 0);
   const others = team.filter((x) => cityOf(x).id === cityOf(p).id && x.slug !== p.slug).slice(0, 4);
 
   return (
@@ -138,6 +152,10 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
                 <a className="btn btn-cta" href={bookHref} target="_blank" rel="noopener">{fill(text.book)}</a>
               </div>
               <p>{text.note[lang]}</p>
+              <nav className="toc" aria-label={common.onThisPage[lang]}>
+                <p className="tag">{common.onThisPage[lang]}</p>
+                <ol>{toc.map((t) => <li key={t.id}><a href={`#${t.id}`}>{t.label}</a></li>)}</ol>
+              </nav>
             </div>
           </div>
         </div>
@@ -155,71 +173,49 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
         </section>
       )}
 
-      {/* ═══ ③ 内容（左）+ 资历与预约（右侧栏） ═══ */}
+      {/* ═══ ③ 三个大段落：关于 · 可以帮你的事 · 资历与经历 ═══ */}
       <section className="section section-muted">
-        <div className="container with-aside">
-          <div className="stack">
-            <div>
-              <div className="list-head"><h2>{fill(text.about)}</h2></div>
-              {profile.about ? (
-                <div className="prose">{profile.about.map((para) => <p key={para.zh}>{para[lang]}</p>)}</div>
-              ) : (
-                <p className="muted">{text.pending[lang]}</p>
-              )}
-            </div>
-            {helps.length > 0 && (
-              <div>
-                <div className="list-head"><h2>{fill(text.help)}</h2></div>
-                <div className="btn-row">
-                  {helps.map((s) => <Link key={s.slug} className="chip" data-lead={s.slug === p.lead || undefined} href={`/${lang}/services/${s.category}/${s.slug}`}>{s.title[lang]} →</Link>)}
-                </div>
+        <div className="container stack">
+          <div id="about">
+            <div className="list-head"><h2>{fill(text.about)}</h2></div>
+            {profile.about ? (
+              <div className="prose">
+                {profile.about.map((para) => <p key={para.zh}>{para[lang]}</p>)}
+                {profile.outside && <p className="muted">{text.outside[lang]}{lang === "zh" ? "：" : ": "}{profile.outside[lang]}</p>}
               </div>
-            )}
-            {profile.experience && (
-              <div>
-                <div className="list-head"><h2>{text.experience[lang]}</h2></div>
-                <ul className="rule-list">{profile.experience.map((e) => <li key={e.zh}>{e[lang]}</li>)}</ul>
-              </div>
-            )}
-            {profile.awards && (
-              <div>
-                <div className="list-head"><h2>{text.awards[lang]}</h2></div>
-                <ul className="rule-list">{profile.awards.map((a) => <li key={a.zh}>{a[lang]}</li>)}</ul>
-              </div>
-            )}
-            {profile.talks && (
-              <div>
-                <div className="list-head"><h2>{text.talks[lang]}</h2></div>
-                <ul className="rule-list">{profile.talks.map((t) => <li key={t.zh}>{t[lang]}</li>)}</ul>
-              </div>
-            )}
-            {profile.memberships && (
-              <div>
-                <div className="list-head"><h2>{text.memberships[lang]}</h2></div>
-                <ul className="rule-list">{profile.memberships.map((m) => <li key={m.zh}>{m[lang]}</li>)}</ul>
-              </div>
-            )}
-            {profile.outside && (
-              <dl className="facts">
-                <div><dt>{text.outside[lang]}</dt><dd>{profile.outside[lang]}</dd></div>
-              </dl>
+            ) : (
+              <p className="muted">{text.pending[lang]}</p>
             )}
           </div>
-          <aside>
-            {profile.qualifications && (
-              <div>
-                <h3>{text.qualifications[lang]}</h3>
-                <dl className="facts">
-                  {profile.qualifications.map((q) => <div key={q.label.en}><dt>{q.label[lang]}</dt><dd>{q.value[lang]}</dd></div>)}
-                </dl>
+          {helps.length > 0 && (
+            <div id="help">
+              <div className="list-head"><h2>{fill(text.help)}</h2></div>
+              <div className="btn-row">
+                {helps.map((s) => <Link key={s.slug} className="chip" data-lead={s.slug === p.lead || undefined} href={`/${lang}/services/${s.category}/${s.slug}`}>{s.title[lang]} →</Link>)}
               </div>
-            )}
-            <div>
-              <h3>{text.ready[lang]}</h3>
-              <p>{text.note[lang]}</p>
             </div>
-            <a className="btn btn-cta" href={bookHref} target="_blank" rel="noopener">{fill(text.book)}</a>
-          </aside>
+          )}
+          {hasCredentials && (
+            <div id="credentials">
+              <div className="list-head"><h2>{text.credentials[lang]}</h2></div>
+              <div className="groups">
+                {profile.qualifications && (
+                  <div>
+                    <h3>{text.qualifications[lang]}</h3>
+                    <dl className="facts">
+                      {profile.qualifications.map((q) => <div key={q.label.en}><dt>{q.label[lang]}</dt><dd>{q.value[lang]}</dd></div>)}
+                    </dl>
+                  </div>
+                )}
+                {lists.map((g) => (
+                  <div key={g.key}>
+                    <h3>{g.title[lang]}</h3>
+                    <ul className="rule-list">{g.items!.map((i) => <li key={i.zh}>{i[lang]}</li>)}</ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

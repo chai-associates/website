@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 全部服务 /services
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 我的情况是（选择器）  ③ 5 个分类与全部服务  ④ 直接咨询
+// 区块顺序：① 标题 + 目录  ② 我的情况是（选择器）  ③ 5 个分类（每个分类一张卡片，里面列出服务）  ④ 直接咨询
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -45,6 +45,7 @@ const text = {
   },
   // ③ 全部服务
   all: { zh: "全部服务", en: "All services" },
+  viewCategory: { zh: "查看这个分类", en: "View this category" },
   // ④ 直接咨询
   ask: {
     title: { zh: "找不到你的情况？", en: "Can't find your situation?" },
@@ -78,11 +79,18 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           <h1>{common.services[lang]}</h1>
           <p>{text.lead[lang]}</p>
           <p>{text.scope[lang]}</p>
+          <nav className="toc" aria-label={common.onThisPage[lang]}>
+            <p className="tag">{common.onThisPage[lang]}</p>
+            <ol>
+              <li><a href="#situation">{text.picker.label[lang]}</a></li>
+              {serviceCategories.map((c) => <li key={c.slug}><a href={`#${c.slug}`}>{c.title[lang]}</a></li>)}
+            </ol>
+          </nav>
         </div>
       </section>
 
       {/* ═══ ② 我的情况是 ═══ */}
-      <section className="section section-muted">
+      <section id="situation" className="section section-muted">
         <div className="container">
           <SituationPicker
             label={text.picker.label[lang]}
@@ -99,26 +107,22 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
         </div>
       </section>
 
-      {/* ═══ ③ 5 个分类与全部服务 ═══ */}
+      {/* ═══ ③ 5 个分类：一张卡片 = 分类名称 → 一句话 → 这个分类的服务（链接清单）→ 查看这个分类 ═══ */}
       <section className="section">
-        <div className="container stack">
-          <h2>{text.all[lang]}</h2>
-          {serviceCategories.map((c) => (
-            <div key={c.slug}>
-              <div className="section-head">
-                <h3><Link href={`/${lang}/services/${c.slug}`} className="text-link">{c.title[lang]} →</Link></h3>
+        <div className="container">
+          <div className="list-head"><h2>{text.all[lang]}</h2></div>
+          <div className="card-grid">
+            {serviceCategories.map((c) => (
+              <div key={c.slug} id={c.slug} className="card reveal">
+                <h3>{c.title[lang]}</h3>
                 <p>{c.short[lang]}</p>
+                <ul className="link-list">
+                  {services.filter((s) => s.category === c.slug).map((s) => <li key={s.slug}><Link href={href(s.slug)}>{s.title[lang]}</Link></li>)}
+                </ul>
+                <Link className="text-link" href={`/${lang}/services/${c.slug}`}>{text.viewCategory[lang]} →</Link>
               </div>
-              <div className="card-grid">
-                {services.filter((s) => s.category === c.slug).map((s) => (
-                  <Link key={s.slug} href={href(s.slug)} className="card card-link reveal">
-                    <h3>{s.title[lang]}</h3>
-                    <p>{s.short[lang]}</p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 

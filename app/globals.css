@@ -198,6 +198,27 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .timeline > li:last-child::after { display: none; }
 .timeline > li > h3 + p { margin-top: calc(var(--spacing) * 1); color: var(--color-ink-muted); }
 
+/* ── 积木：目录（长页面最上面：这一页有什么，点了跳过去）──
+   结构：nav.toc > p.tag「本页内容」+ ol > li > a[href="#id"]；手机 2 栏，电脑自动排开 */
+.toc { margin-top: calc(var(--spacing) * 6); padding-top: calc(var(--spacing) * 4); border-top: 1px solid var(--color-line); }
+.toc ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--spacing) * 6); margin-top: calc(var(--spacing) * 1); }
+.toc a { display: block; min-height: var(--tap-min); padding-block: calc(var(--spacing) * 3); font-weight: 600; line-height: var(--leading-heading); }
+.toc a::after { content: "\00a0↓"; color: var(--color-ink-muted); } /* 箭头由积木加，黏在最后一个字后面 */
+@media (min-width: 860px) {
+  .toc ol { display: flex; flex-wrap: wrap; column-gap: calc(var(--spacing) * 8); } /* 电脑：按文字长度排开 */
+}
+
+/* ── 积木：链接清单（不加框）：每一行一个链接，细线分隔；用在分类下的服务、延伸阅读 ── */
+.link-list a { display: flex; align-items: center; justify-content: space-between; gap: calc(var(--spacing) * 4); min-height: var(--tap-min); padding: calc(var(--spacing) * 2) 0; border-top: 1px solid var(--color-line); }
+.link-list a::after { content: "→"; color: var(--color-ink-muted); }
+.card > .link-list { margin-top: calc(var(--spacing) * 2); }
+.list-head + .link-list > li:first-child > a { border-top: 0; } /* 紧接横线标题时，标题的线就是第一条线 */
+
+/* ── 积木：小组（同一个大段落里分几组）：小标题 h3 → 内容；只有大段落开头才用横线标题 ── */
+.groups { display: grid; gap: calc(var(--spacing) * 8); }
+.groups h3 { font-size: var(--text-lead); }
+.groups h3 + * { margin-top: calc(var(--spacing) * 3); }
+
 /* ── 积木：面包屑（首页 › 离婚服务 › 孩子） ─────────── */
 .breadcrumb { display: flex; flex-wrap: wrap; align-items: center; column-gap: calc(var(--spacing) * 2); font-size: var(--text-caption); color: var(--color-ink-muted); }
 .breadcrumb li + li::before { content: "›"; margin-right: calc(var(--spacing) * 2); }

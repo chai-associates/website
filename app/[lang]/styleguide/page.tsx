@@ -282,6 +282,23 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </ol>
           </div>
           <div>
+            <div className="list-head"><h2>目录</h2><span>toc · 长页面最上面，点了跳到那一段</span></div>
+            <nav className="toc" aria-label="目录示范">
+              <p className="tag">本页内容</p>
+              <ol>{["关于林慧盈", "可以帮你的事", "资历与经历"].map((t) => <li key={t}><a href="#">{t}</a></li>)}</ol>
+            </nav>
+          </div>
+          <div>
+            <div className="list-head"><h2>链接清单</h2><span>link-list · 不加框，一行一个链接</span></div>
+            <ul className="link-list">{["协议离婚", "单方面离婚", "收到离婚申请"].map((t) => <li key={t}><a href="#">{t}</a></li>)}</ul>
+          </div>
+          <div>
+            <div className="list-head"><h2>小组</h2><span>groups · 同一段落里用小标题分组，不再每组划横线</span></div>
+            <div className="groups">
+              {["经历", "奖项"].map((t) => <div key={t}><h3>{t}</h3><ul className="rule-list"><li>{t} 1</li><li>{t} 2</li></ul></div>)}
+            </div>
+          </div>
+          <div>
             <div className="list-head"><h2>正文段落</h2><span>prose · stack</span></div>
             <div className="prose">
               <p>prose：段落之间自动留一行的距离，用在个人介绍、离婚百科文章。</p>

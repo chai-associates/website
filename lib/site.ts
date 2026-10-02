@@ -180,6 +180,7 @@ export const common = {
   viewAll: { zh: "查看全部服务", en: "View All Services" },
   askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
   readMore: { zh: "阅读详情", en: "Read More" },
+  onThisPage: { zh: "本页内容", en: "On this page" },
   call: { zh: "拨打电话", en: "Call Now" },
   directions: { zh: "开始导航", en: "Get Directions" },
   notYours: {

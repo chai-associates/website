@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 你需要知道的（只写到重点）+ 相关文章（左）+ ③ 询问表格（右侧栏）
-//          ④ 不是你的情况？  ⑤ 相关服务
+// 区块顺序：① 标题  ② 你需要知道的 → 延伸阅读 → 不是你的情况？（左）+ ③ 询问表格（右侧栏）
+// 一页只有一个主要行动：询问表格。其他都是文字链接。
 // 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
-// 相关文章读 lib/divorcepedia.ts（文章的 services 有这项服务就会出现）；没有相关文章，那一段自动隐藏。
+// 延伸阅读 = 相关文章（lib/divorcepedia.ts，文章的 services 有这项服务）+ 同分类的其他服务（最多 3 项）。
 // 还没写内容的服务会显示「内容准备中」。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -12,7 +12,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
 import { InquiryForm } from "@/lib/interactive";
-import { cities, common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { cities, common, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -55,8 +55,7 @@ const text = {
       ],
     },
   } as Record<string, { intro: Bi; points: Bi[] }>,
-  reads: { zh: "相关文章", en: "Related reading" },
-  allReads: { zh: "离婚百科", en: "Divorcepedia" },
+  reads: { zh: "延伸阅读", en: "Further reading" },
   pending: { zh: "这项服务的详细说明正在准备中。你可以先用下面的表格，把情况发给律师。", en: "Details for this service are being prepared. In the meantime, send your situation to a lawyer using the form below." },
   know: { zh: "你需要知道的", en: "What you need to know" },
 
@@ -75,8 +74,6 @@ const text = {
     ] as { label: Bi; options: Bi[] }[],
   },
 
-  // ⑤ 相关服务
-  related: { zh: "相关服务", en: "Related services" },
 };
 
 // 预先生成所有服务页；不在清单里的网址 → 404
@@ -100,6 +97,10 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
   const content = text.content[s.slug];
   const reads = articles.filter((a) => a.services.includes(s.slug));
   const related = services.filter((x) => x.category === s.category && x.slug !== s.slug).slice(0, 3);
+  const further = [
+    ...reads.map((a) => ({ href: `/${lang}/divorcepedia/${a.slug}`, title: a.title[lang] })),
+    ...related.map((r) => ({ href: `/${lang}/services/${r.category}/${r.slug}`, title: r.title[lang] })),
+  ];
 
   return (
     <>
@@ -131,17 +132,17 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
                 <p className="muted">{text.pending[lang]}</p>
               )}
             </div>
-            {reads.length > 0 && (
+            {further.length > 0 && (
               <div>
-                <div className="list-head">
-                  <h2>{text.reads[lang]}</h2>
-                  <Link className="text-link" href={`/${lang}/divorcepedia`}>{text.allReads[lang]} →</Link>
-                </div>
-                <ul className="rule-list">
-                  {reads.map((a) => <li key={a.slug}><Link className="text-link" href={`/${lang}/divorcepedia/${a.slug}`}>{a.title[lang]} →</Link></li>)}
+                <div className="list-head"><h2>{text.reads[lang]}</h2></div>
+                <ul className="link-list">
+                  {further.map((f) => <li key={f.href}><Link href={f.href}>{f.title}</Link></li>)}
                 </ul>
               </div>
             )}
+            <p>
+              {common.notYours.title[lang]} <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
+            </p>
           </div>
           <aside>
             <div>
@@ -159,42 +160,6 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
         </div>
       </section>
 
-      {/* ═══ ④ 不是你的情况？ ═══ */}
-      <section className="section">
-        <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{common.notYours.title[lang]}</h2>
-              <p>{common.notYours.desc[lang]}</p>
-            </div>
-            <div className="btn-row">
-              <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
-              <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ ⑤ 相关服务 ═══ */}
-      {related.length > 0 && (
-        <section className="section section-muted">
-          <div className="container">
-            <div className="list-head">
-              <h2>{text.related[lang]}</h2>
-              <Link className="text-link" href={`/${lang}/services/${c.slug}`}>{c.title[lang]} →</Link>
-            </div>
-            <div className="card-grid">
-              {related.map((r) => (
-                <Link key={r.slug} href={`/${lang}/services/${r.category}/${r.slug}`} className="card card-link reveal">
-                  <h3>{r.title[lang]}</h3>
-                  <p>{r.short[lang]}</p>
-                  <span className="text-link">{common.readMore[lang]} →</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </>
   );
 }
