@@ -134,16 +134,14 @@ export default async function CareersPage({ params }: PageProps<"/[lang]/careers
         </section>
       )}
 
-      {/* ═══ ④ 投递履历 ═══ */}
-      <section className="section">
+      {/* ═══ ④ 投递履历（浅灰） ═══ */}
+      <section className="section section-muted">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{text.cv.title[lang]}</h2>
-              <p>{text.cv.desc[lang]} {firm.careersEmail}</p>
-            </div>
-            <a className="btn btn-cta" href={mailto(text.cv.subject[lang])}>{text.cv.send[lang]}</a>
+          <div className="section-head">
+            <h2>{text.cv.title[lang]}</h2>
+            <p>{text.cv.desc[lang]} {firm.careersEmail}</p>
           </div>
+          <a className="btn btn-cta" href={mailto(text.cv.subject[lang])}>{text.cv.send[lang]}</a>
         </div>
       </section>
     </>

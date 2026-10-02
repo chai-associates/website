@@ -25,7 +25,7 @@ const text = {
     "按钮一律胶囊形",
     "英文大标题（h1、h2）用 Garamond 衬线；中文标题、h3 以下用无衬线",
     "段落 = 色带：白 / 浅灰 / 深色交替，相邻不同色；一条色带只做一件事；母页只放「图 → 标题 → 一两句 → 一个链接」",
-    "小标签：大写、拉开字距、古铜色（深色色带上用浅古铜）",
+    "一个区块只有一个标题，标题上面不放小标签；小标签只放资料（城市、职位、日期、类别、编号），古铜色",
     "照片比例：人像 4:5，场景 3:2（首页首屏满版照片例外）",
     "古铜只用在主要按钮和小标签",
     "动态要轻；手机设定「减少动态」时全部关闭",
@@ -35,8 +35,8 @@ const text = {
     ["bg-subtle", "subtle 浅灰区块"], ["bg-accent", "accent 古铜"], ["bg-inverse", "inverse 深色底"],
   ],
   sizes: [
-    ["text-display", "display · h1"], ["text-title", "title · h2"], ["text-subtitle", "subtitle · h3"],
-    ["text-lead", "lead · 标题下的说明"], ["text-body", "body · 正文"], ["text-small", "small · 次要说明"], ["text-caption", "caption · 标签、备注"],
+    ["text-title", "title · 页面标题 h1"], ["text-lead", "lead · 页面副标题（跟 title 一组）"],
+    ["text-subtitle", "subtitle · 区块标题 h2"], ["text-body", "body · 说明、正文、卡片标题 h3（跟 subtitle 一组）"], ["text-caption", "caption · 小标签、面包屑、备注"],
   ],
   people: [
     { initials: "LH", name: { zh: "林慧盈", en: "Lim Hui Ying" }, role: { zh: "主管合伙人", en: "Managing Partner" }, meta: { zh: "新山 · English · 华语", en: "Johor Bahru · English · 华语" } },
@@ -98,9 +98,9 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       <section className="section section-muted">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{lang === "en" ? "Our services" : "服务范围"}</p>
-            <h2>section-head：小标签 → 标题 → 说明</h2>
+            <h2>section-head：标题 → 副标题 → 说明</h2>
             <p>区块开头用这个；一组清单的开头用下面的 list-head。</p>
+            <p>第二段是说明：灰色小字。</p>
           </div>
           <div className="stack">
           <div>
@@ -317,9 +317,8 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       <section className="section section-dark">
         <div className="container">
           <div className="section-head">
-            <p className="tag">section-dark</p>
             <h2>深色色带：留给重点时刻</h2>
-            <p>小标签自动变浅古铜，说明文字变浅灰。最后一条色带不用深色（页脚是深色）。</p>
+            <p>说明文字自动变浅灰，小标签（编号等）变浅古铜。最后一条色带不用深色（页脚是深色）。</p>
           </div>
           <a className="btn btn-light" href="#">btn-light（深色上的次要按钮）</a>
         </div>
@@ -337,25 +336,23 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div className="split">
             <div className="photo-frame" />
             <div>
-              <div className="section-head"><p className="tag">split</p><h2>左右并排</h2></div>
+              <div className="section-head"><h2>左右并排</h2></div>
               <p>照片（左）+ 文字（右）；手机上下排。</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ 深色行动区块 ═══ */}
-      <section className="section">
+      {/* ═══ 结尾行动色带 ═══ */}
+      <section className="section section-muted">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{lang === "en" ? "Not sure who to speak to?" : "不确定该找谁？"}</h2>
-              <p>cta-band：一句话 + 一个主要按钮（可以再加一个文字链接）。每页最多一个。</p>
-            </div>
-            <div className="btn-row">
-              <a className="btn btn-cta" href="#">直接咨询律师</a>
-              <a className="text-link" href="#">查看全部服务 →</a>
-            </div>
+          <div className="section-head">
+            <h2>{lang === "en" ? "Not sure who to speak to?" : "不确定该找谁？"}</h2>
+            <p>结尾行动色带：section-head（标题 + 一句）→ 一个主要按钮（可以再加一个文字链接）。每页最后一条，浅灰或白，不用深色。</p>
+          </div>
+          <div className="btn-row">
+            <a className="btn btn-cta" href="#">直接咨询律师</a>
+            <a className="text-link" href="#">查看全部服务 →</a>
           </div>
         </div>
       </section>

@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 分类页 /services/[category]（5 个分类共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 这一类的服务  ③ 不是你的情况？
+// 色带顺序：① 标题（白）  ② 这一类的服务卡片（白，接在标题下面；不另加标题）  ③ 不是你的情况？（浅灰）
 // 分类名称、服务清单在 lib/site.ts；每个分类的介绍写在下面 text.intro。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -36,9 +36,6 @@ const text = {
       en: "When you're not ready to divorce yet, or need to keep yourself and your children safe first.",
     },
   } satisfies Record<ServiceCategory, Bi>,
-  // ② 清单标题
-  list: { zh: "这一类的服务", en: "Services in this area" },
-  count: { zh: "{n} 项服务", en: "{n} services" },
 };
 
 // 预先生成 5 个分类页；不在清单里的网址 → 404
@@ -75,13 +72,9 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
         </div>
       </section>
 
-      {/* ═══ ② 这一类的服务 ═══ */}
+      {/* ═══ ② 这一类的服务（白） ═══ */}
       <section className="section">
         <div className="container">
-          <div className="list-head">
-            <h2>{text.list[lang]}</h2>
-            <span>{text.count[lang].replace("{n}", String(list.length))}</span>
-          </div>
           <div className="card-grid">
             {list.map((s) => (
               <Link key={s.slug} href={`/${lang}/services/${c.slug}/${s.slug}`} className="card card-link reveal">
@@ -94,18 +87,16 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
         </div>
       </section>
 
-      {/* ═══ ③ 不是你的情况？ ═══ */}
-      <section className="section">
+      {/* ═══ ③ 不是你的情况？（浅灰） ═══ */}
+      <section className="section section-muted">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{common.notYours.title[lang]}</h2>
-              <p>{common.notYours.desc[lang]}</p>
-            </div>
-            <div className="btn-row">
-              <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
-              <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
-            </div>
+          <div className="section-head">
+            <h2>{common.notYours.title[lang]}</h2>
+            <p>{common.notYours.desc[lang]}</p>
+          </div>
+          <div className="btn-row">
+            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+            <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
           </div>
         </div>
       </section>

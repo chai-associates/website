@@ -2,7 +2,7 @@
 // 全部服务 /services
 // ───────────────────────────────────────────────────────────────
 // 母页：只做导览，带人到分类页（每个分类的服务清单在分类页）。品牌语法 4：一条色带只做一件事。
-// 色带顺序：① 标题（白）  ② 选单「我们可以怎么帮你？」（浅灰）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白）  ④ 找不到你的情况？（浅灰）
+// 色带顺序：① 标题（白）  ② 选单「我们可以怎么帮你？」（浅灰）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白；不另加标题，页面标题已经说了）  ④ 找不到你的情况？（浅灰）
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -45,8 +45,6 @@ const text = {
     ] as { label: Bi; slugs: string[] }[],
   },
   // ③ 全部服务（5 个分类）
-  all: { zh: "全部服务", en: "All services" },
-  allDesc: { zh: "离婚相关的服务分成 5 类，点进去看每一类的服务。", en: "Our services fall into five areas. Open one to see the services in it." },
   viewCategory: { zh: "查看这个分类", en: "View this category" },
   // ④ 直接咨询
   ask: {
@@ -104,10 +102,6 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       {/* ═══ ③ 5 个分类：照片卡片（白） ═══ */}
       <section className="section">
         <div className="container">
-          <div className="section-head">
-            <h2>{text.all[lang]}</h2>
-            <p>{text.allDesc[lang]}</p>
-          </div>
           <div className="card-grid">
             {serviceCategories.map((c) => (
               <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card reveal">

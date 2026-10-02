@@ -1,25 +1,36 @@
 // ═══════════════════════════════════════════════════════════════
 // 离婚百科文章 /divorcepedia/[slug]（所有文章共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题（一句话重点）
-//          ② 文章 + 相关服务连结 + 法律声明（左）+ 问律师按钮（右侧栏；手机排在下面）
-//          ③ 同一个分类的其他文章
+// 百科 = 读文章的感觉（服务页才有侧栏表格）：一栏、不放侧栏、不放照片。
+// 色带顺序：① 标题 → 资料备注「离婚百科 · 分类 · 约 N 分钟」（白）
+//          ② 文章：一栏，行宽固定（白，接在标题下面）
+//          ③ 想请律师帮你办？：问律师按钮 + 查看相关服务（浅灰）
+//          ④ 同一个分类的其他文章（白）
+// 法律声明在页尾（全站共用），这里不再重复。
 // 文章内容在 lib/divorcepedia.ts；这里只放这一页的固定文字。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
-import { common, disclaimer, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
 // ─────────────────────────────────────────────
 const text = {
   pedia: { zh: "离婚百科", en: "Divorcepedia" },
-  services: { zh: "相关服务", en: "Related services" }, // 只给读屏软件，画面上不显示标题
-  // ② 侧栏：问律师按钮，WhatsApp 预先填好文章名称
-  message: { zh: "你好，我看了「{title}」，想咨询我的情况。", en: "Hi, I read \"{title}\" and would like to ask about my situation." },
+  // ① 资料备注
+  minutes: { zh: "约 {n} 分钟", en: "{n} min read" },
+  // ③ 读完 → 交给律师 / 去看服务：连结一律用动词开头
+  handoff: {
+    title: { zh: "想请律师帮你办？", en: "Want a lawyer to handle this?" },
+    desc: { zh: "每个案件都不一样。律师会根据你的情况，告诉你可以怎么做。", en: "Every case is different. A lawyer will explain what you can do in your situation." },
+  },
+  message: { zh: "你好，我看了「{title}」，想咨询我的情况。", en: "Hi, I read \"{title}\" and would like to ask about my situation." }, // WhatsApp 预先填好文章名称
+  viewService: { zh: "查看{service}服务", en: "View {service} service" },
+  // ④ 同分类文章
+  browse: { zh: "浏览全部百科", en: "Browse All Articles" },
   // ③ 同分类文章
   more: { zh: "更多关于{category}", en: "More on {category}" },
 };
@@ -44,6 +55,9 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
   const c = serviceCategories.find((x) => x.slug === a.category)!;
   const related = services.filter((s) => a.services.includes(s.slug));
   const more = articles.filter((x) => x.category === a.category && x.slug !== a.slug);
+  // 阅读时间：中文每分钟约 400 字，英文每分钟约 200 词
+  const words = a.body.flatMap((b) => ("h2" in b ? [b.h2] : "p" in b ? [b.p] : b.list)).map((t) => t[lang]).join(" ");
+  const minutes = Math.max(1, Math.round(lang === "zh" ? words.replace(/\s/g, "").length / 400 : words.split(/\s+/).length / 200));
   const fill = (t: Bi) => t[lang].replace("{title}", a.title[lang]).replace("{category}", c.title[lang]);
 
   return (
@@ -58,40 +72,44 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
           </ol>
           <h1>{a.title[lang]}</h1>
           <p>{a.summary[lang]}</p>
+          <p>{text.pedia[lang]} · {c.title[lang]} · {text.minutes[lang].replace("{n}", String(minutes))}</p>
         </div>
       </section>
 
-      {/* ═══ ② 文章（左）+ 问律师（右侧栏） ═══ */}
+      {/* ═══ ② 文章：一栏（白） ═══ */}
       <section className="section">
-        <div className="container with-aside">
-          <div className="stack">
-            <article className="prose">
-              {a.body.map((b, i) =>
-                "h2" in b ? <h2 key={i}>{b.h2[lang]}</h2>
-                : "p" in b ? <p key={i}>{b.p[lang]}</p>
-                : <ul key={i}>{b.list.map((li) => <li key={li.en}>{li[lang]}</li>)}</ul>,
-              )}
-            </article>
-            {related.length > 0 && (
-              <nav className="btn-row" aria-label={text.services[lang]}>
-                {related.map((s) => <Link key={s.slug} className="chip" href={`/${lang}/services/${s.category}/${s.slug}`}>{s.title[lang]} →</Link>)}
-              </nav>
+        <div className="container">
+          <article className="prose">
+            {a.body.map((b, i) =>
+              "h2" in b ? <h2 key={i}>{b.h2[lang]}</h2>
+              : "p" in b ? <p key={i}>{b.p[lang]}</p>
+              : <ul key={i}>{b.list.map((li) => <li key={li.en}>{li[lang]}</li>)}</ul>,
             )}
-            <p className="muted">{disclaimer[lang]}</p>
-          </div>
-          <aside>
-            <a className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
-          </aside>
+          </article>
         </div>
       </section>
 
-      {/* ═══ ③ 同一个分类的其他文章 ═══ */}
+      {/* ═══ ③ 想请律师帮你办？（浅灰） ═══ */}
+      <section className="section section-muted">
+        <div className="container">
+          <div className="section-head">
+            <h2>{text.handoff.title[lang]}</h2>
+            <p>{text.handoff.desc[lang]}</p>
+          </div>
+          <div className="btn-row">
+            <a className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+            {related.map((r) => <Link key={r.slug} className="text-link" href={`/${lang}/services/${r.category}/${r.slug}`}>{text.viewService[lang].replace("{service}", r.title[lang])} →</Link>)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ ④ 同一个分类的其他文章（白） ═══ */}
       {more.length > 0 && (
-        <section className="section section-muted">
+        <section className="section">
           <div className="container">
             <div className="list-head">
               <h2>{fill(text.more)}</h2>
-              <Link className="text-link" href={`/${lang}/divorcepedia`}>{text.pedia[lang]} →</Link>
+              <Link className="text-link" href={`/${lang}/divorcepedia`}>{text.browse[lang]} →</Link>
             </div>
             <div className="card-grid">
               {more.slice(0, 3).map((m) => (

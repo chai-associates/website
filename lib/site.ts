@@ -66,10 +66,10 @@ export const cities: { id: string; label: Bi; full: Bi }[] = [
 
 // id：办事处编号（团队成员用它指定在哪一间）
 export const offices: { id: string; city: string; name: Bi; address: string; phone: string; phoneDisplay: string }[] = [
-  { id: "impian-emas", city: "jb", name: { zh: "Taman Impian Emas（士姑来）", en: "Taman Impian Emas (Skudai)" }, address: "241, Jalan Impian Emas 22, Taman Impian Emas, 81300 Skudai, Johor", phone: "+60194774149", phoneDisplay: "+6019-477 4149" },
-  { id: "eko-galleria", city: "jb", name: { zh: "Eko Galleria（依斯干达公主城）", en: "Eko Galleria (Iskandar Puteri)" }, address: "B-05-36, Blok B, Eko Galleria, Persiaran Eko Botani, 79100 Iskandar Puteri, Johor", phone: "+6075853008", phoneDisplay: "+607-585 3008" },
-  { id: "jaya-putra", city: "jb", name: { zh: "Bandar Jaya Putra", en: "Bandar Jaya Putra" }, address: "12-01 & 12-02, Jalan Jaya Putra 7/2, Bandar Jaya Putra, 81100 Johor Bahru, Johor", phone: "+6073614666", phoneDisplay: "+607-361 4666" },
-  { id: "taman-sea", city: "kl", name: { zh: "八打灵再也 Taman Sea", en: "Petaling Jaya (Taman Sea)" }, address: "51-03, Jalan SS 23/15, Taman Sea, 47400 Petaling Jaya, Selangor", phone: "+60378869672", phoneDisplay: "+603-7886 9672" },
+  { id: "impian-emas", city: "jb", name: { zh: "Taman Impian Emas", en: "Taman Impian Emas" }, address: "241, Jalan Impian Emas 22, Taman Impian Emas, 81300 Skudai, Johor", phone: "+60194774149", phoneDisplay: "+6019-477 4149" },
+  { id: "eko-galleria", city: "jb", name: { zh: "Eko Galleria", en: "Eko Galleria" }, address: "B-05-36, Blok B, Eko Galleria, Persiaran Eko Botani, 79100 Iskandar Puteri, Johor", phone: "+6075853008", phoneDisplay: "+607-585 3008" },
+  { id: "jaya-putra", city: "jb", name: { zh: "Austin Crest", en: "Austin Crest" }, address: "12-01 & 12-02, Jalan Jaya Putra 7/2, Bandar Jaya Putra, 81100 Johor Bahru, Johor", phone: "+6073614666", phoneDisplay: "+607-361 4666" },
+  { id: "taman-sea", city: "kl", name: { zh: "Petaling Jaya", en: "Petaling Jaya" }, address: "51-03, Jalan SS 23/15, Taman Sea, 47400 Petaling Jaya, Selangor", phone: "+60378869672", phoneDisplay: "+603-7886 9672" },
   { id: "ayer-keroh", city: "mlk", name: { zh: "Ayer Keroh", en: "Ayer Keroh" }, address: "No. 27-2, Jalan PPPS 1, Pusat Perniagaan Putra Sentosa, 75150 Ayer Keroh, Melaka", phone: "+6062337189", phoneDisplay: "+606-233 7189" },
 ];
 

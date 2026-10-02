@@ -81,16 +81,14 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
         </div>
       </section>
 
-      {/* ═══ ③ 不确定该找谁？ ═══ */}
-      <section className="section">
+      {/* ═══ ③ 不确定该找谁？（浅灰） ═══ */}
+      <section className="section section-muted">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{text.ask.title[lang]}</h2>
-              <p>{text.ask.desc[lang]}</p>
-            </div>
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <div className="section-head">
+            <h2>{text.ask.title[lang]}</h2>
+            <p>{text.ask.desc[lang]}</p>
           </div>
+          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
         </div>
       </section>
     </>

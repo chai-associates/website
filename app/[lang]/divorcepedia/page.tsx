@@ -20,7 +20,7 @@ const text = {
   heading: { zh: "离婚前后，\n你会想知道的事。", en: "What you'll want to know,\nbefore and after divorce." },
   lead: { zh: "用简单的话，解释马来西亚非穆斯林离婚的常见问题。", en: "Plain answers to common questions about non-Muslim divorce in Malaysia." },
   // ② 分类
-  services: { zh: "{category}的相关服务", en: "Related services: {category}" },
+  services: { zh: "查看{category}的服务", en: "View {category} services" }, // 读完百科 → 去看服务：一律用动词开头
   // ③ 想先聊聊你的情况？
   ask: {
     title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
@@ -85,16 +85,14 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
         </div>
       </section>
 
-      {/* ═══ ③ 想先聊聊你的情况？ ═══ */}
+      {/* ═══ ③ 想先聊聊你的情况？（白） ═══ */}
       <section className="section">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{text.ask.title[lang]}</h2>
-              <p>{text.ask.desc[lang]}</p>
-            </div>
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <div className="section-head">
+            <h2>{text.ask.title[lang]}</h2>
+            <p>{text.ask.desc[lang]}</p>
           </div>
+          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
         </div>
       </section>
     </>

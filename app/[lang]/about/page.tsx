@@ -47,7 +47,7 @@ const text = {
     practice: { zh: "业务", en: "Practice" },
     practiceValue: { zh: "离婚与家事（非穆斯林）", en: "Divorce & family law (non-Muslim)" },
   },
-  // ③ 我们的理念：使命当大标题、愿景当说明，下面 3 个理念
+  // ③ 我们的理念：标题 → 使命（副标题）→ 愿景（说明），下面 3 个理念
   values: {
     title: { zh: "我们的理念", en: "Our Values" },
     mission: { zh: "[律所的使命，一句话，由律所提供]", en: "[The firm's mission in one sentence, provided by the firm]" },
@@ -94,8 +94,7 @@ const text = {
   },
   // ⑧ 认识我们的团队
   team: {
-    tag: { zh: "我们的团队", en: "Our People" },
-    title: { zh: "认识我们的团队", en: "Meet our people" },
+    title: { zh: "我们的团队", en: "Our People" },
     desc: { zh: "{n} 位律师，分布在 {m} 间办事处。", en: "{n} lawyers across {m} offices." },
     cta: { zh: "认识我们的团队", en: "Meet Our People" },
   },
@@ -137,10 +136,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         <div className="container split">
           <div className="photo-frame">{/* 律所照片：放进 public/images/ 后加 <Image fill /> */}</div>
           <div>
-            <div className="section-head">
-              <p className="tag">{text.firm.title[lang]}</p>
-              <h2>{firm.name}</h2>
-            </div>
+            <div className="section-head"><h2>{text.firm.title[lang]}</h2></div>
             <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
             <dl className="facts">
               <div><dt>{text.facts.founded[lang]}</dt><dd>{firm.founded}</dd></div>
@@ -156,8 +152,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section id="values" className="section">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{text.values.title[lang]}</p>
-            <h2>{text.values.mission[lang]}</h2>
+            <h2>{text.values.title[lang]}</h2>
+            <p>{text.values.mission[lang]}</p>
             <p>{text.values.vision[lang]}</p>
           </div>
           <div className="card-grid">
@@ -175,8 +171,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section id="process" className="section section-dark">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{text.process.title[lang]}</p>
-            <h2>{text.process.desc[lang]}</h2>
+            <h2>{text.process.title[lang]}</h2>
+            <p>{text.process.desc[lang]}</p>
           </div>
           <ol className="steps">
             {text.process.list.map((s, i) => (
@@ -198,7 +194,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
               {md.image ? <Image src={md.image} alt={displayName(md, lang)} fill sizes="(min-width: 860px) 40vw, 100vw" /> : initials(md.name)}
             </div>
             <div>
-              <p className="tag">{text.message.title[lang]}</p>
+              <div className="section-head"><h2>{text.message.title[lang]}</h2></div>
               <figure className="quote">
                 <blockquote><p>{text.message.quote[lang]}</p></blockquote>
                 <figcaption>— {displayName(md, lang)} · {roles[md.role].label[lang]}</figcaption>
@@ -250,7 +246,6 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section id="team" className="section section-dark">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{text.team.tag[lang]}</p>
             <h2>{text.team.title[lang]}</h2>
             <p>{count(text.team.desc)}</p>
           </div>

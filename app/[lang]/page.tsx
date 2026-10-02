@@ -45,21 +45,18 @@ const text = {
 
   // ② 服务范围（服务清单本身在 lib/site.ts）
   services: {
-    tag: { zh: "服务范围", en: "Our services" },
-    title: { zh: "我们可以怎么帮你", en: "How we can help" },
+    title: { zh: "服务范围", en: "Our Services" },
   },
 
   // ③ 我们的团队（成员资料在 lib/site.ts 的 team）
   people: {
-    tag: { zh: "我们的团队", en: "Our people" },
-    title: { zh: "认识我们的团队", en: "Meet our people" },
+    title: { zh: "我们的团队", en: "Our People" },
     swipe: { zh: "← 左右滑动 →", en: "← Swipe →" },
   },
 
   // ④ 联系我们（办事处资料在 lib/site.ts）
   contact: {
-    tag: { zh: "联系我们", en: "Contact" },
-    title: { zh: "5 间办事处，就近找我们", en: "Come and see us — 5 offices" },
+    title: { zh: "联系我们", en: "Contact Us" },
   },
 };
 
@@ -119,7 +116,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <section id="services" className="section">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{text.services.tag[lang]}</p>
             <h2>{text.services.title[lang]}</h2>
           </div>
           {/* 5 个服务分类（内容在 lib/site.ts）· 卡片比例固定 3:2 */}
@@ -143,7 +139,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <section id="people" className="section section-muted">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{people.tag[lang]}</p>
             <h2>{people.title[lang]}</h2>
           </div>
           <div className="scroll-row [--cols:3]">
@@ -167,7 +162,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <section id="contact" className="section">
         <div className="container">
           <div className="section-head">
-            <p className="tag">{contact.tag[lang]}</p>
             <h2>{contact.title[lang]}</h2>
             <p>{firm.hours[lang]}</p>
           </div>

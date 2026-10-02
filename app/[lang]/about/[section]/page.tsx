@@ -106,18 +106,16 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
         </div>
       </section>
 
-      {/* ═══ ③ 想先聊聊你的情况？ ═══ */}
-      <section className="section">
+      {/* ═══ ③ 想先聊聊你的情况？（浅灰） ═══ */}
+      <section className="section section-muted">
         <div className="container">
-          <div className="cta-band">
-            <div>
-              <h2>{text.ask.title[lang]}</h2>
-              <p>{text.ask.desc[lang]}</p>
-            </div>
-            <div className="btn-row">
-              <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
-              <Link className="text-link" href={`/${lang}/about`}>{text.about[lang]} →</Link>
-            </div>
+          <div className="section-head">
+            <h2>{text.ask.title[lang]}</h2>
+            <p>{text.ask.desc[lang]}</p>
+          </div>
+          <div className="btn-row">
+            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+            <Link className="text-link" href={`/${lang}/about`}>{text.about[lang]} →</Link>
           </div>
         </div>
       </section>

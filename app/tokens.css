@@ -5,7 +5,7 @@
    · 不放任何页面或区块专用的值。页面数量增加，这个文件不会变长。
    · @theme 里的值同时变成 Tailwind class，可以直接在 page.tsx 用：
        颜色  bg-accent  text-ink  text-ink-muted  border-line  bg-subtle
-       字号  text-caption text-small text-body text-lead text-subtitle text-title text-display（流体）
+       字号  text-caption text-body text-lead text-subtitle text-title（流体，5 级）
        间距  积木只用下面的 7 级阶梯 --space-1 … --space-6 + --section-y（见「间距阶梯」）；
              Tailwind 的 p-4、gap-6 只给页面版面用（1 格 = 4px）
        圆角  rounded-sm（栏位）  rounded-md（卡片、照片）
@@ -22,7 +22,8 @@
      4 段落 = 色带：白 / 浅灰 / 深色交替，相邻两段不同色；一条色带只做一件事（一个标题、一两句、一个行动）；
        页脚是深色，所以最后一条色带不用深色；母页只放「图 → 标题 → 一两句 → 一个链接」，长文字只在子页；
        细横线标题只给清单用
-     5 小标签：大写、拉开字距、古铜色（深色色带上用浅古铜）
+     5 一个区块只有一个标题，标题上面不放小标签。小标签只放资料（城市、职位、日期、类别、编号）：
+       大写、拉开字距、古铜色（深色色带上用浅古铜）
      6 照片比例：人像 4:5，场景 3:2（首页首屏满版照片例外）
      7 古铜只用在主要按钮和小标签
      8 动态要轻：用下面的 --motion / --ease；手机设定「减少动态」时全部关闭
@@ -51,18 +52,18 @@
 
   /* ── 字号：流体字号（跟着荧幕宽度等比例缩放） ─────────
      每一级在 320px 荧幕是最小值，1440px 是最大值，中间按比例平滑变化。
-     手机上每一级约 1.25 倍（大三度：16 → 20 → 26 → 34），接近 Apple iOS 系统字级，层级才看得出来。
-     层级（小 → 大）：caption < small < body < lead < subtitle < title < display
-     标题和说明用「不同级」来区分，不只是颜色。
+     只有 5 级（减法：删掉了 display 和 small）。两两一组使用：
+       页面标题区：title（h1）+ lead（副标题）
+       区块：      subtitle（h2）+ body（说明、正文）；卡片标题 h3 = body 粗体
+       caption：小标签、面包屑、备注
+     层级（小 → 大）：caption < body < lead < subtitle < title
                      320   375   425   768  1024  1440 （px）                       */
   --text-*: initial;
   --text-caption:  clamp(0.8125rem, 0.7768rem + 0.1786vw, 0.9375rem); /* 13 → 15 · 标签、备注 */
-  --text-small:    clamp(0.9375rem, 0.9196rem + 0.0893vw, 1rem);      /* 15 → 16 · 说明（灰色小字）、按钮 */
-  --text-body:     clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem);       /* 16 → 18 · 正文 */
-  --text-lead:     clamp(1.125rem, 1.0893rem + 0.1786vw, 1.25rem);    /* 18 → 20 · 副标题（标题下面那一句） */
-  --text-subtitle: clamp(1.25rem, 1.1786rem + 0.3571vw, 1.5rem);      /* 20 → 24 · 卡片标题 h3 */
-  --text-title:    clamp(1.625rem, 1.375rem + 1.25vw, 2.5rem);        /* 26 → 40 · 区块标题 h2 */
-  --text-display:  clamp(2.125rem, 1.7321rem + 1.9643vw, 3.5rem);     /* 34 → 56 · 页面大标题 h1 */
+  --text-body:     clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem);       /* 16 → 18 · 正文、说明、按钮、卡片标题 h3（粗体） */
+  --text-lead:     clamp(1.125rem, 1.0893rem + 0.1786vw, 1.25rem);    /* 18 → 20 · 页面副标题（h1 下面那一句） */
+  --text-subtitle: clamp(1.25rem, 1.1786rem + 0.3571vw, 1.5rem);      /* 20 → 24 · 区块标题 h2 */
+  --text-title:    clamp(1.625rem, 1.375rem + 1.25vw, 2.5rem);        /* 26 → 40 · 页面标题 h1 */
 
   /* ── Tailwind 版面单位：1 格 = 4px（只给页面的 grid / gap 等版面 class 用；积木不用，积木用下面的间距阶梯） ── */
   --spacing: 4px;
