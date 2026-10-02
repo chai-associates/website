@@ -8,6 +8,8 @@
 //   services  相关服务的 slug（服务页的「相关文章」、文章页的「相关服务」用）
 //   title     标题（顾客会问的问题）· summary 一句话重点（列表卡片和文章开头）
 //   body      内文：{ h2 } 小标题 · { p } 段落 · { list } 清单
+//   image     封面照片（可不填，没填就是深灰底）：放进 public/images/divorcepedia/，填 "/images/divorcepedia/文章代号.jpg"
+//             尺寸统一 2400 × 1350 px（16:9）；主体放在中间那条 2400 × 600 里（电脑版只显示这一条）
 // 新增文章：照格式加一个物件就好。不要的文章：删掉那一个物件。
 // ⚠ 内容整理自律所的「离婚 Divorce」文件，只改写成顾客看得懂的说法，没有新增法律内容。
 //   上线前需由律师审稿（文件里有几处中英文不一致，已在对话中列出）。
@@ -15,7 +17,7 @@
 import type { Bi, ServiceCategory } from "@/lib/site";
 
 export type Block = { h2: Bi } | { p: Bi } | { list: Bi[] };
-export type Article = { slug: string; category: ServiceCategory; services: string[]; title: Bi; summary: Bi; body: Block[] };
+export type Article = { slug: string; category: ServiceCategory; services: string[]; title: Bi; summary: Bi; body: Block[]; image?: string };
 
 export const articles: Article[] = [
   // ── 办理离婚 ─────────────────────────────────

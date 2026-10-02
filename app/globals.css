@@ -170,6 +170,14 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .photo-card:hover > img { transform: scale(1.03); }
 .photo-card h3 + p { margin-top: var(--space-2); }
 .photo-card-action { align-self: flex-end; }
+/* 封面（离婚百科文章）：照片当背景，标题 + 副标题压在下方，白字。
+   手机 16:9、电脑 4:1（照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里，电脑版只看得到这一条）。
+   字比较多时框会自动变高，不会切到字；没有照片时是深灰底。 */
+.cover { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 16 / 9; margin-top: var(--space-3); padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); }
+.cover > img { z-index: -2; object-fit: cover; border-radius: inherit; }
+.cover::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--scrim-cover); }
+.cover h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
+@media (min-width: 860px) { .cover { aspect-ratio: 4 / 1; padding: var(--space-5); } }
 /* 照片框：圆角裁切的场景照片（品牌语法 6：3:2；人像用 person-photo 的 4:5） */
 .photo-frame { position: relative; overflow: hidden; aspect-ratio: 3 / 2; border-radius: var(--radius-md); background: var(--color-line); }
 .photo-frame > img { object-fit: cover; }

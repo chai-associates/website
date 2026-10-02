@@ -110,4 +110,5 @@
   --ease: cubic-bezier(0.32, 0.72, 0, 1); /* 动态曲线：快出慢停 */
   --scrim-hero: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--color-bg) 85%, transparent) 85%, var(--color-bg) 100%); /* 首屏照片：下缘淡出成白色，放小标签和标题 */
   --scrim-photo: linear-gradient(180deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.2) 55%, rgb(0 0 0 / 0.45) 100%); /* 照片卡片的暗角：上方放文字、下方放按钮 */
+  --scrim-cover: linear-gradient(180deg, rgb(0 0 0 / 0.15) 0%, rgb(0 0 0 / 0.7) 100%); /* 封面照片：越往下越暗，下方压白色标题 */
 }

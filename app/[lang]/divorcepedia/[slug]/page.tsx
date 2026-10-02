@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════════
 // 离婚百科文章 /divorcepedia/[slug]（所有文章共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 百科 = 读文章的感觉（服务页才有侧栏表格）：一栏、不放侧栏、不放照片。
-// 色带顺序：① 标题 → 资料备注「离婚百科 · 分类 · 约 N 分钟」（白）
+// 百科 = 读文章的感觉（服务页才有侧栏表格）：封面照片 + 一栏正文、不放侧栏。
+// 色带顺序：① 面包屑 → 封面：照片上压标题 + 一句话重点（白）
 //          ② 文章：一栏，行宽固定（白，接在标题下面）
 //          ③ 想请律师帮你办？：问律师按钮 → 下面一行一个「查看 X 服务」（浅灰）
 //          ④ 同一个分类的其他文章（白）
@@ -10,6 +10,7 @@
 // 文章内容在 lib/divorcepedia.ts；这里只放这一页的固定文字。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
@@ -20,8 +21,6 @@ import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, ty
 // ─────────────────────────────────────────────
 const text = {
   pedia: { zh: "离婚百科", en: "Divorcepedia" },
-  // ① 资料备注
-  minutes: { zh: "约 {n} 分钟", en: "{n} min read" },
   // ③ 读完 → 交给律师 / 去看服务：连结一律用动词开头
   handoff: {
     title: { zh: "想请律师帮你办？", en: "Want a lawyer to handle this?" },
@@ -55,9 +54,6 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
   const c = serviceCategories.find((x) => x.slug === a.category)!;
   const related = services.filter((s) => a.services.includes(s.slug));
   const more = articles.filter((x) => x.category === a.category && x.slug !== a.slug);
-  // 阅读时间：中文每分钟约 400 字，英文每分钟约 200 词
-  const words = a.body.flatMap((b) => ("h2" in b ? [b.h2] : "p" in b ? [b.p] : b.list)).map((t) => t[lang]).join(" ");
-  const minutes = Math.max(1, Math.round(lang === "zh" ? words.replace(/\s/g, "").length / 400 : words.split(/\s+/).length / 200));
   const fill = (t: Bi) => t[lang].replace("{title}", a.title[lang]).replace("{category}", c.title[lang]);
 
   return (
@@ -70,9 +66,11 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             <li><Link href={`/${lang}/divorcepedia`}>{text.pedia[lang]}</Link></li>
             <li aria-current="page">{a.title[lang]}</li>
           </ol>
-          <h1>{a.title[lang]}</h1>
-          <p>{a.summary[lang]}</p>
-          <p>{text.pedia[lang]} · {c.title[lang]} · {text.minutes[lang].replace("{n}", String(minutes))}</p>
+          <div className="cover">
+            {a.image && <Image src={a.image} alt="" fill preload sizes="(min-width: 1152px) 1088px, 100vw" />}
+            <h1>{a.title[lang]}</h1>
+            <p>{a.summary[lang]}</p>
+          </div>
         </div>
       </section>
 

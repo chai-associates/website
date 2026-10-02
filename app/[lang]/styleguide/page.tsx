@@ -193,6 +193,11 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 {["多年经验", "收费透明", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
               </ul>
             </div>
+            <div className="cover">
+              <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="1152px" />
+              <h1>{lang === "en" ? "cover: article title" : "cover：百科文章封面"}</h1>
+              <p>手机 16:9、电脑 4:1；照片 2400 × 1350，标题压在下方</p>
+            </div>
           </div>
           <div>
             <div className="list-head"><h2>分页选择</h2><span>tabs · 不用 JavaScript</span></div>
