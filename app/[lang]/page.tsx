@@ -27,7 +27,7 @@ const text = {
 
   // ① 首屏
   hero: {
-    title: { zh: "专注家事法律，\n陪你走过\n人生转折。", en: "Family law,\nhandled with care." },
+    title: { zh: "专注家事法律，\n陪你走过人生转折", en: "Family law,\nhandled with care." },
     sub: {
       zh: "离婚、抚养权、赡养费与财产分割，我们用清楚易懂的方式陪你处理每一步。",
       en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",

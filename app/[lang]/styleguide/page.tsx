@@ -183,7 +183,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="1152px" />
               <div>
                 <p className="tag">新山 · 吉隆坡 · 马六甲</p>
-                <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折。"}</h1>
+                <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折"}</h1>
               </div>
             </div>
             <div className="hero-intro">
