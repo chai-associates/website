@@ -4,7 +4,7 @@
 // 母页。品牌语法 4：段落 = 色带，相邻不同色；一条色带只做一件事。内容依「律所问卷」。
 // 色带顺序：① 标题 + 目录（白）  ② 律所简介：照片 + 文字 + 资料（浅灰）  ③ 我们的理念：使命 → 愿景 → 3 个理念（白）
 //   ④ 合作流程（深色）  ⑤ 主管合伙人的话（白）  ⑥ 里程碑（浅灰）  ⑦ 荣誉与认可（白）
-//   ⑧ 更多关于我们：媒体报道 / 公益活动 / 活动与讲座（浅灰）  ⑨ 认识我们的团队（深色）  ⑩ 想先聊聊（白）
+//   ⑧ 更多关于我们：媒体报道 / 公益活动 / 活动与讲座，照片卡片（浅灰）  ⑨ 认识我们的团队（深色）  ⑩ 想先聊聊（白）
 // 成立年份、办事处、团队在 lib/site.ts（律师人数由 team 自动算）；这里只放这一页的文字。
 // ⚠ 中括号 [ ] 里的都是占位，等律所问卷回来后照题目替换。
 // ⚠ 荣誉与认可要符合律师公会的宣传规定（不自夸、不比较，只写「名称 · 颁发单位 · 年份」）；
@@ -262,12 +262,14 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
           <div className="section-head"><h2>{text.more.title[lang]}</h2></div>
           <div className="card-grid">
             {aboutSections.map((a) => (
-              <article key={a.slug} className="feature reveal">
-                <div className="photo-frame">{/* 照片之后加 */}</div>
-                <h3>{a.title[lang]}</h3>
-                <p>{text.more.desc[a.slug][lang]}</p>
-                <Link className="text-link" href={`/${lang}/about/${a.slug}`}>{common.readMore[lang]} →</Link>
-              </article>
+              <Link key={a.slug} href={`/${lang}/about/${a.slug}`} className="photo-card reveal">
+                {/* 照片之后加：<Image src=… alt="" fill /> */}
+                <div>
+                  <h3>{a.title[lang]}</h3>
+                  <p>{text.more.desc[a.slug][lang]}</p>
+                </div>
+                <span className="btn btn-light btn-sm photo-card-action">{common.readMore[lang]} →</span>
+              </Link>
             ))}
           </div>
         </div>

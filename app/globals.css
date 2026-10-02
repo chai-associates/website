@@ -49,19 +49,19 @@ p { max-width: var(--measure); }
 .section-dark .steps > li { border-top-color: var(--color-inverse-ink); }
 .section-head { margin-bottom: var(--space-4); }
 .section-head .tag + :is(h2, h3) { margin-top: var(--space-2); }
-.section-head :is(h2, h3) + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); }
+.section-head :is(h2, h3) + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
 /* 内页最上方：面包屑 → 大标题 → 说明（第二段说明用小字） */
 .page-head { padding: var(--space-3) 0 calc(var(--section-y) / 2); }
 .page-head .container > h1 { margin-top: var(--space-3); }
-.page-head .container > p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); }
-.page-head .container > p + p { margin-top: var(--space-2); font-size: var(--text-small); }
+.page-head .container > p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
+.page-head .container > p + p { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-small); } /* 说明：灰色小字 */ /* 第二段是另一段说明 → 16（标题 ↔ 副标题才是 8） */
 .page-head .container > .btn-row { margin-top: var(--space-4); }
 /* 个人页的标题区：照片（左）+ 职位、名字、介绍、资料列、按钮（右）；手机上下排 */
 .profile-head { display: grid; gap: var(--space-4); margin-top: var(--space-4); }
 .list-head + .profile-head { margin-top: 0; } /* 关于我们的「主管合伙人的话」：横线标题下面直接接 */
 .profile-head .person-photo { margin-bottom: 0; font-size: var(--text-display); }
 .profile-head .tag + h1 { margin-top: var(--space-2); }
-.profile-head h1 + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); }
+.profile-head h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
 .profile-head .facts, .profile-head .btn-row { margin-top: var(--space-4); }
 .profile-head .btn-row + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-caption); }
 @media (min-width: 860px) {
@@ -84,7 +84,7 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-hero); }
 .hero .tag + h1 { margin-top: var(--space-2); }
 .hero-intro { padding-top: var(--space-3); }
-.hero-intro > p { color: var(--color-ink-muted); font-size: var(--text-lead); }
+.hero-intro > p { color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .hero-intro > p + .btn-row { margin-top: var(--space-4); }
 .hero-intro > .btn-row + .points { margin-top: var(--space-5); }
 /* 重点三栏（首屏下方）：上下细线，每一点 = 图示 + 一个短标题 */
@@ -165,7 +165,8 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .card-link:hover { border-color: var(--color-ink); }
 /* 卡片网格：每张至少 300px，自动决定一行几张（手机 1、平板 2、电脑 3） */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--space-4); }
-/* 照片卡片：照片当背景。固定排版：标题 + 说明在左上，按钮在右下（不管荧幕大小、字数多少都一样） */
+/* 照片卡片：照片当背景，文字放在照片里面（一张照片 = 一个项目，一眼看得出是一组）。
+   固定排版：标题 + 说明在左上，按钮在右下。母页的导览项目（服务分类、更多关于我们）都用这个 */
 .photo-card { aspect-ratio: 3 / 2; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: hidden; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); }
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
 .photo-card > img { z-index: -2; object-fit: cover; }
@@ -177,10 +178,9 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .photo-frame { position: relative; overflow: hidden; aspect-ratio: 3 / 2; border-radius: var(--radius-md); background: var(--color-line); }
 .photo-frame > img { object-fit: cover; }
 
-/* ── 积木：导览项目（母页用）：照片 3:2 → 标题 → 一两句 → 一个链接。不加框 ──
-   没有照片时 photo-frame 显示灰色方块（shell）；也可以不放照片（例如理念、荣誉），只留 小标签 / 标题 / 说明 */
+/* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句 → 一个链接。不加框 ──
+   有照片的项目一律用 .photo-card（文字放在照片里面） */
 .feature { display: flex; flex-direction: column; gap: var(--space-2); }
-.feature > .photo-frame { margin-bottom: var(--space-2); }
 .feature > h3 { font-size: var(--text-subtitle); }
 .feature > p { color: var(--color-ink-muted); }
 .feature > .text-link { margin-top: auto; }

@@ -334,10 +334,10 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       <section className="section">
         <div className="container stack">
           <div>
-            <div className="section-head"><h2>导览项目</h2><p>feature：照片 3:2 → 标题 → 一两句 → 一个链接；母页用，不加框</p></div>
+            <div className="section-head"><h2>文字项目</h2><p>feature：没有照片的项目（理念、荣誉）：小标签 → 标题 → 一两句 → 一个链接；有照片的用 photo-card</p></div>
             <div className="card-grid">
               {["办理离婚", "孩子", "财产与赡养费"].map((t) => (
-                <article key={t} className="feature"><div className="photo-frame" /><h3>{t}</h3><p>一句话说明</p><a className="text-link" href="#">查看这个分类 →</a></article>
+                <article key={t} className="feature"><span className="tag">理念</span><h3>{t}</h3><p>一句话说明</p><a className="text-link" href="#">阅读详情 →</a></article>
               ))}
             </div>
           </div>

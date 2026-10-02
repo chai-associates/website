@@ -2,7 +2,7 @@
 // 全部服务 /services
 // ───────────────────────────────────────────────────────────────
 // 母页：只做导览，带人到分类页（每个分类的服务清单在分类页）。品牌语法 4：一条色带只做一件事。
-// 色带顺序：① 标题（白）  ② 从你的情况开始（浅灰）  ③ 5 个分类：照片 → 标题 → 一句 → 链接（白）  ④ 找不到你的情况？（浅灰）
+// 色带顺序：① 标题（白）  ② 从你的情况开始（浅灰）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白）  ④ 找不到你的情况？（浅灰）
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -105,7 +105,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
         </div>
       </section>
 
-      {/* ═══ ③ 5 个分类：照片 → 标题 → 一句 → 链接（白） ═══ */}
+      {/* ═══ ③ 5 个分类：照片卡片（白） ═══ */}
       <section className="section">
         <div className="container">
           <div className="section-head">
@@ -114,12 +114,14 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           </div>
           <div className="card-grid">
             {serviceCategories.map((c) => (
-              <article key={c.slug} className="feature reveal">
-                <div className="photo-frame">{c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}</div>
-                <h3>{c.title[lang]}</h3>
-                <p>{c.short[lang]}</p>
-                <Link className="text-link" href={`/${lang}/services/${c.slug}`}>{text.viewCategory[lang]} →</Link>
-              </article>
+              <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card reveal">
+                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                <div>
+                  <h3>{c.title[lang]}</h3>
+                  <p>{c.short[lang]}</p>
+                </div>
+                <span className="btn btn-light btn-sm photo-card-action">{text.viewCategory[lang]} →</span>
+              </Link>
             ))}
           </div>
         </div>
