@@ -235,9 +235,9 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               </ul>
             </div>
           </div>
-          <aside>
+          <aside className="panel">
             <div>
-              <h3>侧栏（with-aside）</h3>
+              <h3>侧栏（with-aside）里放框（panel）</h3>
               <p>侧栏本身就是卡片。电脑版在右边并跟着滑动；手机版排在正文下面。</p>
             </div>
             <label className="field">

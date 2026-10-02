@@ -48,12 +48,9 @@ p { max-width: var(--measure); }
 .section-dark .feature > p,
 .section-dark .steps > li > p,
 .section-dark .list-head > :not(:first-child),
-.section-dark .link-list a::after,
-.section-dark .with-aside > aside h3 + p { color: var(--color-inverse-muted); }
-/* 深色带里的细线、侧栏：线改成深底用的细线，侧栏不再是白底卡片 */
-.section-dark :is(.list-head, .link-list a, .with-aside > aside) { border-color: var(--color-inverse-line); }
-.section-dark .with-aside > aside { background: transparent; }
-.section-dark .select:focus-visible { outline-color: var(--color-inverse-ink); }
+.section-dark .link-list a::after { color: var(--color-inverse-muted); }
+/* 深色带里的细线：改成深底用的细线 */
+.section-dark :is(.list-head, .link-list a) { border-color: var(--color-inverse-line); }
 .section-dark .steps > li { border-top-color: var(--color-inverse-ink); }
 .section-head { margin-bottom: var(--space-4); }
 .section-head :is(h2, h3) + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
@@ -124,10 +121,11 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .list-head > :not(:first-child) { color: var(--color-ink-muted); }
 /* 左边正文、右边侧栏卡片（电脑版侧栏跟着滑动；手机版排在正文下面） */
 .with-aside { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
-.with-aside > aside { display: grid; gap: var(--space-4); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
-.with-aside > aside h3 + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
-.with-aside > aside h3 + .facts { margin-top: var(--space-3); }
-.with-aside > aside .facts { grid-template-columns: minmax(0, 1fr); } /* 侧栏太窄，资料列一律单栏 */
+/* 框：白底 + 细线框 + 圆角（询问表格、实习资料）。放在侧栏，或单独放在一条色带里（最宽一个阅读行宽） */
+.panel { display: grid; gap: var(--space-4); max-width: var(--measure); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
+.panel h3 + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
+.panel h3 + .facts { margin-top: var(--space-3); }
+.panel .facts { grid-template-columns: minmax(0, 1fr); } /* 框太窄，资料列一律单栏 */
 @media (min-width: 860px) {
   .with-aside { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; }
   .with-aside > aside { position: sticky; top: calc(var(--header-h) + var(--space-4)); }

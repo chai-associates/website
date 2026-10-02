@@ -2,7 +2,7 @@
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
 // 色带顺序：① 标题（白）  ② 你需要知道的：跟百科文章同一个阅读排版，小标题 + 圆点清单（白）
-//          ③ 延伸阅读（左）+ 询问表格（右侧栏；手机排在下面）（深色）
+//          ③ 延伸阅读（深色）  ④ 询问表格：白底细线框 .panel（白）
 // 一页只有一个主要行动：询问表格。其他都是文字链接。
 // 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
 // 延伸阅读 = 相关文章（lib/divorcepedia.ts，文章的 services 有这项服务）+ 同分类的其他服务（最多 3 项）。
@@ -133,18 +133,22 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
         </div>
       </section>
 
-      {/* ═══ ③ 延伸阅读（左）+ 询问表格（右侧栏；手机排在下面）（深色） ═══ */}
-      <section className="section section-dark">
-        <div className="container with-aside">
-          {further.length > 0 && (
-            <div>
-              <div className="list-head"><h2>{text.reads[lang]}</h2></div>
-              <ul className="link-list">
-                {further.map((f) => <li key={f.href}><Link href={f.href}>{f.title}</Link></li>)}
-              </ul>
-            </div>
-          )}
-          <aside>
+      {/* ═══ ③ 延伸阅读（深色） ═══ */}
+      {further.length > 0 && (
+        <section className="section section-dark">
+          <div className="container">
+            <div className="list-head"><h2>{text.reads[lang]}</h2></div>
+            <ul className="link-list">
+              {further.map((f) => <li key={f.href}><Link href={f.href}>{f.title}</Link></li>)}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {/* ═══ ④ 询问表格（白） ═══ */}
+      <section className="section">
+        <div className="container">
+          <div className="panel">
             <div>
               <h3>{text.form.title[lang]}</h3>
               <p>{text.form.desc[lang]}</p>
@@ -156,7 +160,7 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
               submit={text.form.submit[lang]}
               questions={text.form.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) }))}
             />
-          </aside>
+          </div>
         </div>
       </section>
     </>

@@ -120,7 +120,7 @@ export default async function CareersPage({ params }: PageProps<"/[lang]/careers
                 <ul className="rule-list">{intern.requirements.map((r) => <li key={r.zh}>{r[lang]}</li>)}</ul>
               </div>
             </div>
-            <aside>
+            <aside className="panel">
               <div>
                 <h3>{intern.facts[lang]}</h3>
                 <dl className="facts">
