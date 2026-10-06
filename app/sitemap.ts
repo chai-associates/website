@@ -6,7 +6,7 @@ import { aboutSections, locales, serviceCategories, services, siteUrl, team } fr
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
-    "", "/services", "/divorcepedia", "/about", "/people", "/locations", "/careers",
+    "", "/services", "/divorcepedia", "/about", "/people", "/locations", "/careers", "/privacy",
     ...serviceCategories.map((c) => `/services/${c.slug}`),
     ...services.map((s) => `/services/${s.category}/${s.slug}`),
     ...articles.map((a) => `/divorcepedia/${a.slug}`),

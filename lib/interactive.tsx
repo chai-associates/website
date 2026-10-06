@@ -7,11 +7,14 @@
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
 // · TeamFilter      律师团队按办事处筛选（/people 页）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
+// · CookieConsent   Cookie 提示 + 同意后才载入 GA4（layout.tsx）
+// · ConsentReset    「更改 Cookie 设定」按钮（隐私政策页）
 // ═══════════════════════════════════════════════════════════════
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, ViewTransition } from "react";
+import Script from "next/script";
+import { useEffect, useState, useSyncExternalStore, ViewTransition } from "react";
 import { whatsappLink, type Lang } from "@/lib/site";
 
 // ── 选单 ─────────────────────────────────────────
@@ -92,6 +95,7 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
     const data = new FormData(e.currentTarget);
     const colon = lang === "zh" ? "：" : ": ";
     const lines = questions.map((q, i) => `· ${q.label}${colon}${data.get(`q${i}`)}`);
+    track("generate_lead", { method: "whatsapp_form" });
     window.open(whatsappLink(lang, [intro, ...lines].join("\n")), "_blank", "noopener");
   };
 
@@ -168,4 +172,80 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       {children}
     </ViewTransition>
   );
+}
+
+// ── Cookie 提示 + GA4 ────────────────────────────
+// 访客按「同意」→ 才载入 GA4，并记录 WhatsApp / 电话的点击；按「不同意」→ 什么都不载入。
+// 选择存在访客自己的浏览器（localStorage），隐私政策页的「更改 Cookie 设定」可以重新选择。
+// 已关闭 Google 信号与广告个人化：资料只用来统计，不做再营销（离婚案件的隐私考量）。
+type Consent = "granted" | "denied" | null;
+const CONSENT_KEY = "cookie-consent";
+const CONSENT_EVENT = "cookie-consent-change";
+const readConsent = (): Consent => {
+  try { return localStorage.getItem(CONSENT_KEY) as Consent; } catch { return null; }
+};
+const subscribeConsent = (cb: () => void) => {
+  window.addEventListener(CONSENT_EVENT, cb);
+  window.addEventListener("storage", cb);
+  return () => { window.removeEventListener(CONSENT_EVENT, cb); window.removeEventListener("storage", cb); };
+};
+const setConsent = (v: Consent) => {
+  try { if (v) localStorage.setItem(CONSENT_KEY, v); else localStorage.removeItem(CONSENT_KEY); } catch {}
+  window.dispatchEvent(new Event(CONSENT_EVENT));
+};
+
+// 送一个事件到 GA（没有同意 / 没有载入时什么都不做）
+type Gtag = (...args: unknown[]) => void;
+function track(event: string, params: Record<string, string>) {
+  (window as unknown as { gtag?: Gtag }).gtag?.("event", event, params);
+}
+
+export function CookieConsent({ gaId, text, policyHref }: {
+  gaId: string;
+  text: { message: string; policy: string; accept: string; decline: string };
+  policyHref: string;
+}) {
+  // 服务器端、读到之前 = "unknown"：先不显示提示，避免一闪
+  const consent = useSyncExternalStore(subscribeConsent, readConsent, () => "unknown" as const);
+
+  // 同意后：点 WhatsApp、电话的连结时记一笔
+  useEffect(() => {
+    if (consent !== "granted") return;
+    const onClick = (e: MouseEvent) => {
+      const href = (e.target as HTMLElement).closest("a")?.getAttribute("href") ?? "";
+      if (href.startsWith("https://wa.me/")) track("generate_lead", { method: "whatsapp" });
+      else if (href.startsWith("tel:")) track("generate_lead", { method: "phone" });
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [consent]);
+
+  // 撤回同意：这一页剩下的时间也停止送资料
+  useEffect(() => {
+    (window as unknown as Record<string, boolean>)[`ga-disable-${gaId}`] = consent !== "granted";
+  }, [consent, gaId]);
+
+  if (consent === "granted") {
+    return (
+      <>
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+        <Script id="ga4">{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}',{allow_google_signals:false,allow_ad_personalization_signals:false});`}</Script>
+      </>
+    );
+  }
+  if (consent !== null) return null;
+  return (
+    <div className="consent" role="region" aria-label={text.policy}>
+      <p>{text.message} <Link className="text-link" href={policyHref}>{text.policy} →</Link></p>
+      <div className="btn-row">
+        <button type="button" className="btn btn-cta btn-sm" onClick={() => setConsent("granted")}>{text.accept}</button>
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setConsent("denied")}>{text.decline}</button>
+      </div>
+    </div>
+  );
+}
+
+// 「更改 Cookie 设定」：清掉选择 → 下面再出现 Cookie 提示
+export function ConsentReset({ label }: { label: string }) {
+  return <button type="button" className="btn btn-ghost" onClick={() => setConsent(null)}>{label}</button>;
 }

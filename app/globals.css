@@ -260,6 +260,9 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .tab-panel { display: none; order: 1; flex-basis: 100%; margin-top: var(--space-2); } /* order 1 = 排到所有按钮后面；8 + 8 = 按钮与内容相隔 16 */
 .tab > input:checked ~ .tab-panel { display: block; }
 
+/* ── 积木：Cookie 提示（固定在画面下方；按同意 / 不同意后消失）── */
+.consent { position: fixed; z-index: 25; inset-inline: var(--gutter); bottom: var(--gutter); display: grid; gap: var(--space-3); max-width: var(--measure); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); }
+
 /* ── 外框：页首 ─────────────────────────────────── */
 .site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: var(--hairline) solid var(--color-line); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }

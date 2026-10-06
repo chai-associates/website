@@ -42,6 +42,9 @@ export const whatsappLink = (lang: Lang, message: string = firm.whatsappMessage[
 export const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
 // launched：正式上线前保持 false → 全站不让 Google 收录（robots.txt 全部挡住 + 每页 noindex）。上线当天改成 true。
 export const launched = false;
+// gaId：Google Analytics 4 的评估 ID（G-XXXXXXX）。在 Vercel → Settings → Environment Variables 加 NEXT_PUBLIC_GA_ID。
+// 没有设定 → 不出现 Cookie 提示、不载入 GA。有设定 → 访客按「同意」后才载入（见 lib/interactive.tsx 的 CookieConsent）。
+export const gaId = process.env.NEXT_PUBLIC_GA_ID;
 // 每一页的 SEO 资料：标题、说明、中英对应网址（hreflang）、分享预览（Open Graph）。path 不含语言，例如 "/about"
 export const pageMeta = (lang: Lang, path: string, title: string, description: string): Metadata => ({
   title,

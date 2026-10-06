@@ -1,7 +1,8 @@
 // ═══════════════════════════════════════════════════════════════
 // 全站外框：每一页都会出现的东西只写在这里
 // · 页首（Logo、咨询按钮、选单；语言切换在选单里）
-// · 页脚（链接、社交媒体、法律声明）
+// · 页脚（链接、社交媒体、隐私政策、法律声明）
+// · Cookie 提示（有设定 GA 时才出现，见 lib/site.ts 的 gaId）
 // · 网页默认标题、网址、搜寻引擎设定（字体在 lib/fonts.ts）
 // 页面内容写在各自的 page.tsx。
 // ═══════════════════════════════════════════════════════════════
@@ -10,11 +11,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { fontVariables } from "@/lib/fonts";
-import { Menu, PageTransition } from "@/lib/interactive";
-import { aboutSections, common, disclaimer, firm, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { CookieConsent, Menu, PageTransition } from "@/lib/interactive";
+import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
 const text = {
+  privacy: { zh: "隐私政策", en: "Privacy Policy" },
+  consent: {
+    message: { zh: "我们使用 Cookie 统计网站的访问情况，帮助改善网站。你同意后才会启用。", en: "We use cookies to understand how this site is used and to improve it. They are only turned on if you agree." },
+    accept: { zh: "同意", en: "Accept" },
+    decline: { zh: "不同意", en: "Decline" },
+  },
   // 选单（有 children 的会展开；href 同时给页脚用）
   nav: [
     { href: "", label: common.home },
@@ -127,10 +134,20 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             <nav className="footer-links">
               {text.nav.map((l) => <Link key={l.href} href={`${home}${l.href}`}>{l.label[lang]}</Link>)}
               {socials.map((s) => <a key={s.label} href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
+              <Link href={`${home}/privacy`}>{text.privacy[lang]}</Link>
             </nav>
             <p className="footer-disc">{scope[lang]} {disclaimer[lang]} © {new Date().getFullYear()} {firm.name}.</p>
           </div>
         </footer>
+
+        {/* ── Cookie 提示（没有设定 GA 就不出现） ── */}
+        {gaId && (
+          <CookieConsent
+            gaId={gaId}
+            policyHref={`${home}/privacy`}
+            text={{ message: text.consent.message[lang], policy: text.privacy[lang], accept: text.consent.accept[lang], decline: text.consent.decline[lang] }}
+          />
+        )}
       </body>
     </html>
   );
