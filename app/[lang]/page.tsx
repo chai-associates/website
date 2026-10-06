@@ -33,7 +33,7 @@ const text = {
       en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",
     },
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
-    image: "/images/hero/hero-bg.jpg",
+    image: "/images/hero/hero-bg-v3.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
     // 首屏下方 3 点（之后可照「律所问卷」B5 调整；图示可选 award / receipt / lock，或在下面 Icon 加新的）
     points: [

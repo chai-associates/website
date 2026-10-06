@@ -167,7 +167,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           <div>
             <div className="list-head"><h2>照片框</h2><span>photo-frame · 场景 3:2</span></div>
-            <div className="photo-frame max-w-md"><Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="448px" /></div>
+            <div className="photo-frame max-w-md"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="448px" /></div>
           </div>
           <div>
             <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 --cols 栏</span></div>
@@ -180,7 +180,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div>
             <div className="list-head"><h2>首屏与重点三栏</h2><span>hero（照片下缘淡出，压小标签 + 标题）· hero-intro · points</span></div>
             <div className="hero">
-              <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="1152px" />
+              <Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" />
               <div>
                 <p className="tag">新山 · 吉隆坡 · 马六甲</p>
                 <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折"}</h1>
@@ -194,7 +194,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               </ul>
             </div>
             <div className="cover">
-              <Image src="/images/hero/hero-bg.jpg" alt="" fill sizes="1152px" />
+              <Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" />
               <h1>{lang === "en" ? "cover: article title" : "cover：百科文章封面"}</h1>
               <p>手机 16:9、电脑 4:1；照片 2400 × 1350，标题压在下方</p>
             </div>
