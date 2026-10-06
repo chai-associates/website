@@ -126,13 +126,13 @@ export const lawyerCount = team.filter((p) => roles[p.role].group !== "support")
 
 // ── 离婚服务：5 个分类（首页卡片、选单、服务页都读这里） ──
 // 网址：/services（全部）→ /services/分类 → /services/分类/服务
-// image：照片放进 public/images/services/ 后，把 null 改成路径
+// image：分类照片（public/images/services/，3:2）；没有照片填 null
 export const serviceCategories = [
-  { slug: "divorce", title: { zh: "办理离婚", en: "Getting Divorced" }, short: { zh: "协议、单方面、外遇与婚姻无效", en: "Joint, single, adultery and annulment" }, image: null as string | null },
-  { slug: "children", title: { zh: "孩子", en: "Children" }, short: { zh: "抚养权、探视权与抚养费", en: "Custody, access and child maintenance" }, image: null as string | null },
-  { slug: "finances", title: { zh: "财产与赡养费", en: "Money & Property" }, short: { zh: "赡养费、财产分配与欠债", en: "Maintenance, assets and debts" }, image: null as string | null },
-  { slug: "after-divorce", title: { zh: "离婚之后", en: "After Divorce" }, short: { zh: "执行、修改法庭令与婚姻状况证明", en: "Enforcing and changing orders, marital status" }, image: null as string | null },
-  { slug: "separation", title: { zh: "分居与保护", en: "Separation & Protection" }, short: { zh: "分居协议、家暴保护令与调解", en: "Separation deeds, protection orders, mediation" }, image: null as string | null },
+  { slug: "divorce", title: { zh: "办理离婚", en: "Getting Divorced" }, short: { zh: "协议、单方面、外遇与婚姻无效", en: "Joint, single, adultery and annulment" }, image: "/images/services/divorce.png" as string | null },
+  { slug: "children", title: { zh: "孩子", en: "Children" }, short: { zh: "抚养权、探视权与抚养费", en: "Custody, access and child maintenance" }, image: "/images/services/children.png" as string | null },
+  { slug: "finances", title: { zh: "财产与赡养费", en: "Money & Property" }, short: { zh: "赡养费、财产分配与欠债", en: "Maintenance, assets and debts" }, image: "/images/services/finances.png" as string | null },
+  { slug: "after-divorce", title: { zh: "离婚之后", en: "After Divorce" }, short: { zh: "执行、修改法庭令与婚姻状况证明", en: "Enforcing and changing orders, marital status" }, image: "/images/services/after-divorce.png" as string | null },
+  { slug: "separation", title: { zh: "分居与保护", en: "Separation & Protection" }, short: { zh: "分居协议、家暴保护令与调解", en: "Separation deeds, protection orders, mediation" }, image: "/images/services/separation.png" as string | null },
 ] as const;
 export type ServiceCategory = (typeof serviceCategories)[number]["slug"];
 
@@ -169,9 +169,9 @@ export const services: { slug: string; category: ServiceCategory; title: Bi; sho
 // ── 关于我们的子页面（选单、/about/[section] 都读这里）：对应「律所问卷」Tab 6–8 ──
 // 网址：/about/media、/about/community、/about/events；内容写在 app/[lang]/about/[section]/page.tsx
 export const aboutSections = [
-  { slug: "media", title: { zh: "媒体报道", en: "In the Media" } },
-  { slug: "community", title: { zh: "公益活动", en: "Community" } },
-  { slug: "events", title: { zh: "活动与讲座", en: "Events & Talks" } },
+  { slug: "media", title: { zh: "媒体报道", en: "In the Media" }, image: "/images/about/media.png" },
+  { slug: "community", title: { zh: "公益活动", en: "Community" }, image: "/images/about/community.png" },
+  { slug: "events", title: { zh: "活动与讲座", en: "Events & Talks" }, image: "/images/about/events.png" },
 ] as const;
 export type AboutSection = (typeof aboutSections)[number]["slug"];
 

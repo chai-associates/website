@@ -34,6 +34,7 @@ const text = {
   // ② 律所简介 + 律所资料
   firm: {
     title: { zh: "律所简介", en: "Our Firm" },
+    image: "/images/about/firm.png", // 律所照片（3:2）
     paragraphs: [
       { zh: "[第一段：律所成立年份、创办人，以及为什么专注家事法律]", en: "[Paragraph 1: when and by whom the firm was founded, and why it focuses on family law]" },
       { zh: "[第二段：律所处理案件的方式，以及想给客户的感受]", en: "[Paragraph 2: how the firm handles matters and what clients can expect]" },
@@ -133,7 +134,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       {/* ═══ ② 律所简介：照片 + 文字 + 资料（浅灰） ═══ */}
       <section id="firm" className="section section-muted">
         <div className="container split">
-          <div className="photo-frame">{/* 律所照片：放进 public/images/ 后加 <Image fill /> */}</div>
+          <div className="photo-frame"><Image src={text.firm.image} alt={firm.name} fill sizes="(min-width: 860px) 50vw, 100vw" /></div>
           <div>
             <div className="section-head"><h2>{text.firm.title[lang]}</h2></div>
             <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
@@ -210,7 +211,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
           <div className="card-grid">
             {aboutSections.map((a) => (
               <Link key={a.slug} href={`/${lang}/about/${a.slug}`} className="photo-card reveal">
-                {/* 照片之后加：<Image src=… alt="" fill /> */}
+                <Image src={a.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />
                 <div>
                   <h3>{a.title[lang]}</h3>
                   <p>{text.more.desc[a.slug][lang]}</p>

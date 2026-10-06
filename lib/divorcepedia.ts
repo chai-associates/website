@@ -23,6 +23,7 @@ export const articles: Article[] = [
   // ── 办理离婚 ─────────────────────────────────
   {
     slug: "joint-or-single-petition",
+    image: "/images/divorcepedia/joint-or-single-petition.png",
     category: "divorce",
     services: ["joint-petition", "single-petition"],
     title: { zh: "协议离婚还是单方面离婚？", en: "Joint or single petition: which applies to me?" },
@@ -44,6 +45,7 @@ export const articles: Article[] = [
   },
   {
     slug: "marriage-counselling",
+    image: "/images/divorcepedia/marriage-counselling.png",
     category: "divorce",
     services: ["single-petition"],
     title: { zh: "离婚前一定要做婚姻辅导吗？", en: "Do I need marriage counselling before divorcing?" },
@@ -99,6 +101,7 @@ export const articles: Article[] = [
   },
   {
     slug: "responding-to-a-petition",
+    image: "/images/divorcepedia/responding-to-a-petition.png",
     category: "divorce",
     services: ["responding"],
     title: { zh: "收到离婚申请怎么办？", en: "I've been served a divorce petition. What now?" },
@@ -137,6 +140,7 @@ export const articles: Article[] = [
   },
   {
     slug: "annulment-vs-divorce",
+    image: "/images/divorcepedia/annulment-vs-divorce.png",
     category: "divorce",
     services: ["annulment"],
     title: { zh: "婚姻无效和离婚有什么不同？", en: "Annulment or divorce: what's the difference?" },
