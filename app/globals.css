@@ -4,50 +4,46 @@
 /* ═══════════════════════════════════════════════════════════════
    GLOBAL STYLES · 全站共用样式
    ───────────────────────────────────────────────────────────────
-   只放「任何页面都会重复用到」的东西，所有数值来自 tokens.css。
+   全站唯一的样式来源，所有数值来自 tokens.css。
    · 基础：字体、标题、段落
-   · 积木：container、section、按钮、卡片、照片卡片、滑动列……
+   · 积木：色带、标题区、正文、按钮、卡片、照片卡片、封面、框、滑动列……
    · 外框：页首、选单、页脚（layout.tsx 用）
-   某一页的版面（几栏、间距、谁在左谁在右）写在那一页的 page.tsx，
-   用 Tailwind class + tokens，不写在这里。所以页面变多，这个文件也不会变长。
+   page.tsx 只组合积木（写积木的 class），不写样式、不用 Tailwind 的间距或字号 class。
+   新的版面需求 → 先找现有积木；真的没有才在这里加一个积木，不在页面里各自写。
    ═══════════════════════════════════════════════════════════════ */
 
 /* 内容容器：用 @utility 取代 Tailwind 自带的 container（自带的会把宽度锁在断点 860px） */
 @utility container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
 
-/* 放在 @layer 里：page.tsx 的 Tailwind class 可以覆盖这些默认样式 */
+/* 基础样式放在 @layer base（优先级最低，积木可以直接覆盖） */
 @layer base {
 /* ── 基础 ──────────────────────────────────────── */
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header-h); }
 body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-zh); font-size: var(--text-body); line-height: var(--leading-zh); -webkit-font-smoothing: antialiased; }
 body.lang-en { font-family: var(--font-en); line-height: var(--leading-en); }
-h1, h2, h3 { font-weight: 700; line-height: var(--leading-heading); letter-spacing: -0.01em; }
+h1, h2, h3 { font-weight: var(--weight-bold); line-height: var(--leading-heading); letter-spacing: -0.01em; }
 h1 { font-size: var(--text-title); white-space: pre-line; }
 /* 品牌语法 3：英文版 h1、h2 用 Garamond 衬线（中文版维持无衬线） */
-body.lang-en :is(h1, h2) { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.005em; }
+body.lang-en :is(h1, h2) { font-family: var(--font-serif); font-weight: var(--weight-medium); letter-spacing: -0.005em; }
 h2 { font-size: var(--text-subtitle); }
 h3 { font-size: var(--text-body); } /* 卡片标题 = 正文大小、粗体（跟说明用粗细和颜色区分） */
 p { max-width: var(--measure); }
+svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤小 */
 
 }
 
 @layer components {
 /* ── 积木：版面 ─────────────────────────────────── */
 .section { padding: var(--section-y) 0; }
-/* 区块节奏：同样底色的两个区块相连时共用一个留白；页面标题区后面接白色区块时不再加留白 */
+/* 区块节奏：两个白色区块相连时共用一个留白；页面标题区后面接白色区块时不再加留白（浅灰、深色不会相邻，见品牌语法 4） */
 .section:not(.section-muted, .section-dark) + .section:not(.section-muted, .section-dark),
-.section-muted + .section-muted,
-.section-dark + .section-dark,
 .page-head + .section:not(.section-muted, .section-dark) { padding-top: 0; }
 /* 品牌语法 4：色带 = 白（.section）/ 浅灰（.section-muted）/ 深色（.section-dark），相邻两段不同色 */
 .section-muted { background: var(--color-subtle); }
 .section-dark { background: var(--color-inverse); color: var(--color-inverse-ink); }
 .section-dark .tag { color: var(--color-accent-on-dark); }
 .section-dark .section-head :is(h2, h3) + p,
-.section-dark .section-head p + p,
-.section-dark .feature > p,
 .section-dark .steps > li > p,
-.section-dark .list-head > :not(:first-child),
 .section-dark .link-list a::after { color: var(--color-inverse-muted); }
 /* 深色带里的细线：改成深底用的细线 */
 .section-dark :is(.list-head, .link-list a) { border-color: var(--color-inverse-line); }
@@ -60,10 +56,8 @@ p { max-width: var(--measure); }
 .page-head .container > h1 { margin-top: var(--space-3); }
 .page-head .container > p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
 .page-head .container > p + p { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); } /* 第二段 = 备注：灰色 caption；跟副标题相隔 16（标题 ↔ 副标题才是 8） */
-.page-head .container > .btn-row { margin-top: var(--space-4); }
 /* 个人页的标题区：照片（左）+ 职位、名字、介绍、资料列、按钮（右）；手机上下排 */
 .profile-head { display: grid; gap: var(--space-4); margin-top: var(--space-4); }
-.list-head + .profile-head { margin-top: 0; } /* 关于我们的「主管合伙人的话」：横线标题下面直接接 */
 .profile-head .person-photo { margin-bottom: 0; font-size: var(--text-title); }
 .profile-head .tag + h1 { margin-top: var(--space-2); }
 .profile-head h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
@@ -74,11 +68,11 @@ p { max-width: var(--measure); }
 }
 /* 引言：一段大字（个人页「用自己的话」、以后主管合伙人的话）→ 下面署名。
    英文版用 Garamond，中文版用无衬线；不用斜体，引号由浏览器依语言自动加上 */
-.quote blockquote p { max-width: 24em; font-size: var(--text-subtitle); font-weight: 500; line-height: var(--leading-heading); letter-spacing: -0.01em; }
+.quote blockquote p { max-width: 24em; font-size: var(--text-subtitle); font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: -0.01em; }
 .quote blockquote p::before { content: open-quote; }
 .quote blockquote p::after { content: close-quote; }
 body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacing: -0.005em; }
-.quote figcaption { margin-top: var(--space-4); color: var(--color-ink-muted); font-size: var(--text-caption); font-weight: 600; }
+.quote figcaption { margin-top: var(--space-4); color: var(--color-ink-muted); font-size: var(--text-caption); font-weight: var(--weight-medium); }
 .quote + .text-link { margin-top: var(--space-3); }
 /* 首屏（首页）：照片约占画面 52% 高，下缘淡出成白色；小标签 + 大标题压在淡出的地方。
    照片是品牌语法 6 的例外（满版宽，不用 3:2 / 4:5）。
@@ -92,16 +86,17 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .hero-intro > p + .btn-row { margin-top: var(--space-4); }
 .hero-intro > .btn-row + .points { margin-top: var(--space-5); }
 /* 重点三栏（首屏下方）：上下细线，每一点 = 图示 + 一个短标题 */
-.points { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); padding: var(--space-4) 0; border-block: 1px solid var(--color-line); } /* 一排放不下（320 宽英文）就自动换行，不会撑出画面 */
-.points li { display: flex; align-items: center; gap: var(--space-2); font-weight: 600; white-space: nowrap; } /* 图示和字同一排 */
+.points { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); padding: var(--space-4) 0; border-block: var(--hairline) solid var(--color-line); } /* 一排放不下（320 宽英文）就自动换行，不会撑出画面 */
+.points li { display: flex; align-items: center; gap: var(--space-2); font-weight: var(--weight-medium); white-space: nowrap; } /* 图示和字同一排 */
 @media (min-width: 860px) {
   .points { justify-content: flex-start; column-gap: var(--space-6); } /* 桌面：三点靠左排，不散到两边 */
 }
 /* 左右并排：照片（左）+ 文字（右）；手机上下排。文字那边用 section-head 等积木 */
 .split { display: grid; gap: var(--space-4); align-items: center; }
 @media (min-width: 860px) { .split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); } }
-/* split-golden：左窄右宽 1 : 1.618，上缘对齐（办事处页：办事处卡片 + 那里的律师） */
-@media (min-width: 860px) { .split-golden { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: start; gap: var(--space-4); } }
+/* split-golden：左窄右宽 1 : 1.618，上缘对齐（办事处页：办事处卡片 + 那里的律师）；手机上下排，相隔 24 */
+.split-golden { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+@media (min-width: 860px) { .split-golden { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: start; } }
 .split .section-head { margin-bottom: 0; }
 .split .section-head + * { margin-top: var(--space-4); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
@@ -113,11 +108,11 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .prose > * + h2 { margin-top: var(--space-5); }
 .prose > h2 + * { margin-top: var(--space-2); }
 .prose > p + ul { margin-top: var(--space-2); }
-.prose > ul { padding-left: 1.25em; list-style: disc; }
+.prose > ul { padding-left: var(--space-4); list-style: disc; }
 .prose > ul > li + li { margin-top: var(--space-2); }
 .prose > ul > li::marker { color: var(--color-ink-muted); }
 /* 品牌语法 4：一组清单的开头 = 左标题、右边副标题或链接、下面一条细线 */
-.list-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: 1px solid var(--color-line); }
+.list-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: var(--hairline) solid var(--color-line); }
 .list-head > :not(:first-child) { color: var(--color-ink-muted); }
 /* 左边正文、右边侧栏卡片（电脑版侧栏跟着滑动；手机版排在正文下面） */
 .with-aside { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
@@ -131,12 +126,12 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
   .with-aside > aside { position: sticky; top: calc(var(--header-h) + var(--space-4)); }
 }
 /* 品牌语法 5：小标签 = 大写、拉开字距、古铜色 */
-.tag { font-size: var(--text-caption); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+.tag { font-size: var(--text-caption); font-weight: var(--weight-medium); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
 .muted { color: var(--color-ink-muted); }
 
 /* ── 积木：按钮与链接 ─────────────────────────────── */
 /* 按钮文字太长时（例如长的律师名字）会换行，不会撑出画面 */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap); padding: var(--space-2) var(--space-4); border: var(--border) solid transparent; border-radius: 999px; font: inherit; font-size: var(--text-body); font-weight: 600; line-height: var(--leading-heading); text-align: center; cursor: pointer; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap); padding: var(--space-2) var(--space-4); border: var(--border) solid transparent; border-radius: var(--radius-pill); font: inherit; font-size: var(--text-body); font-weight: var(--weight-medium); line-height: var(--leading-heading); text-align: center; cursor: pointer; }
 .btn-cta { background: var(--color-accent); color: var(--color-on-accent); }
 .btn-cta:hover { filter: brightness(1.12); }
 .btn-ghost { background: var(--color-bg); color: var(--color-ink); border-color: var(--color-ink); }
@@ -145,14 +140,14 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .btn-sm { min-height: var(--tap-min); padding: 0 var(--space-3); font-size: var(--text-caption); } /* 小按钮 = caption 字（页首「咨询」在 320 宽英文才放得下） */
 /* 按钮并排（放不下自动换行） */
 .btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
-.text-link { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); font-weight: 600; }
-.chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: 999px; font-weight: 600; white-space: nowrap; }
+.text-link { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); font-weight: var(--weight-medium); }
+.chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-pill); font-weight: var(--weight-medium); white-space: nowrap; }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
 /* 筛选说明：一排 chip 前面的灰色小字，例如团队页的「办事处」 */
 .filter-label { color: var(--color-ink-muted); }
 /* 选中的按钮变黑（城市分页、团队筛选共用）；data-lead = 主要领域（个人页），一样变黑 */
 .chip[aria-pressed="true"], .chip[data-lead], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
-.chip[aria-pressed="true"] em, .tab > input:checked + label em { color: var(--color-inverse-muted); }
+.tab > input:checked + label em { color: var(--color-inverse-muted); }
 
 /* ── 积木：卡片 ─────────────────────────────────── */
 .card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
@@ -187,11 +182,10 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .photo-frame { position: relative; overflow: hidden; aspect-ratio: 3 / 2; border-radius: var(--radius-md); background: var(--color-line); }
 .photo-frame > img { object-fit: cover; }
 
-/* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句 → 一个链接。不加框 ──
+/* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句。不加框 ──
    有照片的项目一律用 .photo-card（文字放在照片里面） */
 .feature { display: flex; flex-direction: column; gap: var(--space-2); }
 .feature > p { color: var(--color-ink-muted); }
-.feature > .text-link { margin-top: auto; }
 .card-grid:has(> .feature) { row-gap: var(--space-5); } /* 导览项目不加框：上下两行之间 48，比项目里面的 8 / 16 大很多，才看得出是不同项目 */
 
 /* ── 积木：人物卡片（照片 4:5 → 名字 → 职位 → 办事处 · 语言） ── */
@@ -201,56 +195,47 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .person-card { display: flex; flex-direction: column; gap: var(--space-1); }
 .person-photo { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: var(--space-2); border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-family: var(--font-serif); font-size: var(--text-title); }
 .person-photo > img { object-fit: cover; }
-.person-card > strong { font-size: var(--text-caption); font-weight: 600; }
+.person-card > strong { font-size: var(--text-caption); font-weight: var(--weight-medium); }
 .person-card > p { color: var(--color-ink-muted); font-size: var(--text-caption); }
 
 /* ── 积木：资料列（小标签 + 内容，例如 语言 / 执业年份 / 办事处） ── */
-.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: var(--space-3); padding: var(--space-3) 0; border-block: 1px solid var(--color-line); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: var(--space-3); padding: var(--space-3) 0; border-block: var(--hairline) solid var(--color-line); }
 .facts dt { font-size: var(--text-caption); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-ink-muted); }
-.facts dd { margin-top: var(--space-1); font-weight: 600; }
+.facts dd { margin-top: var(--space-1); font-weight: var(--weight-medium); }
 .prose + .facts { margin-top: var(--space-4); } /* 一段文字后面接资料列（关于我们的律所简介） */
 
 /* ── 积木：横线清单（重点、经历、理念） ── */
-.rule-list > li { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-line); }
-.rule-list > li:first-child { border-top: 1px solid var(--color-line); }
+.rule-list > li { padding: var(--space-3) 0; border-bottom: var(--hairline) solid var(--color-line); }
+.rule-list > li:first-child { border-top: var(--hairline) solid var(--color-line); }
 .list-head + .rule-list > li:first-child { border-top: 0; padding-top: 0; } /* 紧接横线标题时，标题的线就是清单的第一条线 */
-.rule-list > li > h3 + p { margin-top: var(--space-2); color: var(--color-ink-muted); } /* 清单项目可以是「标题 + 说明」 */
 
 /* ── 积木：步骤（合作流程）：每一步 = 小标签编号 → h3 → 说明；手机一栏，电脑自动并排 ── */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--space-5) var(--space-4); }
 .steps > li { display: flex; flex-direction: column; gap: var(--space-2); padding-top: var(--space-3); border-top: var(--border) solid var(--color-ink); }
 .steps > li > p { color: var(--color-ink-muted); }
 
-/* ── 积木：时间线（里程碑）：左边一条线 + 圆点，每一项 = 年份 h3 → 说明 ── */
-.timeline > li { position: relative; padding: 0 0 var(--space-4) var(--space-4); }
-.timeline > li::before { content: ""; position: absolute; left: 0; top: calc(var(--text-body) * 0.6 - var(--space-1)); width: var(--space-2); height: var(--space-2); border-radius: 50%; background: var(--color-ink); }
-.timeline > li::after { content: ""; position: absolute; left: calc(var(--space-1) - 0.5px); top: calc(var(--text-body) * 0.6 + var(--space-2)); bottom: calc(var(--space-1) - var(--text-body) * 0.6); width: 1px; background: var(--color-line); }
-.timeline > li:last-child { padding-bottom: 0; }
-.timeline > li:last-child::after { display: none; }
-.timeline > li > h3 + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
-
 /* ── 积木：链接清单（不加框）：每一行一个链接，细线分隔；用在分类下的服务、延伸阅读 ── */
-.link-list a { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-line); }
+.link-list a { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: var(--hairline) solid var(--color-line); }
 .link-list a::after { content: "→"; color: var(--color-ink-muted); }
 :is(.btn, .btn-row) + .link-list { margin-top: var(--space-4); } /* 主要按钮下面再列几个去处（百科读完 → 相关服务） */
 .list-head + .link-list > li:first-child > a { border-top: 0; } /* 紧接横线标题时，标题的线就是第一条线 */
 
 /* ── 积木：小组（同一个大段落里分几组）：小标题 h3 → 内容；只有大段落开头才用横线标题 ── */
 .groups { display: grid; gap: var(--space-5); }
-.groups h3 + * { margin-top: var(--space-3); }
+.groups h3 + * { margin-top: var(--space-2); } /* 小标题 ↔ 它的内容 8（跟正文排版一样） */
 
 /* ── 积木：面包屑（首页 › 离婚服务 › 孩子） ─────────── */
 .breadcrumb { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-2); font-size: var(--text-caption); color: var(--color-ink-muted); }
 .breadcrumb li + li::before { content: "›"; margin-right: var(--space-2); }
 .breadcrumb a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
-.breadcrumb [aria-current="page"] { color: var(--color-ink); font-weight: 600; }
+.breadcrumb [aria-current="page"] { color: var(--color-ink); font-weight: var(--weight-medium); }
 
 /* ── 积木：表格栏位 ─────────────────────────────── */
 /* 表格：一个一个栏位往下排（栏位之间 24），送出按钮占满宽度；「我的情况是」选择器也用 */
 .form { display: grid; gap: var(--space-4); }
 .form > .btn { width: 100%; }
-.field { display: grid; gap: var(--space-2); font-weight: 600; }
-.select { width: 100%; min-height: var(--tap); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-ink); font: inherit; font-size: var(--text-body); font-weight: 400; }
+.field { display: grid; gap: var(--space-2); font-weight: var(--weight-medium); }
+.select { width: 100%; min-height: var(--tap); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-ink); font: inherit; font-size: var(--text-body); font-weight: var(--weight-regular); }
 .select:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
 
 /* ── 积木：滑动列（手机左右滑；电脑变网格，栏数用 --cols 调，默认 3） ── */
@@ -276,10 +261,10 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .tab > input:checked ~ .tab-panel { display: block; }
 
 /* ── 外框：页首 ─────────────────────────────────── */
-.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: 1px solid var(--color-line); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
+.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: var(--hairline) solid var(--color-line); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
-.logo-wm { font-family: var(--font-serif); font-size: var(--text-body); font-weight: 500; letter-spacing: 0.04em; }
+.logo-wm { font-family: var(--font-serif); font-size: var(--text-body); font-weight: var(--weight-medium); letter-spacing: 0.04em; }
 .logo-sub { font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: 0.08em; }
 .nav-right { display: flex; align-items: center; gap: 0; } /* 选单按钮本身有留白（44 框里 22 的线），不用再加间距；320 宽英文才放得下 */
 @media (min-width: 860px) {
@@ -293,24 +278,24 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .menu[data-open="true"] .menu-btn span:nth-child(2) { opacity: 0; }
 .menu[data-open="true"] .menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 /* 后面变暗的部分：点它就关闭 */
-.menu-backdrop { position: fixed; inset: var(--header-h) 0 0 0; background: rgb(0 0 0 / 0.4); opacity: 0; visibility: hidden; transition: opacity var(--motion) var(--ease), visibility var(--motion); }
+.menu-backdrop { position: fixed; inset: var(--header-h) 0 0 0; background: var(--color-backdrop); opacity: 0; visibility: hidden; transition: opacity var(--motion) var(--ease), visibility var(--motion); }
 /* 从右边滑进来的面板 */
 .menu-panel { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: min(360px, 85vw); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); overflow-y: auto; padding: var(--space-3) var(--gutter) var(--space-5); background: var(--color-bg); box-shadow: var(--shadow-float); transform: translateX(100%); visibility: hidden; transition: transform var(--motion) var(--ease), visibility var(--motion); }
-.menu-panel > * { opacity: 0; transform: translateX(24px); transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease); }
+.menu-panel > * { opacity: 0; transform: translateX(var(--space-4)); transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease); }
 .menu[data-open="true"] .menu-backdrop { opacity: 1; visibility: visible; }
 .menu[data-open="true"] .menu-panel { transform: none; visibility: visible; }
 .menu[data-open="true"] .menu-panel > * { opacity: 1; transform: none; transition-delay: var(--motion-fast); }
 .menu-links { display: flex; flex-direction: column; }
 /* 第一层：直接进页面的链接 + 可展开的母目录，长得一样 */
-.menu-links > a, .menu-group > summary { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap); border-bottom: 1px solid var(--color-line); font-size: var(--text-lead); font-weight: 600; cursor: pointer; list-style: none; }
+.menu-links > a, .menu-group > summary { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap); border-bottom: var(--hairline) solid var(--color-line); font-size: var(--text-lead); font-weight: var(--weight-medium); cursor: pointer; list-style: none; }
 .menu-group > summary::-webkit-details-marker { display: none; }
-.menu-group > summary::after { content: "+"; font-size: var(--text-title); font-weight: 300; line-height: 1; transition: transform var(--motion-fast) var(--ease); }
+.menu-group > summary::after { content: "+"; font-size: var(--text-title); font-weight: var(--weight-regular); line-height: 1; transition: transform var(--motion-fast) var(--ease); }
 .menu-group[open] > summary::after { transform: rotate(45deg); }
 /* 第二层：子目录 */
-.menu-sub { display: flex; flex-direction: column; padding: var(--space-2) 0; border-bottom: 1px solid var(--color-line); }
+.menu-sub { display: flex; flex-direction: column; padding: var(--space-2) 0; border-bottom: var(--hairline) solid var(--color-line); }
 .menu-sub a { display: flex; align-items: center; min-height: var(--tap-min); padding-left: var(--space-3); font-size: var(--text-body); color: var(--color-ink-muted); }
-.lang-switch { display: flex; align-self: flex-start; padding: var(--space-1); border-radius: 999px; background: var(--color-subtle); }
-.lang-switch a { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-3); border-radius: 999px; font-weight: 600; color: var(--color-ink-muted); white-space: nowrap; }
+.lang-switch { display: flex; align-self: flex-start; padding: var(--space-1); border-radius: var(--radius-pill); background: var(--color-subtle); }
+.lang-switch a { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-3); border-radius: var(--radius-pill); font-weight: var(--weight-medium); color: var(--color-ink-muted); white-space: nowrap; }
 .lang-switch a[aria-current="true"] { background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-soft); }
 
 /* ── 外框：页脚 ─────────────────────────────────── */
@@ -319,13 +304,13 @@ body.lang-en .quote blockquote p { font-family: var(--font-serif); letter-spacin
 .site-footer .logo-sub { color: var(--color-inverse-muted); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: var(--space-4) 0; }
 .footer-links a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
-.footer-disc { padding-top: var(--space-3); border-top: 1px solid var(--color-inverse-line); font-size: var(--text-caption); }
+.footer-disc { padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-inverse-line); font-size: var(--text-caption); }
 
 /* ── 品牌语法 8：往下滑时轻轻浮现（加 class="reveal"；不支援的浏览器直接显示，不影响阅读） ── */
 @supports (animation-timeline: view()) {
   .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
 }
-@keyframes reveal { from { opacity: 0; transform: translateY(16px); } }
+@keyframes reveal { from { opacity: 0; transform: translateY(var(--space-3)); } }
 @keyframes fade-out { to { opacity: 0; } }
 
 /* ── 品牌语法 8：换页动态（lib/interactive.tsx 的 PageTransition 包住 <main>）──

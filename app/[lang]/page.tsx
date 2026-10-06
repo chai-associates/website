@@ -69,7 +69,7 @@ function Icon({ name }: { name: string }) {
     arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   };
   return (
-    <svg width="1.15em" height="1.15em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
+    <svg width="1.15em" height="1.15em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {paths[name]}
     </svg>
   );
@@ -135,13 +135,13 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* ═════════ ③ 我们的团队 ═════════
-          手机左右滑，电脑 3 栏（要改栏数：把 [--cols:3] 的数字改掉）。 */}
+          手机左右滑，电脑 3 栏（滑动列积木的默认栏数）。 */}
       <section id="people" className="section section-muted">
         <div className="container">
           <div className="section-head">
             <h2>{people.title[lang]}</h2>
           </div>
-          <div className="scroll-row [--cols:3]">
+          <div className="scroll-row">
             {team.filter((p) => roles[p.role].group !== "support").map((p) => (
               <Link key={p.slug} href={`/${lang}/people/${p.slug}`} className="person-card">
                 <div className="person-photo">

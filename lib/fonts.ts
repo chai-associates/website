@@ -5,7 +5,7 @@
 import { EB_Garamond, Noto_Sans_SC, Plus_Jakarta_Sans } from "next/font/google";
 
 const notoSC = Noto_Sans_SC({ weight: ["400", "500", "700"], preload: false, display: "swap", variable: "--font-noto-sc" });
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-jakarta" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-jakarta" });
 const garamond = EB_Garamond({ subsets: ["latin"], weight: ["500"], variable: "--font-garamond" });
 
 // 放在 <html className> 上

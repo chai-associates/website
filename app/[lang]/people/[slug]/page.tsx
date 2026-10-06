@@ -166,13 +166,13 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
       {/* ═══ ③ 三个大段落：关于 · 可以帮你的事 · 资历与经历 ═══ */}
       <section className="section section-muted">
         <div className="container stack">
-          <div id="about">
-            <div className="list-head"><h2>{fill(text.about)}</h2></div>
+          <div id="about" className="prose">
+            <h2>{fill(text.about)}</h2>
             {profile.about ? (
-              <div className="prose">
+              <>
                 {profile.about.map((para) => <p key={para.zh}>{para[lang]}</p>)}
                 {profile.outside && <p className="muted">{text.outside[lang]}{lang === "zh" ? "：" : ": "}{profile.outside[lang]}</p>}
-              </div>
+              </>
             ) : (
               <p className="muted">{text.pending[lang]}</p>
             )}

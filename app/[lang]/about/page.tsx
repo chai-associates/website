@@ -69,9 +69,8 @@ const text = {
       { title: { zh: "[第 4 步，例如：办理案件]", en: "[Step 4, e.g. handling your matter]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
     ] as Item[],
   },
-  // ⑤ 主管合伙人的话（照片、名字取自 team 里的 Managing Partner）
+  // ⑤ 主管合伙人的话：照片 + 引言 + 署名（不另加标题，署名已经说明是谁的话；照片、名字取自 team 里的 Managing Partner）
   message: {
-    title: { zh: "主管合伙人的话", en: "A Word From Our Managing Partner" },
     quote: { zh: "[主管合伙人想对客户说的话，两三句，由本人确认]", en: "[A short message to clients from the Managing Partner, two or three sentences, confirmed by them]" },
     profile: { zh: "阅读个人介绍", en: "Read profile" },
   },
@@ -194,7 +193,6 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
               {md.image ? <Image src={md.image} alt={displayName(md, lang)} fill sizes="(min-width: 860px) 40vw, 100vw" /> : initials(md.name)}
             </div>
             <div>
-              <div className="section-head"><h2>{text.message.title[lang]}</h2></div>
               <figure className="quote">
                 <blockquote><p>{text.message.quote[lang]}</p></blockquote>
                 <figcaption>— {displayName(md, lang)} · {roles[md.role].label[lang]}</figcaption>

@@ -3,14 +3,14 @@
    ───────────────────────────────────────────────────────────────
    · 这里只放「全站共用」的值：颜色、字体、字号、间距、圆角、阴影、尺寸。
    · 不放任何页面或区块专用的值。页面数量增加，这个文件不会变长。
-   · @theme 里的值同时变成 Tailwind class，可以直接在 page.tsx 用：
-       颜色  bg-accent  text-ink  text-ink-muted  border-line  bg-subtle
-       字号  text-caption text-body text-lead text-subtitle text-title（流体，5 级）
-       间距  积木只用下面的 7 级阶梯 --space-1 … --space-6 + --section-y（见「间距阶梯」）；
-             Tailwind 的 p-4、gap-6 只给页面版面用（1 格 = 4px）
-       圆角  rounded-sm（栏位）  rounded-md（卡片、照片）
-       电脑版 md:（≥ 860px）
-   · 下面已关闭 Tailwind 自带的颜色、字号、圆角、断点，只能用这里定义的，确保全站统一。
+   · 样式全部写在 globals.css 的积木里，积木只用这里的值；page.tsx 只放积木的 class，不写样式。
+       字号  5 级：caption body lead subtitle title（流体）
+       字重  3 级：--weight-regular 400 / --weight-medium 500 / --weight-bold 700
+       间距  7 级阶梯 --space-1 … --space-6 + --section-y（见「间距阶梯」）
+       线    --hairline 1px 分隔线 · --border 1.5px 外框（卡片、按钮、栏位）
+       圆角  --radius-sm 栏位 · --radius-md 卡片、照片 · --radius-pill 按钮、chip
+       电脑版 ≥ 860px
+   · 已关闭 Tailwind 自带的颜色、字号、圆角、断点，只能用这里定义的，确保全站统一。
 
    依据：流体字号（字与荧幕等比例）· Apple HIG（可点击 ≥ 44px）· 8pt 网格 ·
         60-30-10 配色（白 / 黑灰 / 古铜只给按钮和小标签）· WCAG AA 对比度 ≥ 4.5 : 1
@@ -45,6 +45,7 @@
   --color-inverse-ink: #f5f5f7;
   --color-inverse-muted: #a1a1a6;  /* 深底上的次要文字 · 对比 6.5:1 */
   --color-inverse-line: color-mix(in srgb, var(--color-inverse-ink) 15%, transparent); /* 深底上的细线 */
+  --color-backdrop: rgb(0 0 0 / 0.4); /* 选单打开时，后面变暗的部分 */
 
   /* ── 字体（字体档案在 app/[lang]/layout.tsx 载入） ── */
   --font-zh: var(--font-noto-sc), "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -73,6 +74,7 @@
   --radius-*: initial;
   --radius-sm: 8px;   /* 栏位（下拉选单等） */
   --radius-md: 12px;  /* 卡片、照片、区块 */
+  --radius-pill: 999px; /* 胶囊形：按钮、chip、语言切换（品牌语法 2） */
 
   /* ── 阴影 ──────────────────────────────────── */
   --shadow-*: initial;
@@ -102,7 +104,12 @@
   --leading-en: 1.5;       /* 英文行距 */
   --leading-heading: 1.2;  /* 标题行距 */
   --leading-lead: 1.5;     /* 副标题（标题下的说明）行距：比正文紧，才不会把「标题 ↔ 副标题」的小间距吃掉 */
-  --border: 1.5px;         /* 边框粗细 */
+  --border: 1.5px;         /* 外框粗细：卡片、按钮、chip、栏位、框 */
+  --hairline: 1px;         /* 分隔线粗细：横线标题、清单、资料列、页首、页脚 */
+  /* 字重：只有 3 级（中文字体只载入 400 / 500 / 700）。标题 bold；按钮、连结、chip、小标签、栏位标签 medium；正文 regular */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
   --tap: 48px;             /* 主要按钮、栏位高度（8pt 网格；Apple 最小 44） */
   --tap-min: 44px;         /* 最小可点击尺寸（HIG） */
   --header-h: 64px;        /* 页首高度 */

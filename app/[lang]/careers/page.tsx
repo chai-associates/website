@@ -111,9 +111,9 @@ export default async function CareersPage({ params }: PageProps<"/[lang]/careers
         <section id="internship" className="section">
           <div className="container with-aside">
             <div className="stack">
-              <div>
-                <div className="list-head"><h2>{intern.title[lang]}</h2></div>
-                <div className="prose">{intern.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
+              <div className="prose">
+                <h2>{intern.title[lang]}</h2>
+                {intern.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}
               </div>
               <div>
                 <div className="list-head"><h3>{intern.requirementsTitle[lang]}</h3></div>

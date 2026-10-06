@@ -285,14 +285,6 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </ol>
           </div>
           <div>
-            <div className="list-head"><h2>时间线</h2><span>timeline · 年份 → 说明</span></div>
-            <ol className="timeline">
-              {[["2010", "律所成立"], ["2015", "开设第二间办事处"], ["2024", "第五间办事处开业"]].map(([y, t]) => (
-                <li key={y}><h3>{y}</h3><p>{t}</p></li>
-              ))}
-            </ol>
-          </div>
-          <div>
             <div className="list-head"><h2>链接清单</h2><span>link-list · 不加框，一行一个链接</span></div>
             <ul className="link-list">{["协议离婚", "单方面离婚", "收到离婚申请"].map((t) => <li key={t}><a href="#">{t}</a></li>)}</ul>
           </div>
@@ -331,10 +323,10 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       <section className="section">
         <div className="container stack">
           <div>
-            <div className="section-head"><h2>文字项目</h2><p>feature：没有照片的项目（理念、荣誉）：小标签 → 标题 → 一两句 → 一个链接；有照片的用 photo-card</p></div>
+            <div className="section-head"><h2>文字项目</h2><p>feature：没有照片的项目（理念、荣誉）：小标签 → 标题 → 一两句；有照片的用 photo-card</p></div>
             <div className="card-grid">
               {["办理离婚", "孩子", "财产与赡养费"].map((t) => (
-                <article key={t} className="feature"><span className="tag">理念</span><h3>{t}</h3><p>一句话说明</p><a className="text-link" href="#">阅读详情 →</a></article>
+                <article key={t} className="feature"><span className="tag">理念</span><h3>{t}</h3><p>一句话说明</p></article>
               ))}
             </div>
           </div>
