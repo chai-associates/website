@@ -21,8 +21,8 @@
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header-h); }
 body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-zh); font-size: var(--text-body); line-height: var(--leading-zh); -webkit-font-smoothing: antialiased; }
 body.lang-en { font-family: var(--font-en); line-height: var(--leading-en); }
-h1, h2, h3 { font-weight: var(--weight-bold); line-height: var(--leading-heading); letter-spacing: -0.01em; }
-h1 { font-size: var(--text-title); white-space: pre-line; }
+h1, h2, h3 { font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: -0.01em; } /* 区块标题、卡片标题用 medium：中文 700 笔画太密，一屏粗字太多 */
+h1 { font-size: var(--text-title); font-weight: var(--weight-bold); white-space: pre-line; } /* 只有页面大标题用 bold */
 /* 品牌语法 3：英文版 h1、h2 用 Garamond 衬线（中文版维持无衬线） */
 body.lang-en :is(h1, h2) { font-family: var(--font-serif); font-weight: var(--weight-medium); letter-spacing: -0.005em; }
 h2 { font-size: var(--text-subtitle); }
