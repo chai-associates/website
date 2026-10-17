@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 离婚百科 /divorcepedia（文章列表）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 分类按钮（一次只看一个分类；不需要 JavaScript）→ 文章卡片 + 该分类的服务连结
+// 区块顺序：① 标题  ② 分类按钮（一次只看一个分类；不需要 JavaScript。选了哪个分类会记在网址 #代号，文章的面包屑会带 #代号回来）→ 文章卡片 + 该分类的服务连结
 //          ③ 想先聊聊你的情况？
 // 文章资料在 lib/divorcepedia.ts；分类跟服务一样读 lib/site.ts。没有文章的分类自动隐藏。
 // ═══════════════════════════════════════════════════════════════
@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
+import { TabsHash } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -61,7 +62,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
           <div className="tabs">
             {groups.map((g, i) => (
               <div key={g.slug} className="tab">
-                <input type="radio" name="pedia-category" id={`pedia-${g.slug}`} defaultChecked={i === 0} />
+                <input type="radio" name="pedia-category" id={`pedia-${g.slug}`} value={g.slug} defaultChecked={i === 0} />
                 <label htmlFor={`pedia-${g.slug}`} className="chip">
                   {g.title[lang]} <em>{g.list.length}</em>
                 </label>
@@ -82,6 +83,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
               </div>
             ))}
           </div>
+          <TabsHash name="pedia-category" />
         </div>
       </section>
 

@@ -63,7 +63,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
         <div className="container">
           <ol className="breadcrumb">
             <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li><Link href={`/${lang}/divorcepedia`}>{text.pedia[lang]}</Link></li>
+            <li><Link href={`/${lang}/divorcepedia#${a.category}`}>{text.pedia[lang]}</Link></li>
             <li aria-current="page">{a.title[lang]}</li>
           </ol>
           <div className="cover">
@@ -109,7 +109,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
           <div className="container">
             <div className="list-head">
               <h2>{fill(text.more)}</h2>
-              <Link className="text-link" href={`/${lang}/divorcepedia`}>{text.browse[lang]} →</Link>
+              <Link className="text-link" href={`/${lang}/divorcepedia#${a.category}`}>{text.browse[lang]} →</Link>
             </div>
             <div className="card-grid">
               {more.slice(0, 3).map((m) => (

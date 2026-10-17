@@ -11,7 +11,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { fontVariables } from "@/lib/fonts";
-import { CookieConsent, Menu, PageTransition } from "@/lib/interactive";
+import { CookieConsent, LangSwitch, Menu, PageTransition } from "@/lib/interactive";
 import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
@@ -110,10 +110,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
                     </div>
                   </details>
                 </nav>
-                <div className="lang-switch" role="group" aria-label={text.language[lang]}>
-                  <Link href="/zh" aria-current={lang === "zh"} hrefLang="zh">中文</Link>
-                  <Link href="/en" aria-current={lang === "en"} hrefLang="en">English</Link>
-                </div>
+                <LangSwitch label={text.language[lang]} current={lang} />
               </Menu>
             </div>
           </div>

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════
-// 样式总览 /styleguide（不公开：不在选单，也不让 Google 收录）
+// 样式总览 /styleguide（不公开：不在选单，也不让 Google 收录；正式上线后 launched = true 时自动变成 404）
 // ───────────────────────────────────────────────────────────────
 // 全站所有积木摆在同一页，用来确认品牌一致。
 // 新增积木时，也要在这里加一个示范；这一页只「使用」积木，不定义任何样式。
@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isLang } from "@/lib/site";
+import { isLang, launched } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Styleguide",
@@ -47,7 +47,7 @@ const text = {
 
 export default async function StyleguidePage({ params }: PageProps<"/[lang]/styleguide">) {
   const { lang } = await params;
-  if (!isLang(lang)) notFound();
+  if (!isLang(lang) || launched) notFound(); // 上线后访客打不开，只在上线前和开发时看
 
   return (
     <>

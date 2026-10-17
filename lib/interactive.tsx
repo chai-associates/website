@@ -7,6 +7,8 @@
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
 // · TeamFilter      律师团队按办事处筛选（/people 页）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
+// · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
+// · TabsHash        分页选择记住选了哪一个：网址加 #代号，按返回会回到同一个分页（离婚百科）
 // · CookieConsent   Cookie 提示 + 同意后才载入 GA4（layout.tsx）
 // · ConsentReset    「更改 Cookie 设定」按钮（隐私政策页）
 // ═══════════════════════════════════════════════════════════════
@@ -172,6 +174,42 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       {children}
     </ViewTransition>
   );
+}
+
+// ── 语言切换 ─────────────────────────────────
+// 把网址开头的 /zh 或 /en 换掉，其余不变：/zh/services/children ↔ /en/services/children
+export function LangSwitch({ label, current }: { label: string; current: Lang }) {
+  const rest = usePathname().replace(/^\/(zh|en)(?=\/|$)/, "");
+  return (
+    <div className="lang-switch" role="group" aria-label={label}>
+      <Link href={`/zh${rest}`} aria-current={current === "zh"} hrefLang="zh">中文</Link>
+      <Link href={`/en${rest}`} aria-current={current === "en"} hrefLang="en">English</Link>
+    </div>
+  );
+}
+
+// ── 分页选择记住选了哪一个 ─────────────────────
+// 分页选择（.tabs）本身不需要 JavaScript；这里只多做一件事：
+// 选了哪个分页就把网址改成 #代号（不新增浏览纪录），打开带 #代号 的网址就选回那个分页。
+// 所以从文章按「返回」或面包屑回来，会停在原本的分类，而不是第一个。
+export function TabsHash({ name }: { name: string }) {
+  useEffect(() => {
+    const radios = () => [...document.querySelectorAll<HTMLInputElement>(`input[type="radio"][name="${name}"]`)];
+    const fromHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const match = radios().find((r) => r.value === id);
+      if (match) match.checked = true;
+    };
+    const toHash = (e: Event) => {
+      const r = e.target as HTMLInputElement;
+      if (r.name === name) window.history.replaceState(window.history.state, "", `#${r.value}`);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    document.addEventListener("change", toHash);
+    return () => { window.removeEventListener("hashchange", fromHash); document.removeEventListener("change", toHash); };
+  }, [name]);
+  return null;
 }
 
 // ── Cookie 提示 + GA4 ────────────────────────────
