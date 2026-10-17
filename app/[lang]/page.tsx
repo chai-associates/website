@@ -11,7 +11,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, serviceCategories, team, type Lang } from "@/lib/site";
+import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, serviceCategories, structuredData, team, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -20,8 +20,8 @@ const text = {
   meta: {
     title: { zh: "离婚与家事法律 | Chai & Associates 律师事务所", en: "Divorce & Family Law in Malaysia | Chai & Associates" },
     description: {
-      zh: "专注离婚与家事法律：协议离婚、单方面离婚、抚养权、赡养费与财产分割。吉隆坡 · 新山 · 马六甲。",
-      en: "Divorce and family law in Malaysia — joint and single petitions, custody, maintenance and division of assets. Kuala Lumpur · Johor Bahru · Melaka.",
+      zh: "专注离婚与家事法律：协议离婚、单方面离婚、抚养权、赡养费与财产分割。新山 · 雪兰莪 · 马六甲。",
+      en: "Divorce and family law in Malaysia — joint and single petitions, custody, maintenance and division of assets. Johor Bahru · Selangor · Melaka.",
     },
   },
 
@@ -35,10 +35,9 @@ const text = {
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
     image: "/images/hero/hero-bg-v3.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
-    // 首屏下方 3 点（之后可照「律所问卷」B5 调整；图示可选 award / receipt / lock，或在下面 Icon 加新的）
+    // 首屏下方的重点（图示可选 award / lock，或在下面 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
       { icon: "award", title: { zh: "多年经验", en: "Experienced" } },
-      { icon: "receipt", title: { zh: "收费透明", en: "Clear fees" } },
       { icon: "lock", title: { zh: "隐私保密", en: "Confidential" } },
     ],
   },
@@ -64,7 +63,6 @@ const text = {
 function Icon({ name }: { name: string }) {
   const paths: Record<string, React.ReactNode> = {
     award: <><circle cx="12" cy="8" r="5" /><path d="M8.5 12.5 7 21l5-3 5 3-1.5-8.5" /></>,
-    receipt: <><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></>,
     lock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
     arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   };
@@ -89,11 +87,15 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
   return (
     <>
+      {/* 给 Google 看的律所与办事处资料（画面上看不到） */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(lang) }} />
+
       {/* ═════════ ① 首屏 ═════════
           照片约占画面 40% 高，下缘淡出成白色，小标签（城市）+ 标题压在上面；
-          下面接说明 → 按钮 → 3 点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
+          下面接说明 → 按钮 → 重点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
       <section className="hero">
-        <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" style={{ objectPosition: "40% 30%" }} />
+        {/* 手机上首屏是直的，照片要放大到约 2 倍萤幕宽才填满 → 手机载入 2 倍宽的版本，才不会糊 */}
+        <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="(min-width: 860px) 100vw, 200vw" style={{ objectPosition: "40% 30%" }} />
         <div className="container">
           <p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>
           <h1>{hero.title[lang]}</h1>

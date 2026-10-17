@@ -12,21 +12,23 @@ export type Bi = { zh: string; en: string }; // 中英对照文字
 export const isLang = (v: string): v is Lang => (locales as readonly string[]).includes(v);
 
 // ── 律所 ─────────────────────────────────────────
-// ⚠ founded、phone、email、careersEmail、tagline 是示范资料（律师人数由 team 自动算），等律所问卷 A 部分回来后替换
+// founded 已确认。⚠ email、careersEmail 暂定用 chaiassociates.my（等律所确认网域）；hours 待律所确认。律师人数由 team 自动算
 export const firm = {
   name: "Chai & Associates",
   nameZh: "律师事务所",
   founded: 2010, // 页脚和关于我们显示「Est. 2010」
   phone: "+60194774149",
   phoneDisplay: "+6019-477 4149",
-  email: "enquiry@chaiassociates.com.my",
-  careersEmail: "careers@chaiassociates.com.my", // 招聘电邮（加入我们页）
+  email: "enquiry@chaiassociates.my",
+  careersEmail: "careers@chaiassociates.my", // 招聘电邮（加入我们页）
   tagline: { zh: "专注家事法律，陪你走过人生转折。", en: "Family law, handled with care." },
   whatsapp: "60194774149", // 国际格式，不加 + 或空格
   whatsappMessage: {
     zh: "你好，我想预约咨询离婚相关问题。",
     en: "Hi, I'd like to book a consultation about a divorce matter.",
   },
+  // 营业时间：文字给访客看，openingHours 给 Google 看（结构化资料）；两个要一起改
+  openingHours: { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:30" },
   hours: {
     zh: "星期一至五 · 9:00am – 5:30pm（周末休息）",
     en: "Mon – Fri · 9:00am – 5:30pm (closed on weekends)",
@@ -63,7 +65,7 @@ export const mapsLink = (address: string) =>
 // label：短名（按钮用）· full：全名（标题用）
 export const cities: { id: string; label: Bi; full: Bi }[] = [
   { id: "jb", label: { zh: "新山", en: "JB" }, full: { zh: "新山", en: "Johor Bahru" } },
-  { id: "kl", label: { zh: "吉隆坡", en: "KL" }, full: { zh: "吉隆坡（八打灵再也）", en: "Petaling Jaya" } },
+  { id: "kl", label: { zh: "雪兰莪", en: "Selangor" }, full: { zh: "雪兰莪（八打灵再也）", en: "Petaling Jaya" } },
   { id: "mlk", label: { zh: "马六甲", en: "Melaka" }, full: { zh: "马六甲", en: "Melaka" } },
 ];
 
@@ -205,3 +207,49 @@ export const socials: { label: string; url: string }[] = [
   { label: "Facebook", url: "https://www.facebook.com/CHAI.ASSOCIATES/" },
   { label: "Instagram", url: "https://www.instagram.com/chai.associates/" },
 ];
+
+// ── 结构化资料（给 Google 看：律所 + 5 间办事处的名称、地址、电话、营业时间）──
+// 首页和办事处页各放一份（<script type="application/ld+json">）。资料全部读上面的 firm / offices，不另外维护。
+// 地址格式固定为「……, 邮区 地区, 州」，这里自动拆成 Google 要的栏位。
+const postalAddress = (address: string) => {
+  const parts = address.split(", ");
+  const region = parts.pop()!;
+  const [postalCode, ...locality] = parts.pop()!.split(" ");
+  return { "@type": "PostalAddress", streetAddress: parts.join(", "), postalCode, addressLocality: locality.join(" "), addressRegion: region, addressCountry: "MY" };
+};
+export const structuredData = (lang: Lang) => {
+  const firmId = `${siteUrl}/#firm`;
+  const hours = { "@type": "OpeningHoursSpecification", dayOfWeek: firm.openingHours.days, opens: firm.openingHours.opens, closes: firm.openingHours.closes };
+  const graph = [
+    {
+      "@type": "LegalService",
+      "@id": firmId,
+      name: firm.name,
+      alternateName: `${firm.name} ${firm.nameZh}`,
+      url: `${siteUrl}/${lang}`,
+      logo: `${siteUrl}/images/brand/logo.jpg`,
+      image: `${siteUrl}/images/brand/og.jpg`,
+      description: firm.tagline[lang],
+      telephone: firm.phone,
+      email: firm.email,
+      foundingDate: String(firm.founded),
+      areaServed: { "@type": "Country", name: "Malaysia" },
+      knowsAbout: serviceCategories.map((c) => c.title[lang]),
+      sameAs: socials.map((s) => s.url),
+    },
+    ...offices.map((o) => ({
+      "@type": "LegalService",
+      "@id": `${siteUrl}/#office-${o.id}`,
+      name: `${firm.name} · ${o.name[lang]}`,
+      parentOrganization: { "@id": firmId },
+      url: `${siteUrl}/${lang}/locations`,
+      image: `${siteUrl}/images/brand/og.jpg`,
+      telephone: o.phone,
+      address: postalAddress(o.address),
+      hasMap: mapsLink(o.address),
+      openingHoursSpecification: hours,
+    })),
+  ];
+  // 把 < 换掉，避免内容被当成 HTML（Next.js 文件建议的做法）
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
+};

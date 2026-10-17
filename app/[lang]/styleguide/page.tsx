@@ -182,7 +182,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="hero">
               <Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" />
               <div>
-                <p className="tag">新山 · 吉隆坡 · 马六甲</p>
+                <p className="tag">新山 · 雪兰莪 · 马六甲</p>
                 <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折"}</h1>
               </div>
             </div>
@@ -190,7 +190,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               <p>hero-intro：照片下面接说明 → 按钮</p>
               <div className="btn-row"><a className="btn btn-outline" href="#">了解我们的服务 →</a></div>
               <ul className="points">
-                {["多年经验", "收费透明", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
+                {["多年经验", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
               </ul>
             </div>
             <div className="cover">
@@ -202,7 +202,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div>
             <div className="list-head"><h2>分页选择</h2><span>tabs · 不用 JavaScript</span></div>
             <div className="tabs">
-              {["新山", "吉隆坡", "马六甲"].map((c, i) => (
+              {["新山", "雪兰莪", "马六甲"].map((c, i) => (
                 <div key={c} className="tab">
                   <input type="radio" name="sg-tabs" id={`sg-tab-${i}`} defaultChecked={i === 0} />
                   <label htmlFor={`sg-tab-${i}`} className="chip">{c} <em>{3 - i}</em></label>

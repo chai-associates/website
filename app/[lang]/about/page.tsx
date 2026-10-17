@@ -66,7 +66,7 @@ const text = {
     list: [
       { title: { zh: "[第 1 步，例如：WhatsApp 联系我们]", en: "[Step 1, e.g. message us on WhatsApp]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
       { title: { zh: "[第 2 步，例如：初次咨询]", en: "[Step 2, e.g. first consultation]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
-      { title: { zh: "[第 3 步，例如：报价与委托]", en: "[Step 3, e.g. fees and engagement]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
+      { title: { zh: "[第 3 步，例如：委托律师]", en: "[Step 3, e.g. engaging a lawyer]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
       { title: { zh: "[第 4 步，例如：办理案件]", en: "[Step 4, e.g. handling your matter]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
     ] as Item[],
   },

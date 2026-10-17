@@ -12,7 +12,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, team, whatsappLink } from "@/lib/site";
+import { cities, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, structuredData, team, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -44,6 +44,9 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
 
   return (
     <>
+      {/* 给 Google 看的律所与办事处资料（画面上看不到） */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(lang) }} />
+
       {/* ═══ ① 标题 ═══ */}
       <section className="page-head">
         <div className="container">
