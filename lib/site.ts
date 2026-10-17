@@ -12,7 +12,7 @@ export type Bi = { zh: string; en: string }; // 中英对照文字
 export const isLang = (v: string): v is Lang => (locales as readonly string[]).includes(v);
 
 // ── 律所 ─────────────────────────────────────────
-// founded 已确认。⚠ email、careersEmail 暂定用 chaiassociates.my（等律所确认网域）；hours 待律所确认。律师人数由 team 自动算
+// founded 已确认。⚠ email、careersEmail 暂定用 chaiassociates.my（等律所确认网域）。不写营业时间：时间由律师和客户直接约。律师人数由 team 自动算
 export const firm = {
   name: "Chai & Associates",
   nameZh: "律师事务所",
@@ -26,12 +26,6 @@ export const firm = {
   whatsappMessage: {
     zh: "你好，我想预约咨询离婚相关问题。",
     en: "Hi, I'd like to book a consultation about a divorce matter.",
-  },
-  // 营业时间：文字给访客看，openingHours 给 Google 看（结构化资料）；两个要一起改
-  openingHours: { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:30" },
-  hours: {
-    zh: "星期一至五 · 9:00am – 5:30pm（周末休息）",
-    en: "Mon – Fri · 9:00am – 5:30pm (closed on weekends)",
   },
 };
 
@@ -186,6 +180,7 @@ export const common = {
   askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
   readMore: { zh: "阅读详情", en: "Read More" },
   call: { zh: "拨打电话", en: "Call Now" },
+  whatsapp: { zh: "WhatsApp", en: "WhatsApp" }, // 全站统一一个 WhatsApp 号码（firm.whatsapp）
   directions: { zh: "开始导航", en: "Get Directions" },
   notYours: {
     title: { zh: "不是你的情况？", en: "Not quite your situation?" },
@@ -208,7 +203,7 @@ export const socials: { label: string; url: string }[] = [
   { label: "Instagram", url: "https://www.instagram.com/chai.associates/" },
 ];
 
-// ── 结构化资料（给 Google 看：律所 + 5 间办事处的名称、地址、电话、营业时间）──
+// ── 结构化资料（给 Google 看：律所 + 5 间办事处的名称、地址、电话）──
 // 首页和办事处页各放一份（<script type="application/ld+json">）。资料全部读上面的 firm / offices，不另外维护。
 // 地址格式固定为「……, 邮区 地区, 州」，这里自动拆成 Google 要的栏位。
 const postalAddress = (address: string) => {
@@ -219,7 +214,6 @@ const postalAddress = (address: string) => {
 };
 export const structuredData = (lang: Lang) => {
   const firmId = `${siteUrl}/#firm`;
-  const hours = { "@type": "OpeningHoursSpecification", dayOfWeek: firm.openingHours.days, opens: firm.openingHours.opens, closes: firm.openingHours.closes };
   const graph = [
     {
       "@type": "LegalService",
@@ -247,7 +241,6 @@ export const structuredData = (lang: Lang) => {
       telephone: o.phone,
       address: postalAddress(o.address),
       hasMap: mapsLink(o.address),
-      openingHoursSpecification: hours,
     })),
   ];
   // 把 < 换掉，避免内容被当成 HTML（Next.js 文件建议的做法）

@@ -11,7 +11,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, cityOf, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, serviceCategories, structuredData, team, type Lang } from "@/lib/site";
+import { cities, cityOf, common, displayName, initials, isLang, mapsLink, offices, pageMeta, roles, serviceCategories, structuredData, team, whatsappLink, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -163,10 +163,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           城市按钮：选中的变黑底，只显示该城市的办事处。新增办事处或城市：只改 lib/site.ts。 */}
       <section id="contact" className="section">
         <div className="container">
-          <div className="section-head">
-            <h2>{contact.title[lang]}</h2>
-            <p>{firm.hours[lang]}</p>
-          </div>
+          <div className="section-head"><h2>{contact.title[lang]}</h2></div>
 
           {/* 选城市：选中的变黑底，下面只显示该城市的办事处（不需要 JavaScript） */}
           <div className="tabs">
@@ -185,6 +182,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                         <p>{o.phoneDisplay}</p>
                         <div className="btn-row">
                           <a className="btn btn-ghost btn-sm" href={`tel:${o.phone}`}>{common.call[lang]}</a>
+                          <a className="btn btn-ghost btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.whatsapp[lang]}</a>
                           <a className="btn btn-ghost btn-sm" href={mapsLink(o.address)} target="_blank" rel="noopener">{common.directions[lang]}</a>
                         </div>
                       </div>

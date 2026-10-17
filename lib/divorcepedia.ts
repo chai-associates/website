@@ -8,7 +8,7 @@
 //   services  相关服务的 slug（服务页的「相关文章」、文章页的「相关服务」用）
 //   title     标题（顾客会问的问题）· summary 一句话重点（列表卡片和文章开头）
 //   body      内文：{ h2 } 小标题 · { p } 段落 · { list } 清单
-//   image     封面照片（可不填，没填就是深灰底）：放进 public/images/divorcepedia/，填 "/images/divorcepedia/文章代号.jpg"
+//   image     封面照片（可不填，没填就是深灰底）：放进 public/images/divorcepedia/，填 "/images/divorcepedia/文件名.png"（换照片时用新文件名，才不会被旧缓存卡住）
 //             尺寸统一 2400 × 1350 px（16:9）；主体放在中间那条 2400 × 600 里（电脑版只显示这一条）
 // 新增文章：照格式加一个物件就好。不要的文章：删掉那一个物件。
 // ⚠ 内容整理自律所的「离婚 Divorce」文件，只改写成顾客看得懂的说法，没有新增法律内容。
@@ -23,7 +23,7 @@ export const articles: Article[] = [
   // ── 办理离婚 ─────────────────────────────────
   {
     slug: "joint-or-single-petition",
-    image: "/images/divorcepedia/joint-or-single-petition.png",
+    image: "/images/divorcepedia/joint-single-petition.png",
     category: "divorce",
     services: ["joint-petition", "single-petition"],
     title: { zh: "协议离婚还是单方面离婚？", en: "Joint or single petition: which applies to me?" },
@@ -45,7 +45,7 @@ export const articles: Article[] = [
   },
   {
     slug: "marriage-counselling",
-    image: "/images/divorcepedia/marriage-counselling.png",
+    image: "/images/divorcepedia/marriage-counsel.png",
     category: "divorce",
     services: ["single-petition"],
     title: { zh: "离婚前一定要做婚姻辅导吗？", en: "Do I need marriage counselling before divorcing?" },
@@ -75,6 +75,7 @@ export const articles: Article[] = [
   },
   {
     slug: "documents-and-terms",
+    image: "/images/divorcepedia/documents-and-terms.png",
     category: "divorce",
     services: ["joint-petition", "single-petition"],
     title: { zh: "申请离婚要准备什么？", en: "What do I need to prepare for a divorce?" },
@@ -101,7 +102,7 @@ export const articles: Article[] = [
   },
   {
     slug: "responding-to-a-petition",
-    image: "/images/divorcepedia/responding-to-a-petition.png",
+    image: "/images/divorcepedia/responding-to-petition.png",
     category: "divorce",
     services: ["responding"],
     title: { zh: "收到离婚申请怎么办？", en: "I've been served a divorce petition. What now?" },
@@ -117,6 +118,7 @@ export const articles: Article[] = [
   },
   {
     slug: "adultery",
+    image: "/images/divorcepedia/adultery.png",
     category: "divorce",
     services: ["adultery"],
     title: { zh: "对方出轨：怎么证明？可以索赔吗？", en: "Adultery: how is it proved, and can I claim damages?" },
@@ -140,7 +142,7 @@ export const articles: Article[] = [
   },
   {
     slug: "annulment-vs-divorce",
-    image: "/images/divorcepedia/annulment-vs-divorce.png",
+    image: "/images/divorcepedia/annulment-divorce.png",
     category: "divorce",
     services: ["annulment"],
     title: { zh: "婚姻无效和离婚有什么不同？", en: "Annulment or divorce: what's the difference?" },
@@ -173,6 +175,7 @@ export const articles: Article[] = [
   // ── 孩子 ───────────────────────────────────
   {
     slug: "custody-and-guardianship",
+    image: "/images/divorcepedia/custody-and-guardianship.png",
     category: "children",
     services: ["custody"],
     title: { zh: "抚养权和监护权有什么不同？法庭怎么决定？", en: "Custody and guardianship: what's the difference, and how does the court decide?" },
@@ -201,6 +204,7 @@ export const articles: Article[] = [
   },
   {
     slug: "access-to-children",
+    image: "/images/divorcepedia/access-to-children.png",
     category: "children",
     services: ["access"],
     title: { zh: "没有抚养权，还能见孩子吗？", en: "Can I still see my children without custody?" },
@@ -220,6 +224,7 @@ export const articles: Article[] = [
   // ── 财产与赡养费 ───────────────────────────────
   {
     slug: "maintenance",
+    image: "/images/divorcepedia/maintenance.png",
     category: "finances",
     services: ["spousal-maintenance", "child-maintenance"],
     title: { zh: "赡养费和子女抚养费怎么决定？", en: "How are spousal and child maintenance decided?" },
@@ -246,6 +251,7 @@ export const articles: Article[] = [
   },
   {
     slug: "matrimonial-assets",
+    image: "/images/divorcepedia/matrimonial-assets.png",
     category: "finances",
     services: ["matrimonial-assets", "debt-recovery"],
     title: { zh: "哪些算婚姻财产？离婚时怎么分？", en: "What counts as matrimonial assets, and how are they divided?" },
@@ -285,6 +291,7 @@ export const articles: Article[] = [
   // ── 离婚之后 ─────────────────────────────────
   {
     slug: "enforcing-court-orders",
+    image: "/images/divorcepedia/enforcing-court-orders.png",
     category: "after-divorce",
     services: ["enforcement"],
     title: { zh: "对方不付赡养费、不遵守法庭令怎么办？", en: "My ex isn't paying or following the court order. What can I do?" },
@@ -298,6 +305,7 @@ export const articles: Article[] = [
   },
   {
     slug: "foreign-divorce",
+    image: "/images/divorcepedia/foreign-divorce.png",
     category: "after-divorce",
     services: ["foreign-divorce"],
     title: { zh: "在国外离婚，回马来西亚要怎么更新婚姻状况？", en: "Divorced overseas: how do I update my status in Malaysia?" },

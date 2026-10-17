@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 办事处 /locations
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题（营业时间）  ② 每个城市一组：横线标题（右边是办事处数量）
+// 区块顺序：① 标题  ② 每个城市一组：横线标题（右边是办事处数量）
 //            → 每间办事处一行：办事处卡片（左）+ 在这间办事处的律师（右；手机排在下面）
 //          ③ 不确定去哪一间？（浅灰色带）
 // 只显示律师（合伙人、顾问律师、律师）；法律支援团队不列在这里（律师公会规定）。
@@ -12,7 +12,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, common, displayName, firm, initials, isLang, mapsLink, offices, pageMeta, roles, structuredData, team, whatsappLink } from "@/lib/site";
+import { cities, common, displayName, initials, isLang, mapsLink, offices, pageMeta, roles, structuredData, team, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -56,7 +56,6 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
           </ol>
           <h1>{text.heading[lang]}</h1>
           <p>{text.lead[lang]}</p>
-          <p>{firm.hours[lang]}</p>
         </div>
       </section>
 
@@ -83,6 +82,7 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
                           <p>{o.phoneDisplay}</p>
                           <div className="btn-row">
                             <a className="btn btn-ghost btn-sm" href={`tel:${o.phone}`}>{common.call[lang]}</a>
+                            <a className="btn btn-ghost btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.whatsapp[lang]}</a>
                             <a className="btn btn-ghost btn-sm" href={mapsLink(o.address)} target="_blank" rel="noopener">{common.directions[lang]}</a>
                           </div>
                         </div>
