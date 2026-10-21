@@ -3,7 +3,7 @@
 // ───────────────────────────────────────────────────────────────
 // 全站所有积木摆在同一页，用来确认品牌一致。
 // 新增积木时，也要在这里加一个示范；这一页只「使用」积木，不定义任何样式。
-// /zh/styleguide 和 /en/styleguide 对照看：英文版的大标题是 Garamond。
+// /zh/styleguide 和 /en/styleguide 对照看：大标题中文是思源宋体、英文是 Garamond。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -23,7 +23,7 @@ const text = {
   rules: [
     "圆角 12px（卡片、照片）· 栏位 8px",
     "按钮一律胶囊形",
-    "英文大标题（h1、h2）用 Garamond 衬线；中文标题、h3 以下用无衬线",
+    "大标题（h1、h2）、引言用衬线：英文 Garamond、中文思源宋体；h3 以下和正文用无衬线：中文 MiSans、英文 Plus Jakarta Sans",
     "段落 = 色带：白 / 浅灰 / 深色交替，相邻不同色；一条色带只做一件事；母页只放「图 → 标题 → 一两句 → 一个链接」",
     "一个区块只有一个标题，标题上面不放小标签；小标签只放资料（城市、职位、日期、类别、编号），古铜色",
     "照片比例：人像 4:5，场景 3:2（首页首屏满版照片例外）",
@@ -270,7 +270,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </div>
           </div>
           <div>
-            <div className="list-head"><h2>引言</h2><span>quote · 英文 Garamond · 不用斜体</span></div>
+            <div className="list-head"><h2>引言</h2><span>quote · 衬线（英文 Garamond、中文思源宋体）· 不用斜体</span></div>
             <figure className="quote">
               <blockquote><p>{lang === "en" ? "Every family is different. We listen first, then explain your options in plain words." : "每个家庭都不一样。我们先听，再用简单的话告诉你有哪些选择。"}</p></blockquote>
               <figcaption>— {lang === "en" ? "Lim Hui Ying" : "林慧盈"}</figcaption>
