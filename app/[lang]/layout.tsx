@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { fontVariables } from "@/lib/fonts";
+import "@/lib/fonts"; // 字体（MiSans）
 import { CookieConsent, LangSwitch, Menu, PageTransition } from "@/lib/interactive";
 import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
 
@@ -74,7 +74,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   const home = `/${lang}`;
 
   return (
-    <html lang={lang === "zh" ? "zh-Hans" : "en"} className={fontVariables}>
+    <html lang={lang === "zh" ? "zh-Hans" : "en"}>
       <body className={`lang-${lang}`}>
         {/* ── 页首 ───────────────────────────── */}
         <header className="site-header">

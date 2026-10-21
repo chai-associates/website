@@ -6,7 +6,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { fontVariables } from "@/lib/fonts";
+import "@/lib/fonts"; // 字体（MiSans）
 import { firm } from "@/lib/site";
 
 const text = {
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang="zh-Hans" className={fontVariables}>
+    <html lang="zh-Hans">
       <body className="lang-zh">
         <main>
           <section className="section">

@@ -18,7 +18,7 @@
    品牌语法（8 条，定案后锁定；样式总览页 /styleguide 可以看到全部）
      1 圆角 12px（卡片、照片）· 栏位 8px
      2 按钮一律胶囊形
-     3 大标题（h1、h2）、引言用衬线：英文 Garamond、中文思源宋体；h3 以下和正文用无衬线：中文 MiSans、英文 Plus Jakarta Sans
+     3 全站只用一种字体 MiSans（中英文、标题、正文），层级只靠字号和粗细
      4 段落 = 色带：白 / 浅灰 / 深色交替，相邻两段不同色；一条色带只做一件事（一个标题、一两句、一个行动）；
        页脚是深色，所以最后一条色带不用深色；母页只放「图 → 标题 → 一两句 → 一个链接」，长文字只在子页；
        细横线标题只给清单用
@@ -47,10 +47,8 @@
   --color-inverse-line: color-mix(in srgb, var(--color-inverse-ink) 15%, transparent); /* 深底上的细线 */
   --color-backdrop: rgb(0 0 0 / 0.4); /* 选单打开时，后面变暗的部分 */
 
-  /* ── 字体（字体档案在 app/[lang]/layout.tsx 载入） ── */
-  --font-zh: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;                 /* 中文正文 */
-  --font-en: var(--font-jakarta), "MiSans", -apple-system, sans-serif;               /* 英文正文；里面的中文字用 MiSans */
-  --font-serif: var(--font-garamond), var(--font-noto-serif-sc), "Songti SC", serif; /* h1、h2、引言、Logo：英文字 Garamond，中文字思源宋体 */
+  /* ── 字体 ──────────────────────────────────── */
+  --font-sans: "MiSans", "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif; /* 全站唯一字体（中英文、标题、正文）；载入在 lib/fonts.ts */
 
   /* ── 字号：流体字号（跟着荧幕宽度等比例缩放） ─────────
      每一级在 320px 荧幕是最小值，1440px 是最大值，中间按比例平滑变化。

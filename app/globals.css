@@ -19,13 +19,10 @@
 @layer base {
 /* ── 基础 ──────────────────────────────────────── */
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header-h); }
-body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-zh); font-size: var(--text-body); line-height: var(--leading-zh); -webkit-font-smoothing: antialiased; }
-body.lang-en { font-family: var(--font-en); line-height: var(--leading-en); }
+body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-sans); font-size: var(--text-body); line-height: var(--leading-zh); -webkit-font-smoothing: antialiased; }
+body.lang-en { line-height: var(--leading-en); } /* 字体同一种，只有行距按语言不同 */
 h1, h2, h3 { font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: -0.01em; } /* 区块标题、卡片标题用 medium：中文 700 笔画太密，一屏粗字太多 */
 h1 { font-size: var(--text-title); font-weight: var(--weight-bold); white-space: pre-line; } /* 只有页面大标题用 bold */
-/* 品牌语法 3：h1、h2 用衬线（英文 Garamond、中文思源宋体）；英文版 Garamond 统一 medium、字距收一点 */
-h1, h2 { font-family: var(--font-serif); }
-body.lang-en :is(h1, h2) { font-weight: var(--weight-medium); letter-spacing: -0.005em; }
 h2 { font-size: var(--text-subtitle); }
 h3 { font-size: var(--text-body); } /* 卡片标题 = 正文大小、粗体（跟说明用粗细和颜色区分） */
 p { max-width: var(--measure); }
@@ -68,8 +65,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
   .profile-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: center; gap: var(--space-6); }
 }
 /* 引言：一段大字（个人页「用自己的话」、以后主管合伙人的话）→ 下面署名。
-   衬线（英文 Garamond、中文思源宋体）；不用斜体，引号由浏览器依语言自动加上 */
-.quote blockquote p { max-width: 24em; font-family: var(--font-serif); font-size: var(--text-subtitle); font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: -0.01em; }
+   不用斜体，引号由浏览器依语言自动加上 */
+.quote blockquote p { max-width: 24em; font-size: var(--text-subtitle); font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: -0.01em; }
 .quote blockquote p::before { content: open-quote; }
 .quote blockquote p::after { content: close-quote; }
 .quote figcaption { margin-top: var(--space-4); color: var(--color-ink-muted); font-size: var(--text-caption); font-weight: var(--weight-medium); }
@@ -193,7 +190,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .person-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); }
 @media (min-width: 860px) { .person-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .person-card { display: flex; flex-direction: column; gap: var(--space-1); }
-.person-photo { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: var(--space-2); border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-family: var(--font-serif); font-size: var(--text-title); }
+.person-photo { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: var(--space-2); border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-size: var(--text-title); }
 .person-photo > img { object-fit: cover; }
 .person-card > strong { font-size: var(--text-caption); font-weight: var(--weight-medium); }
 .person-card > p { color: var(--color-ink-muted); font-size: var(--text-caption); }
@@ -267,7 +264,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: var(--hairline) solid var(--color-line); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
-.logo-wm { font-family: var(--font-serif); font-size: var(--text-body); font-weight: var(--weight-medium); letter-spacing: 0.04em; }
+.logo-wm { font-size: var(--text-body); font-weight: var(--weight-medium); letter-spacing: 0.04em; }
 .logo-sub { font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: 0.08em; }
 .nav-right { display: flex; align-items: center; gap: 0; } /* 选单按钮本身有留白（44 框里 22 的线），不用再加间距；320 宽英文才放得下 */
 @media (min-width: 860px) {
