@@ -150,8 +150,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
 /* 卡片里的字：标题 → 说明（灰色小字）→ 最下面放链接或按钮 */
 .card > p { color: var(--color-ink-muted); }
-.card > .text-link { margin-top: auto; }
-.card > .btn-row { margin-top: auto; padding-top: var(--space-2); }
+.card > .text-link { margin-top: auto; padding-top: var(--space-3); font-size: var(--text-caption); } /* 动作比标题小一号；8（gap）+ 16 = 跟内容相隔 24 */
+.card > .btn-row { margin-top: auto; padding-top: var(--space-3); } /* 8（gap）+ 16 = 跟内容相隔 24 */
 .card > .btn-row > .btn { flex: 1 1 auto; } /* 按钮照字的宽度排，放不下就换行再撑满；不会把中文挤成直的 */
 /* 可以点的卡片（服务卡片等） */
 .card-link { transition: border-color var(--motion-fast) var(--ease); }
