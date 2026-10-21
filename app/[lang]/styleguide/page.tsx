@@ -130,24 +130,12 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       <section className="section">
         <div className="container stack">
           <div>
-            <div className="list-head"><h2>服务卡片</h2><a className="text-link" href="#">查看全部 →</a></div>
-            <div className="card-grid">
-              {["协议离婚", "单方面离婚", "收到离婚申请"].map((t) => (
-                <a key={t} href="#" className="card card-link reveal">
-                  <h3>{t}</h3>
-                  <p>card card-link：标题 → 说明 → 阅读详情</p>
-                  <span className="text-link">阅读详情 →</span>
-                </a>
-              ))}
-            </div>
-          </div>
-          <div>
             <div className="list-head"><h2>照片卡片</h2><span>场景 3:2</span></div>
             <div className="card-grid">
               {["办理离婚", "孩子"].map((t) => (
                 <a key={t} href="#" className="photo-card reveal">
                   <div><h3>{t}</h3><p>photo-card：左上标题、右下按钮</p></div>
-                  <span className="btn btn-light btn-sm photo-card-action">阅读详情 →</span>
+                  <span className="btn btn-light btn-sm photo-card-action">查看服务 →</span>
                 </a>
               ))}
             </div>

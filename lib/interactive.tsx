@@ -51,11 +51,11 @@ export function Menu({ label, children }: { label: string; children: React.React
 
 // ── 「我的情况是」选择器 ─────────────────────────
 // 选一个情况 → 下面显示相关的服务卡片
-type Card = { href: string; title: string; short: string };
-export function SituationPicker({ label, placeholder, readMore, options }: {
+type Card = { href: string; title: string; short: string; image: string | null };
+export function SituationPicker({ label, placeholder, action, options }: {
   label: string; // 不显示，给读屏软件用（选单的预设文字本身就是问题，例如「我们可以怎么帮你？」）
   placeholder: string;
-  readMore: string;
+  action: string;
   options: { label: string; cards: Card[] }[];
 }) {
   const [picked, setPicked] = useState(-1);
@@ -70,10 +70,13 @@ export function SituationPicker({ label, placeholder, readMore, options }: {
       {cards.length > 0 && (
         <div className="card-grid" aria-live="polite">
           {cards.map((c) => (
-            <Link key={c.href} href={c.href} className="card card-link reveal">
-              <h3>{c.title}</h3>
-              <p>{c.short}</p>
-              <span className="text-link">{readMore} →</span>
+            <Link key={c.href} href={c.href} className="photo-card reveal">
+              {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+              <div>
+                <h3>{c.title}</h3>
+                <p>{c.short}</p>
+              </div>
+              <span className="btn btn-light btn-sm photo-card-action">{action} →</span>
             </Link>
           ))}
         </div>

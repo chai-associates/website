@@ -113,10 +113,13 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             </div>
             <div className="card-grid">
               {more.slice(0, 3).map((m) => (
-                <Link key={m.slug} href={`/${lang}/divorcepedia/${m.slug}`} className="card card-link reveal">
-                  <h3>{m.title[lang]}</h3>
-                  <p>{m.summary[lang]}</p>
-                  <span className="text-link">{common.readMore[lang]} →</span>
+                <Link key={m.slug} href={`/${lang}/divorcepedia/${m.slug}`} className="photo-card reveal">
+                  {m.image && <Image src={m.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                  <div>
+                    <h3>{m.title[lang]}</h3>
+                    <p>{m.summary[lang]}</p>
+                  </div>
+                  <span className="btn btn-light btn-sm photo-card-action">{common.readArticle[lang]} →</span>
                 </Link>
               ))}
             </div>

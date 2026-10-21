@@ -129,7 +129,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   <h3>{c.title[lang]}</h3>
                   <p>{c.short[lang]}</p>
                 </div>
-                <span className="btn btn-light btn-sm photo-card-action">{common.readMore[lang]} <Icon name="arrow" /></span>
+                <span className="btn btn-light btn-sm photo-card-action">{common.viewService[lang]} <Icon name="arrow" /></span>
               </Link>
             ))}
           </div>

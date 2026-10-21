@@ -6,6 +6,7 @@
 // 文章资料在 lib/divorcepedia.ts；分类跟服务一样读 lib/site.ts。没有文章的分类自动隐藏。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
@@ -70,10 +71,13 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
                   <div className="stack">
                     <div className="card-grid">
                       {g.list.map((a) => (
-                        <Link key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} className="card card-link">
-                          <h3>{a.title[lang]}</h3>
-                          <p>{a.summary[lang]}</p>
-                          <span className="text-link">{common.readMore[lang]} →</span>
+                        <Link key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} className="photo-card">
+                          {a.image && <Image src={a.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                          <div>
+                            <h3>{a.title[lang]}</h3>
+                            <p>{a.summary[lang]}</p>
+                          </div>
+                          <span className="btn btn-light btn-sm photo-card-action">{common.readArticle[lang]} →</span>
                         </Link>
                       ))}
                     </div>

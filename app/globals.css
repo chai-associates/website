@@ -153,14 +153,11 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .card > .text-link { margin-top: auto; padding-top: var(--space-3); font-size: var(--text-caption); } /* 动作比标题小一号；8（gap）+ 16 = 跟内容相隔 24 */
 .card > .btn-row { margin-top: auto; padding-top: var(--space-3); } /* 8（gap）+ 16 = 跟内容相隔 24 */
 .card > .btn-row > .btn { flex: 1 1 auto; } /* 按钮照字的宽度排，放不下就换行再撑满；不会把中文挤成直的 */
-/* 可以点的卡片（服务卡片等） */
-.card-link { transition: border-color var(--motion-fast) var(--ease); }
-.card-link:hover { border-color: var(--color-ink); }
 /* 卡片网格：每张至少 300px，自动决定一行几张（手机 1、平板 2、电脑 3） */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--space-4); }
 /* 照片卡片：照片当背景，文字放在照片里面（一张照片 = 一个项目，一眼看得出是一组）。
-   固定排版：标题 + 说明在左上，按钮在右下。母页的导览项目（服务分类、更多关于我们）都用这个 */
-.photo-card { aspect-ratio: 3 / 2; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: hidden; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); }
+   固定排版：标题 + 说明在左上，按钮在右下。所有能点进去的项目（服务分类、单项服务、百科文章、更多关于我们）都用这个 */
+.photo-card { aspect-ratio: 3 / 2; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: clip; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); } /* 至少 3:2；字多的时候往下长，不会被切掉（clip 才会长，hidden 会切字） */
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
 .photo-card > img { z-index: -2; object-fit: cover; }
 .photo-card > img { transition: transform var(--motion) var(--ease); }

@@ -45,7 +45,6 @@ const text = {
     ] as { label: Bi; slugs: string[] }[],
   },
   // ③ 全部服务（5 个分类）
-  viewCategory: { zh: "查看这个分类", en: "View this category" },
   // ④ 直接咨询
   ask: {
     title: { zh: "找不到你的情况？", en: "Can't find your situation?" },
@@ -87,12 +86,12 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           <SituationPicker
             label={text.picker.label[lang]}
             placeholder={text.picker.placeholder[lang]}
-            readMore={common.readMore[lang]}
+            action={common.viewService[lang]}
             options={text.picker.options.map((o) => ({
               label: o.label[lang],
               cards: o.slugs.map((slug) => {
                 const s = services.find((x) => x.slug === slug)!;
-                return { href: href(slug), title: s.title[lang], short: s.short[lang] };
+                return { href: href(slug), title: s.title[lang], short: s.short[lang], image: s.image };
               }),
             }))}
           />
@@ -110,7 +109,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
                   <h3>{c.title[lang]}</h3>
                   <p>{c.short[lang]}</p>
                 </div>
-                <span className="btn btn-light btn-sm photo-card-action">{text.viewCategory[lang]} →</span>
+                <span className="btn btn-light btn-sm photo-card-action">{common.viewService[lang]} →</span>
               </Link>
             ))}
           </div>
