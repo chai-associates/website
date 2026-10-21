@@ -1,11 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
 // 分类页 /services/[category]（5 个分类共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 色带顺序：① 标题（白）  ② 这一类的服务卡片（白，接在标题下面；不另加标题）  ③ 不是你的情况？（浅灰）
+// 色带顺序：① 标题（白）  ② 这一类的服务清单（白，接在标题下面；不另加标题；不放照片）  ③ 不是你的情况？（浅灰）
 // 分类名称、服务清单在 lib/site.ts；每个分类的介绍写在下面 text.intro。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi, type ServiceCategory } from "@/lib/site";
@@ -76,18 +75,16 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
       {/* ═══ ② 这一类的服务（白） ═══ */}
       <section className="section">
         <div className="container">
-          <div className="card-grid">
+          <ul className="link-list">
             {list.map((s) => (
-              <Link key={s.slug} href={`/${lang}/services/${c.slug}/${s.slug}`} className="photo-card reveal">
-                {s.image && <Image src={s.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
-                <div>
+              <li key={s.slug}>
+                <Link href={`/${lang}/services/${c.slug}/${s.slug}`}>
                   <h3>{s.title[lang]}</h3>
                   <p>{s.short[lang]}</p>
-                </div>
-                <span className="btn btn-light btn-sm photo-card-action">{common.viewService[lang]} →</span>
-              </Link>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

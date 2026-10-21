@@ -86,12 +86,11 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           <SituationPicker
             label={text.picker.label[lang]}
             placeholder={text.picker.placeholder[lang]}
-            action={common.viewService[lang]}
             options={text.picker.options.map((o) => ({
               label: o.label[lang],
               cards: o.slugs.map((slug) => {
                 const s = services.find((x) => x.slug === slug)!;
-                return { href: href(slug), title: s.title[lang], short: s.short[lang], image: s.image };
+                return { href: href(slug), title: s.title[lang], short: s.short[lang] };
               }),
             }))}
           />
