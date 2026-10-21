@@ -6,6 +6,7 @@
 // ⚠ 草稿：依《2010 年个人资料保护法》（PDPA，含 2024 年修订）第 7 条的通知事项整理，上线前必须请律师审阅。
 //   「Cookie 与访客统计」那一段是照网站实际做法写的（GA4、同意后才载入、关闭广告个人化）。
 //   电邮读 lib/site.ts 的 firm.email；最后更新日期是占位。
+//   每个语言版本最后一行注明字体 MiSans（小米授权要求）。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -26,6 +27,8 @@ const text = {
   updated: { zh: "最后更新：[日期]", en: "Last updated: [Date]" },
   ms: { zh: "马来文版本", en: "Bahasa Malaysia version", title: "Dasar Privasi (Bahasa Malaysia)" },
   reset: { zh: "更改 Cookie 设定", en: "Change cookie settings" },
+  // 字体注明（MiSans 授权要求注明使用了 MiSans）：每个语言版本的最后一行
+  fontCredit: { zh: "本网站字体使用 MiSans（小米）。", en: "This website uses the MiSans typeface by Xiaomi.", ms: "Laman web ini menggunakan fon MiSans oleh Xiaomi." } as Tri,
   // 每一段：h2 小标题 → 段落 p → 清单 list → 清单后的段落 after。{email} 会换成 firm.email
   parts: [
     {
@@ -174,13 +177,13 @@ const text = {
 // 把一段政策印成 h2 → 段落 → 清单 → 段落（放在 .prose 里）
 function renderParts(lang: keyof Tri, withReset: boolean, resetLabel: string) {
   const t = (s: Tri) => s[lang].replace("{email}", firm.email);
-  return text.parts.map((s) => [
+  return [...text.parts.map((s) => [
     <h2 key={`${s.h2.en}-h`}>{t(s.h2)}</h2>,
     ...(s.p ?? []).map((p) => <p key={p.en}>{t(p)}</p>),
     s.list ? <ul key={`${s.h2.en}-l`}>{s.list.map((li) => <li key={li.en}>{t(li)}</li>)}</ul> : null,
     ...(s.after ?? []).map((p) => <p key={p.en}>{t(p)}</p>),
     s.reset && withReset ? <ConsentReset key={`${s.h2.en}-r`} label={resetLabel} /> : null,
-  ]);
+  ]), <p key="font" className="muted">{text.fontCredit[lang]}</p>];
 }
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/privacy">): Promise<Metadata> {
