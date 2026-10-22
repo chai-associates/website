@@ -7,8 +7,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton } from "@/lib/interactive";
-import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi, type ServiceCategory } from "@/lib/site";
+import { AskSection } from "@/lib/blocks";
+import { common, isLang, pageMeta, serviceCategories, services, type Bi, type ServiceCategory } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -90,18 +90,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
       </section>
 
       {/* ═══ ③ 不是你的情况？（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{common.notYours.title[lang]}</h2>
-            <p>{common.notYours.desc[lang]}</p>
-          </div>
-          <div className="btn-row">
-            <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-            <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
-          </div>
-        </div>
-      </section>
+      <AskSection lang={lang} title={common.notYours.title} desc={common.notYours.desc} action={<Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>} />
     </>
   );
 }

@@ -18,7 +18,7 @@
 // ═══════════════════════════════════════════════════════════════
 import type { Bi, ServiceCategory } from "@/lib/site";
 
-export type Block = { h2: Bi } | { p: Bi } | { list: Bi[] };
+type Block = { h2: Bi } | { p: Bi } | { list: Bi[] };
 export type Act = { name: Bi; source: Bi; inForce: Bi };
 export type Law = { act: Act; sections?: Bi };
 export type Article = { slug: string; category: ServiceCategory; services: string[]; title: Bi; summary: Bi; body: Block[]; image?: string; law?: Law[] };

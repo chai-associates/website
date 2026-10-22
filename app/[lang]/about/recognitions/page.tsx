@@ -10,9 +10,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton } from "@/lib/interactive";
-import { CoverHead } from "@/lib/blocks";
-import { common, isLang, pageMeta, whatsappLink, type Bi } from "@/lib/site";
+import { AskSection, CoverHead } from "@/lib/blocks";
+import { common, isLang, pageMeta, type Bi } from "@/lib/site";
 
 type Item = { kind: Bi; title: Bi; desc: Bi };
 
@@ -29,10 +28,6 @@ const text = {
     { kind: { zh: "会员资格", en: "Membership" }, title: { zh: "[机构名称]", en: "[Organisation]" }, desc: { zh: "[合作或会员关系，一句话]", en: "[The partnership or membership, in one line]" } },
   ] as Item[],
   pending: { zh: "内容正在准备中。", en: "Content is being prepared." },
-  ask: {
-    title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
-    desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
-  },
 };
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/about/recognitions">): Promise<Metadata> {
@@ -79,15 +74,7 @@ export default async function RecognitionsPage({ params }: PageProps<"/[lang]/ab
       </section>
 
       {/* ═══ ③ 想先聊聊你的情况？（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} />
     </>
   );
 }

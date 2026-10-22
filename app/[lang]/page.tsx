@@ -11,9 +11,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { OfficeTabs, PersonCard } from "@/lib/blocks";
+import { Icon, OfficeTabs, PersonCard, PhotoCard, type IconName } from "@/lib/blocks";
 import { HeaderOverHero } from "@/lib/interactive";
-import { cities, common, isLang, pageMeta, roles, serviceCategories, structuredData, team, type Lang } from "@/lib/site";
+import { cities, common, isLang, pageMeta, roles, serviceCategories, structuredData, team, type Bi, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -37,14 +37,14 @@ const text = {
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
     image: "/images/hero/hero-bg-v6.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
-    // 首屏下方的重点（图示可选 award / chat / lock / update，或在下面 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
+    // 首屏下方的重点（图示可选 award / chat / lock / update，或在 lib/blocks.tsx 的 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
       // 任何尺寸都一排 4 个：英文只用一个字（320 宽每格约 70px）
       { icon: "award", title: { zh: "多年经验", en: "Experience" } },
       { icon: "chat", title: { zh: "在线咨询", en: "Online" } },
       { icon: "lock", title: { zh: "隐私保密", en: "Privacy" } },
       { icon: "update", title: { zh: "主动跟进", en: "Updates" } }, // 律所的承诺：进度有变会主动告诉客户（见我们的理念「有时限」）
-    ],
+    ] as { icon: IconName; title: Bi }[],
   },
 
   // ② 服务范围（服务清单本身在 lib/site.ts）
@@ -63,22 +63,6 @@ const text = {
     title: { zh: "联系我们", en: "Contact Us" },
   },
 };
-
-// 线条图标（只有这一页用）：大小跟着旁边文字的字号走（1em = 一个字的大小），不另外设固定尺寸
-function Icon({ name }: { name: string }) {
-  const paths: Record<string, React.ReactNode> = {
-    award: <><circle cx="12" cy="8" r="5" /><path d="M8.5 12.5 7 21l5-3 5 3-1.5-8.5" /></>,
-    lock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
-    chat: <path d="M4 5h16v11H9l-5 4z" />,
-    update: <><path d="M20 12a8 8 0 1 1-2.34-5.66" /><path d="M20 4v5h-5" /></>,
-    arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
-  };
-  return (
-    <svg width="1.15em" height="1.15em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {paths[name]}
-    </svg>
-  );
-}
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
@@ -132,14 +116,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           {/* 5 个服务分类（内容在 lib/site.ts）· 卡片比例固定 3:2 */}
           <div className="card-grid">
             {serviceCategories.map((c) => (
-              <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card">
-                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
-                <div>
-                  <h3>{c.title[lang]}</h3>
-                  <p>{c.short[lang]}</p>
-                </div>
-                <span className="btn btn-light btn-sm photo-card-action">{common.viewService[lang]} <Icon name="arrow" /></span>
-              </Link>
+              <PhotoCard key={c.slug} href={`/${lang}/services/${c.slug}`} image={c.image} title={c.title[lang]} desc={c.short[lang]} action={common.viewService[lang]} />
             ))}
           </div>
         </div>

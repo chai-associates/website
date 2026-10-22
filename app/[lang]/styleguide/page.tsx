@@ -36,6 +36,7 @@ const text = {
     ["bg-subtle", "subtle 浅灰区块"], ["bg-accent", "accent 古铜"], ["bg-inverse", "inverse 深色底"],
   ],
   sizes: [
+    ["text-display", "display · 大数字（.stats，跟 lead 标签一组）"],
     ["text-title", "title · 页面标题 h1"], ["text-lead", "lead · 页面副标题（跟 title 一组）"],
     ["text-subtitle", "subtitle · 区块标题 h2"], ["text-body", "body · 说明、正文、卡片标题 h3（跟 subtitle 一组）"], ["text-caption", "caption · 小标签、面包屑、备注"],
   ],
@@ -211,6 +212,14 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
       <section className="section section-muted">
         <div className="container with-aside">
           <div className="stack">
+            <div>
+              <div className="list-head"><h2>数字</h2><span>stats · 大数字 → 标签 → 备注</span></div>
+              <dl className="stats">
+                <div><dt>{lang === "en" ? "Founded" : "年成立"}</dt><dd>2017</dd></div>
+                <div><dt>{lang === "en" ? "Lawyers" : "位律师"}</dt><dd>8</dd></div>
+                <div><dt>{lang === "en" ? "Offices" : "间办事处"}</dt><dd>5</dd><dd>{lang === "en" ? "Johor Bahru · Petaling Jaya · Melaka" : "新山 · 八打灵再也 · 马六甲"}</dd></div>
+              </dl>
+            </div>
             <div>
               <div className="list-head"><h2>资料列</h2><span>facts</span></div>
               <dl className="facts">

@@ -29,6 +29,7 @@ h2 { font-size: var(--text-subtitle); }
 h3 { font-size: var(--text-body); } /* 卡片标题 = 正文大小、粗体（跟说明用粗细和颜色区分） */
 p { max-width: var(--measure); }
 svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤小 */
+.icon { width: var(--icon-size); height: var(--icon-size); stroke-width: var(--icon-stroke); } /* lib/blocks.tsx 的 Icon */
 
 }
 
@@ -90,10 +91,10 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .hero-body h1 + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .hero-body > * + .btn-row { margin-top: var(--space-4); } /* 说明或引言 ↔ 按钮 24 */
 @media (width >= --theme(--breakpoint-md)) {
-  .hero { min-height: 70svh; align-items: center; }
+  .hero { min-height: var(--hero-min-h); align-items: center; }
   .hero-photo, .hero-top .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; height: auto; }
   .hero-body { padding-block: var(--space-6); }
-  .hero-top { min-height: 0; aspect-ratio: var(--ratio-hero); } /* 首页首屏：高度只看比例 4:3（不用 .hero 的 70svh，不然平板会被撑宽）；文字垂直置中 */
+  .hero-top { min-height: 0; aspect-ratio: var(--ratio-hero); } /* 首页首屏：高度只看比例 4:3（不用 --hero-min-h，不然平板会被撑宽）；文字垂直置中 */
   .hero-top .hero-body { padding-top: calc(var(--header-h) + var(--space-6)); } /* 首页首屏在页首后面：文字从页首下面开始算 */
   .hero-intro { padding-top: var(--space-5); } /* 电脑：照片 ↔ 重点三栏 48（手机的 48 已经在 .hero-body 下方） */
   .hero-body > * { max-width: var(--measure-short); } /* 文字只占左边，不压到右边的人 */
@@ -115,12 +116,13 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .intro .section-head { margin-bottom: 0; }
 .intro .prose > p:first-child { font-size: var(--text-lead); line-height: var(--leading-lead); }
 @media (width >= --theme(--breakpoint-md)) { .intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: start; gap: var(--space-6); } }
-/* 数字：一排 3 格，每格 = 大数字 → 标签 →（备注小字）；上面一条细线 */
-.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-5); padding-top: var(--space-4); border-top: var(--hairline) solid var(--color-line); }
-.stats > div { display: flex; flex-direction: column; gap: var(--space-1); }
-.stats dd:first-of-type { order: -1; font-size: var(--text-title); font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: var(--tracking-tight); } /* 数字排在标签上面（HTML 里标签在前，读屏顺序才对） */
-.stats dt { font-weight: var(--weight-medium); }
-.stats dd + dd { color: var(--color-ink-muted); font-size: var(--text-caption); }
+/* 积木：数字（全站通用）—— 大数字（--text-display）→ 标签（lead）→ 备注小字（可省略）。
+   每格只占自己的宽度、靠左一格接一格，放不下就换行；不平均撑满整排（数字才有份量） */
+.stats { display: flex; flex-wrap: wrap; gap: var(--space-5) var(--space-6); margin-top: var(--space-5); }
+.stats > div { display: flex; flex-direction: column; }
+.stats dd:first-of-type { order: -1; font-size: var(--text-display); font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: var(--tracking-tight); } /* 数字排在标签上面（HTML 里标签在前，读屏顺序才对） */
+.stats dt { font-size: var(--text-lead); font-weight: var(--weight-medium); line-height: var(--leading-heading); }
+.stats dd + dd { margin-top: var(--space-1); color: var(--color-ink-muted); font-size: var(--text-caption); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); } /* minmax(0, 1fr)：里面的滑动列、长字不会把整页撑宽 */
 /* 正文段落（个人介绍、离婚百科文章、服务重点）：段落 · 小标题 h2 · 清单 ul；整块限制在一个阅读行宽（读文章的感觉）
@@ -186,38 +188,35 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .card > .btn-row { margin-top: auto; padding-top: calc(var(--space-4) - var(--space-1)); } /* 4（gap）+ 20 = 跟内容相隔 24 */
 .card > .btn-row > .btn { flex: 1 1 auto; } /* 按钮照字的宽度排，放不下就换行再撑满；不会把中文挤成直的 */
 /* 卡片网格：每张至少 300px，自动决定一行几张（手机 1、平板 2、电脑 3） */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min)), 1fr)); gap: var(--space-4); }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--col-min-md)), 1fr)); gap: var(--space-4); }
 /* 照片卡片：照片当背景，文字放在照片里面（一张照片 = 一个项目，一眼看得出是一组）。
    固定排版：标题 + 说明在左上，按钮在右下。有照片的导览项目（服务分类、百科文章、更多关于我们）都用这个；单项服务用 .link-list（不放照片） */
-.photo-card { aspect-ratio: 3 / 2; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: clip; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); } /* 至少 3:2；字多的时候往下长，不会被切掉（clip 才会长，hidden 会切字） */
+.photo-card { aspect-ratio: var(--ratio-card); position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: clip; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); } /* 至少 3:2；字多的时候往下长，不会被切掉（clip 才会长，hidden 会切字） */
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
-.photo-card > img { z-index: -2; object-fit: cover; }
-.photo-card > img { transition: transform var(--motion) var(--ease); }
-@media (hover: hover) { .photo-card:hover > img, .person-card:hover .person-photo > img { transform: scale(1.03); } } /* 悬停：照片轻轻放大 */
+.photo-card > img { z-index: -2; object-fit: cover; transition: transform var(--motion) var(--ease); }
+@media (hover: hover) { .photo-card:hover > img, .person-card:hover .person-photo > img { transform: scale(var(--zoom-hover)); } } /* 悬停：照片轻轻放大 */
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
    .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、平板以上 3:1；没有照片时是浅灰底。
    照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
    .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
-.bleed { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--color-line); }
-.bleed > img { object-fit: cover; }
+.bleed, .cover-full { position: relative; aspect-ratio: var(--ratio-photo); overflow: hidden; background: var(--color-line); } /* .cover-full 见下面 */
+:is(.bleed, .cover-full) > img { object-fit: cover; }
 .page-head > .bleed { margin-top: var(--space-3); } /* 面包屑 ↔ 照片 16 */
 /* 全屏照片（关于我们 › 律所简介的团队合照）：跟首页一样先照片、后标题。满版 16:9，整张不裁；
    平板以上往上延伸到页首后面（页首透明，HeaderOverHero）。手机页首占比太大会挡到后排的头，所以手机接在页首下面 */
-.cover-full { position: relative; aspect-ratio: var(--ratio-photo); overflow: hidden; background: var(--color-line); }
-.cover-full > img { object-fit: cover; }
 @media (width >= --theme(--breakpoint-md)) { .cover-full { margin-top: calc(-1 * var(--header-h)); } }
 .cover-panel { position: relative; display: grid; gap: var(--space-4); padding-top: var(--space-4); background: var(--color-bg); }
 .cover-panel h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .cover-panel .facts { grid-template-columns: minmax(0, 1fr); } /* 资料栏一律单栏 */
 @media (width >= --theme(--breakpoint-md)) {
-  .bleed { aspect-ratio: 3 / 1; }
+  .bleed { aspect-ratio: var(--ratio-banner); }
   /* 往左多伸出一个页边距、里面留同样的空白：两个上角都能圆角，标题离框边有空间，而且标题仍然跟下面正文的左边对齐 */
   .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin: calc(-1 * var(--space-6)) var(--space-6) 0 calc(-1 * var(--gutter)); padding: var(--space-5) var(--space-5) 0 var(--gutter); border-radius: var(--radius-md) var(--radius-md) 0 0; }
 }
 /* 照片框：圆角裁切的场景照片（品牌语法 6：3:2；人像用 person-photo 的 4:5） */
-.photo-frame { position: relative; overflow: hidden; aspect-ratio: 3 / 2; border-radius: var(--radius-md); background: var(--color-line); }
+.photo-frame { position: relative; overflow: hidden; aspect-ratio: var(--ratio-card); border-radius: var(--radius-md); background: var(--color-line); }
 .photo-frame > img { object-fit: cover; }
 
 /* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句。不加框 ──
@@ -234,7 +233,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 人卡：照片 4:5，下方深色带压白字：名字 → 地区 · 职位。
    电脑（有鼠标）：鼠标移上去，深色带往上长，多显示语言、主要领域；手机、平板（没有鼠标）不显示，点进个人页看 */
 .person-card { position: relative; display: block; overflow: hidden; border-radius: var(--radius-md); }
-.person-photo { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-size: var(--text-title); }
+.person-photo { position: relative; display: grid; place-items: center; aspect-ratio: var(--ratio-portrait); overflow: hidden; border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-size: var(--text-title); }
 .person-photo > img { object-fit: cover; transition: transform var(--motion) var(--ease); }
 .person-info { position: absolute; inset-inline: 0; bottom: 0; display: grid; gap: var(--space-1); padding: var(--space-5) var(--space-3) var(--space-3); background: var(--scrim-person); color: var(--color-white); }
 .person-info p { font-size: var(--text-caption); line-height: var(--leading-lead); } /* 地区 · 职位，以及滑上来的语言、主要领域 */
@@ -246,7 +245,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 }
 
 /* ── 积木：资料列（小标签 + 内容，例如 语言 / 执业年份 / 办事处） ── */
-.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: var(--space-3); padding: var(--space-3) 0; border-block: var(--hairline) solid var(--color-line); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-xs)), 1fr)); gap: var(--space-3); padding: var(--space-3) 0; border-block: var(--hairline) solid var(--color-line); }
 .facts dt { font-size: var(--text-caption); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-ink-muted); }
 .facts dd { margin-top: var(--space-1); font-weight: var(--weight-medium); }
 /* 资料列里放清单（文章的法律依据：一条法令一项 → 下面小字：条文、生效日期、来源） */
@@ -276,7 +275,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .list-head + .rule-list > li:first-child { border-top: 0; padding-top: 0; } /* 紧接横线标题时，标题的线就是清单的第一条线 */
 
 /* ── 积木：步骤（合作流程）：每一步 = 小标签编号 → h3 → 说明；手机一栏，电脑自动并排 ── */
-.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--space-5) var(--space-4); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-sm)), 1fr)); gap: var(--space-5) var(--space-4); }
 .steps > li { display: flex; flex-direction: column; gap: var(--space-1); padding-top: var(--space-3); border-top: var(--border) solid var(--color-ink); }
 .steps > li > p { color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 
@@ -287,7 +286,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 @media (hover: hover) { .link-list a:hover::after { transform: translateX(var(--space-1)); } } /* 悬停：箭头往右推一点 */
 .link-list a > p { grid-column: 1; color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」：相隔 4、行距 1.5 */
 .link-list a:has(> p) { padding-block: var(--space-3); } /* 两行的（标题 + 说明）上下多留一点 */
-.link-list:has(p) { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); column-gap: var(--space-5); } /* 服务索引：电脑 2 栏，手机 1 栏 */
+.link-list:has(p) { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--col-min-lg)), 1fr)); column-gap: var(--space-5); } /* 服务索引：电脑 2 栏，手机 1 栏 */
 :is(.btn, .btn-row) + .link-list { margin-top: var(--space-4); } /* 主要按钮下面再列几个去处（百科读完 → 相关服务） */
 .list-head + .link-list > li:first-child > a { border-top: 0; } /* 紧接横线标题时，标题的线就是第一条线 */
 
@@ -306,12 +305,12 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 弹出视窗（律师个人页的预约表格）：原生 dialog，置中；后面变暗 */
 .dialog { margin: auto; width: min(100% - 2 * var(--gutter), var(--measure)); max-height: calc(100svh - 2 * var(--gutter)); padding: var(--space-4); border: 0; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-float); }
 .dialog::backdrop { background: var(--color-backdrop); }
-/* 打开：淡入 + 从 0.98 倍放大；后面渐暗。关闭时反过来（@starting-style = 刚打开那一刻的样子） */
+/* 打开：淡入 + 从 --zoom-open 倍放大；后面渐暗。关闭时反过来（@starting-style = 刚打开那一刻的样子） */
 .dialog, .dialog::backdrop { transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease), overlay var(--motion) allow-discrete, display var(--motion) allow-discrete; }
-.dialog:not([open]) { opacity: 0; transform: scale(0.98); }
+.dialog:not([open]) { opacity: 0; transform: scale(var(--zoom-open)); }
 .dialog:not([open])::backdrop { opacity: 0; }
 @starting-style {
-  .dialog[open] { opacity: 0; transform: scale(0.98); }
+  .dialog[open] { opacity: 0; transform: scale(var(--zoom-open)); }
   .dialog[open]::backdrop { opacity: 0; }
 }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
@@ -363,8 +362,8 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
 .nav-links, .nav-right > .lang-switch { display: none; } /* 导航、语言切换在 ☰ 选单里（只藏页首上的那个，选单里的照常显示） */
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
-.logo-wm { font-size: var(--text-caption); font-weight: var(--weight-medium); letter-spacing: 0.04em; } /* 手机 caption（全大写加字距，整排很宽）；电脑 subtitle */
-.logo-sub { font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: 0.08em; }
+.logo-wm { font-size: var(--text-caption); font-weight: var(--weight-medium); letter-spacing: var(--tracking-logo); } /* 手机 caption（全大写加字距，整排很宽）；电脑 subtitle */
+.logo-sub { font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: var(--tracking-logo-sub); }
 .nav-right { display: flex; align-items: center; gap: 0; } /* 选单按钮本身有留白（44 框里 22 的线），不用再加间距；320 宽英文才放得下 */
 @media (width >= --theme(--breakpoint-md)) {
   .logo-wm { font-size: var(--text-subtitle); }
@@ -388,8 +387,8 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 .nav-drop > summary { cursor: pointer; list-style: none; }
 .nav-drop > summary::-webkit-details-marker { display: none; }
 /* 有下拉的项目：名字旁边一个向下的小箭头（CSS 画的，跟着字的颜色和大小）；展开时翻成向上 */
-.nav-drop > summary::after { content: ""; width: 0.4em; height: 0.4em; margin: -0.2em 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
-.nav-drop[open] > summary::after { transform: translateY(0.2em) rotate(-135deg); }
+.nav-drop > summary::after { --chev: 0.4em; content: ""; width: var(--chev); height: var(--chev); margin: calc(var(--chev) / -2) 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
+.nav-drop[open] > summary::after { transform: translateY(calc(var(--chev) / 2)) rotate(-135deg); }
 .nav-drop-panel { position: absolute; top: 100%; right: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease); }
 @starting-style { .nav-drop[open] > .nav-drop-panel { opacity: 0; transform: translateY(calc(-1 * var(--space-1))); } } /* 展开那一刻：淡入 + 往下一点 */
 .nav-drop-panel a { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); color: var(--color-ink-muted); transition: color var(--motion-fast) var(--ease); }
@@ -399,15 +398,16 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 .nav-drop-extra > span { padding: var(--space-1) var(--space-4); font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: var(--tracking-wide); }
 
 /* ── 外框：选单（打开 / 关闭由 lib/interactive.tsx 切换 data-open） ── */
-.menu-btn { display: grid; place-content: center; gap: 5px; width: var(--tap-min); height: var(--tap-min); cursor: pointer; }
-.menu-btn span { display: block; width: 22px; height: 2px; border-radius: 2px; background: var(--color-ink); transition: transform var(--motion) var(--ease), opacity var(--motion-fast) var(--ease); }
-.menu[data-open="true"] .menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+/* ☰ 三条线（只属于这个按钮的尺寸）；打开时上下两条移到中间、转成 ✕：移动距离 = 线距 + 线粗 */
+.menu-btn { --bar-w: 22px; --bar-h: 2px; --bar-gap: 5px; display: grid; place-content: center; gap: var(--bar-gap); width: var(--tap-min); height: var(--tap-min); cursor: pointer; }
+.menu-btn span { display: block; width: var(--bar-w); height: var(--bar-h); border-radius: var(--bar-h); background: var(--color-ink); transition: transform var(--motion) var(--ease), opacity var(--motion-fast) var(--ease); }
+.menu[data-open="true"] .menu-btn span:nth-child(1) { transform: translateY(calc(var(--bar-gap) + var(--bar-h))) rotate(45deg); }
 .menu[data-open="true"] .menu-btn span:nth-child(2) { opacity: 0; }
-.menu[data-open="true"] .menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu[data-open="true"] .menu-btn span:nth-child(3) { transform: translateY(calc(-1 * (var(--bar-gap) + var(--bar-h)))) rotate(-45deg); }
 /* 后面变暗的部分：点它就关闭 */
 .menu-backdrop { position: fixed; inset: var(--header-h) 0 0 0; background: var(--color-backdrop); opacity: 0; visibility: hidden; transition: opacity var(--motion) var(--ease), visibility var(--motion); }
 /* 从右边滑进来的面板 */
-.menu-panel { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: min(360px, 85vw); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); overflow-y: auto; padding: var(--space-3) var(--gutter) var(--space-5); background: var(--color-bg); box-shadow: var(--shadow-float); transform: translateX(100%); visibility: hidden; transition: transform var(--motion) var(--ease), visibility var(--motion); }
+.menu-panel { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--menu-w); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); overflow-y: auto; padding: var(--space-3) var(--gutter) var(--space-5); background: var(--color-bg); box-shadow: var(--shadow-float); transform: translateX(100%); visibility: hidden; transition: transform var(--motion) var(--ease), visibility var(--motion); }
 .menu-panel > * { opacity: 0; transform: translateX(var(--space-4)); transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease); }
 .menu[data-open="true"] .menu-backdrop { opacity: 1; visibility: visible; }
 .menu[data-open="true"] .menu-panel { transform: none; visibility: visible; }
@@ -421,7 +421,7 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 .menu-social { display: flex; align-items: center; min-height: var(--tap-min); padding-left: var(--space-3); font-size: var(--text-body); color: var(--color-ink-muted); }
 .menu-social > a { display: inline-flex; align-items: center; justify-content: center; width: var(--tap-min); height: var(--tap-min); color: var(--color-ink); }
 .menu-social > a:first-of-type { margin-left: var(--space-2); }
-.social-icon { width: 1.25em; height: 1.25em; }
+
 .menu-sub a { display: flex; align-items: center; min-height: var(--tap-min); padding-left: var(--space-3); font-size: var(--text-body); color: var(--color-ink-muted); }
 .lang-switch { display: flex; align-self: flex-start; padding: var(--space-1); border-radius: var(--radius-pill); background: var(--color-subtle); }
 .lang-switch a { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-3); border-radius: var(--radius-pill); font-weight: var(--weight-medium); color: var(--color-ink-muted); white-space: nowrap; }
@@ -444,14 +444,14 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
   :is(.card-grid, .person-grid, .steps, .link-list) > :nth-child(3n + 2) { animation-range: entry 10% entry 70%; }
   :is(.card-grid, .person-grid, .steps, .link-list) > :nth-child(3n + 3) { animation-range: entry 20% entry 80%; }
 }
-/* ② 首屏（首页、律师团队的主管合伙人）：一打开，文字一行一行浮现；照片从 1.05 倍慢慢缩回原本大小 */
+/* ② 首屏（首页、律师团队的主管合伙人）：一打开，文字一行一行浮现；照片从 --zoom-settle 倍慢慢缩回原本大小 */
 .hero-body > * { animation: reveal var(--motion-slow) var(--ease) both; }
 .hero-body > :nth-child(2) { animation-delay: var(--stagger); }
 .hero-body > :nth-child(3) { animation-delay: calc(2 * var(--stagger)); }
 .hero-body > :nth-child(4) { animation-delay: calc(3 * var(--stagger)); }
 .hero-photo > img { animation: settle calc(2 * var(--motion-slow)) var(--ease) both; }
 @keyframes reveal { from { opacity: 0; transform: translateY(var(--reveal-distance)); } }
-@keyframes settle { from { transform: scale(1.05); } }
+@keyframes settle { from { transform: scale(var(--zoom-settle)); } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes fade-out { to { opacity: 0; } }
 

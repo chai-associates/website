@@ -9,9 +9,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton } from "@/lib/interactive";
-import { OfficeTabs } from "@/lib/blocks";
-import { common, isLang, pageMeta, structuredData, whatsappLink } from "@/lib/site";
+import { AskSection, OfficeTabs } from "@/lib/blocks";
+import { common, isLang, pageMeta, structuredData } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -63,15 +62,7 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
       </section>
 
       {/* ═══ ③ 不确定去哪一间？（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} title={text.ask.title} desc={text.ask.desc} />
     </>
   );
 }

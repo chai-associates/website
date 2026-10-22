@@ -12,8 +12,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton, HeaderOverHero } from "@/lib/interactive";
-import { cities, common, firm, isLang, lawyerCount, offices, pageMeta, whatsappLink, type Bi } from "@/lib/site";
+import { AskSection } from "@/lib/blocks";
+import { HeaderOverHero } from "@/lib/interactive";
+import { cities, common, firm, isLang, lawyerCount, offices, pageMeta, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
 
@@ -53,11 +54,6 @@ const text = {
       { title: { zh: "[第 3 步，例如：委托律师]", en: "[Step 3, e.g. engaging a lawyer]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
       { title: { zh: "[第 4 步，例如：办理案件]", en: "[Step 4, e.g. handling your matter]" }, desc: { zh: "[一句话说明这一步会发生什么]", en: "[One line on what happens at this step]" } },
     ] as Item[],
-  },
-  // ④ 直接咨询
-  ask: {
-    title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
-    desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
   },
 };
 
@@ -122,15 +118,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       </section>
 
       {/* ═══ ④ 想先聊聊你的情况？（白） ═══ */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} muted={false} />
     </>
   );
 }

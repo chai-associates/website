@@ -6,11 +6,11 @@
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton, SituationPicker } from "@/lib/interactive";
-import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { AskSection, PhotoCard } from "@/lib/blocks";
+import { SituationPicker } from "@/lib/interactive";
+import { common, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -102,29 +102,14 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
         <div className="container">
           <div className="card-grid">
             {serviceCategories.map((c) => (
-              <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card">
-                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
-                <div>
-                  <h3>{c.title[lang]}</h3>
-                  <p>{c.short[lang]}</p>
-                </div>
-                <span className="btn btn-light btn-sm photo-card-action">{common.viewService[lang]} →</span>
-              </Link>
+              <PhotoCard key={c.slug} href={`/${lang}/services/${c.slug}`} image={c.image} title={c.title[lang]} desc={c.short[lang]} action={common.viewService[lang]} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ═══ ④ 找不到你的情况？（浅灰；页脚是深色，最后一条色带不用深色） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} title={text.ask.title} desc={text.ask.desc} />
     </>
   );
 }

@@ -8,9 +8,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton } from "@/lib/interactive";
-import { CoverHead } from "@/lib/blocks";
-import { common, isLang, pageMeta, whatsappLink, type Bi } from "@/lib/site";
+import { AskSection, CoverHead } from "@/lib/blocks";
+import { common, isLang, pageMeta, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
 
@@ -35,10 +34,6 @@ const text = {
     // ⚠ 这一条是对客户的承诺，律所已确认做得到
     { title: { zh: "有时限", en: "Clear timelines" }, desc: { zh: "每个阶段要做什么、预计什么时候完成，事先说明；进度有变，会主动告诉你。", en: "We set out what each stage involves and when it should be done, and tell you promptly if that changes." } },
   ] as Item[],
-  ask: {
-    title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
-    desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
-  },
 };
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/about/values">): Promise<Metadata> {
@@ -81,15 +76,7 @@ export default async function ValuesPage({ params }: PageProps<"/[lang]/about/va
       </section>
 
       {/* ═══ ③ 想先聊聊你的情况？（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} />
     </>
   );
 }

@@ -146,7 +146,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
               </div>
             </div>
             <div className="person-photo">
-              {p.image ? <Image src={p.image} alt={name} fill preload sizes="(min-width: 860px) 40vw, 100vw" /> : initials(p.name)}
+              {p.image ? <Image src={p.image} alt={name} fill preload sizes="(min-width: 768px) 40vw, 100vw" /> : initials(p.name)}
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
               <Link className="text-link" href={`/${lang}/people/all`}>{text.allPeople[lang]} →</Link>
             </div>
             <div className="scroll-row">
-              {others.map((o) => <PersonCard key={o.slug} p={o} lang={lang} sizes="(min-width: 860px) 33vw, 80vw" />)}
+              {others.map((o) => <PersonCard key={o.slug} p={o} lang={lang} sizes="(min-width: 768px) 33vw, 80vw" />)}
             </div>
             <p className="scroll-hint">{text.swipe[lang]}</p>
           </div>

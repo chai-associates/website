@@ -12,9 +12,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton } from "@/lib/interactive";
-import { CoverHead } from "@/lib/blocks";
-import { aboutSections, common, isLang, pageMeta, whatsappLink, type AboutSection, type Bi } from "@/lib/site";
+import { AskSection, CoverHead } from "@/lib/blocks";
+import { aboutSections, common, isLang, pageMeta, type AboutSection, type Bi } from "@/lib/site";
 
 // 一项：date = 年份或年月；source = 媒体名称、合作单位或地点；href = 外部链接（报道原文、活动页面），没有就不填
 type Entry = { date: string; source: Bi; title: Bi; desc?: Bi; href?: string };
@@ -49,10 +48,6 @@ const text = {
     },
   } as Record<AboutSection, { lead: Bi; link: Bi; list: Entry[] }>,
   pending: { zh: "内容正在准备中。", en: "Content is being prepared." },
-  ask: {
-    title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
-    desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
-  },
 };
 
 // 预先生成三个子页面；不在清单里的网址 → 404
@@ -109,15 +104,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
       </section>
 
       {/* ═══ ③ 想先聊聊你的情况？（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} />
     </>
   );
 }

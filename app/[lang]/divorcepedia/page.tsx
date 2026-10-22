@@ -6,12 +6,12 @@
 // 文章资料在 lib/divorcepedia.ts；分类跟服务一样读 lib/site.ts。没有文章的分类自动隐藏。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AskSection, PhotoCard } from "@/lib/blocks";
 import { articles } from "@/lib/divorcepedia";
-import { ConsultButton, TabsHash } from "@/lib/interactive";
-import { common, isLang, pageMeta, serviceCategories, whatsappLink } from "@/lib/site";
+import { TabsHash } from "@/lib/interactive";
+import { common, isLang, pageMeta, serviceCategories } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -71,11 +71,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
                   <div className="stack">
                     <div className="card-grid">
                       {g.list.map((a) => (
-                        <Link key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} className="photo-card">
-                          {a.image && <Image src={a.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
-                          <h3>{a.title[lang]}</h3>
-                          <span className="btn btn-light btn-sm photo-card-action">{common.readArticle[lang]} →</span>
-                        </Link>
+                        <PhotoCard key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} image={a.image} title={a.title[lang]} action={common.readArticle[lang]} />
                       ))}
                     </div>
                     <Link className="text-link" href={`/${lang}/services/${g.slug}`}>{text.services[lang].replace("{category}", g.title[lang])} →</Link>
@@ -89,15 +85,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
       </section>
 
       {/* ═══ ③ 想先聊聊你的情况？（白） ═══ */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.ask.title[lang]}</h2>
-            <p>{text.ask.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
-        </div>
-      </section>
+      <AskSection lang={lang} title={text.ask.title} desc={text.ask.desc} muted={false} />
     </>
   );
 }

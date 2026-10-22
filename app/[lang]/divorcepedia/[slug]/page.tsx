@@ -11,13 +11,11 @@
 // 文章内容在 lib/divorcepedia.ts；这里只放这一页的固定文字。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConsultButton } from "@/lib/interactive";
-import { CoverHead } from "@/lib/blocks";
+import { AskSection, CoverHead, PhotoCard } from "@/lib/blocks";
 import { articles, lawsPortal } from "@/lib/divorcepedia";
-import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
+import { common, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -116,20 +114,13 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
       </section>
 
       {/* ═══ ③ 想请律师帮你办？（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.handoff.title[lang]}</h2>
-            <p>{text.handoff.desc[lang]}</p>
-          </div>
-          <ConsultButton className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} intro={fill(text.message)}>{common.askLawyer[lang]}</ConsultButton>
-          {related.length > 0 && (
-            <ul className="link-list">
-              {related.map((r) => <li key={r.slug}><Link href={`/${lang}/services/${r.category}/${r.slug}`}>{text.viewService[lang].replace("{service}", r.title[lang])}</Link></li>)}
-            </ul>
-          )}
-        </div>
-      </section>
+      <AskSection lang={lang} title={text.handoff.title} desc={text.handoff.desc} message={fill(text.message)}>
+        {related.length > 0 && (
+          <ul className="link-list">
+            {related.map((r) => <li key={r.slug}><Link href={`/${lang}/services/${r.category}/${r.slug}`}>{text.viewService[lang].replace("{service}", r.title[lang])}</Link></li>)}
+          </ul>
+        )}
+      </AskSection>
 
       {/* ═══ ④ 同一个分类的其他文章（白） ═══ */}
       {more.length > 0 && (
@@ -141,14 +132,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             </div>
             <div className="card-grid">
               {more.slice(0, 3).map((m) => (
-                <Link key={m.slug} href={`/${lang}/divorcepedia/${m.slug}`} className="photo-card">
-                  {m.image && <Image src={m.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
-                  <div>
-                    <h3>{m.title[lang]}</h3>
-                    <p>{m.summary[lang]}</p>
-                  </div>
-                  <span className="btn btn-light btn-sm photo-card-action">{common.readArticle[lang]} →</span>
-                </Link>
+                <PhotoCard key={m.slug} href={`/${lang}/divorcepedia/${m.slug}`} image={m.image} title={m.title[lang]} desc={m.summary[lang]} action={common.readArticle[lang]} />
               ))}
             </div>
           </div>

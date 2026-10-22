@@ -226,12 +226,16 @@ export const common = {
   people: { zh: "律师团队", en: "Our People" },
   viewAll: { zh: "查看全部服务", en: "View All Services" },
   askLawyer: { zh: "直接咨询律师", en: "Ask a Lawyer Now" },
-  readMore: { zh: "阅读详情", en: "Read More" }, // 关于我们的导览卡
   readArticle: { zh: "阅读全文", en: "Read Article" }, // 离婚百科的文章卡
   viewService: { zh: "查看服务", en: "View Service" }, // 服务分类的照片卡（首页、服务总览）
   call: { zh: "拨打电话", en: "Call Now" },
   whatsapp: { zh: "WhatsApp", en: "WhatsApp" }, // 全站统一一个 WhatsApp 号码（firm.whatsapp）
   directions: { zh: "开始导航", en: "Get Directions" },
+  // 页面结尾「问律师」区块的预设文字（lib/blocks.tsx 的 AskSection；页面可以换自己的标题、说明）
+  ask: {
+    title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
+    desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
+  },
   notYours: {
     title: { zh: "不是你的情况？", en: "Not quite your situation?" },
     desc: { zh: "看看我们的全部服务，或直接问律师。", en: "Browse all our services, or ask a lawyer directly." },
@@ -248,7 +252,7 @@ export const disclaimer: Bi = {
 };
 
 // ── 社交媒体（选单和页脚都用这里） ──
-// icon：图示（lib/blocks.tsx 的 SocialIcon）
+// icon：图示（lib/blocks.tsx 的 Icon）
 export const socials: { label: string; url: string; icon: "facebook" | "instagram" }[] = [
   { label: "Facebook", url: "https://www.facebook.com/CHAI.ASSOCIATES/", icon: "facebook" },
   { label: "Instagram", url: "https://www.instagram.com/chai.associates/", icon: "instagram" },
