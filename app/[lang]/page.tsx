@@ -11,7 +11,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { cities, cityOf, common, displayName, initials, isLang, mapsLink, offices, pageMeta, roles, serviceCategories, structuredData, team, whatsappLink, type Lang } from "@/lib/site";
+import { OfficeTabs } from "@/lib/blocks";
+import { cities, cityOf, common, displayName, initials, isLang, pageMeta, roles, serviceCategories, structuredData, team, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -91,23 +92,24 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(lang) }} />
 
       {/* ═════════ ① 首屏 ═════════
-          照片约占画面 40% 高，下缘淡出成白色，小标签（城市）+ 标题压在上面；
-          下面接说明 → 按钮 → 重点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
+          电脑：照片满版、靠右对齐（缩放时右边的人不会被切掉），小标签 → 标题 → 说明 → 按钮放左边；
+          手机：照片在上，文字在下。下面接重点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
       <section className="hero">
-        {/* 手机上首屏是直的，照片要放大到约 2 倍萤幕宽才填满 → 手机载入 2 倍宽的版本，才不会糊 */}
-        <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="(min-width: 860px) 100vw, 200vw" style={{ objectPosition: "40% 30%" }} />
-        <div className="container">
+        <div className="hero-photo">
+          <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" />
+        </div>
+        <div className="container hero-body">
           <p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>
           <h1>{hero.title[lang]}</h1>
+          <p>{hero.sub[lang]}</p>
+          <div className="btn-row">
+            <Link className="btn btn-outline" href={`/${lang}/services`}>
+              {hero.cta[lang]} <Icon name="arrow" />
+            </Link>
+          </div>
         </div>
       </section>
       <div className="container hero-intro">
-        <p>{hero.sub[lang]}</p>
-        <div className="btn-row">
-          <Link className="btn btn-outline" href={`/${lang}/services`}>
-            {hero.cta[lang]} <Icon name="arrow" />
-          </Link>
-        </div>
         <ul className="points">
           {hero.points.map((p) => <li key={p.icon}><Icon name={p.icon} /> {p.title[lang]}</li>)}
         </ul>
@@ -160,38 +162,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* ═════════ ④ 联系我们 ═════════
-          城市按钮：选中的变黑底，只显示该城市的办事处。新增办事处或城市：只改 lib/site.ts。 */}
+          城市按钮 + 办事处卡片：跟办事处页共用 lib/blocks.tsx 的 OfficeTabs。新增办事处或城市：只改 lib/site.ts。 */}
       <section id="contact" className="section">
         <div className="container">
           <div className="section-head"><h2>{contact.title[lang]}</h2></div>
 
-          {/* 选城市：选中的变黑底，下面只显示该城市的办事处（不需要 JavaScript） */}
-          <div className="tabs">
-            {cities.map((c, i) => (
-              <div key={c.id} className="tab">
-                <input type="radio" name="office-city" id={`city-${c.id}`} defaultChecked={i === 0} />
-                <label htmlFor={`city-${c.id}`} className="chip">
-                  {c.label[lang]} <em>{offices.filter((o) => o.city === c.id).length}</em>
-                </label>
-                <div className="tab-panel">
-                  <div className="card-grid">
-                    {offices.filter((o) => o.city === c.id).map((o) => (
-                      <div key={o.address} className="card">
-                        <h3>{o.name[lang]}</h3>
-                        <p>{o.address}</p>
-                        <p>{o.phoneDisplay}</p>
-                        <div className="btn-row">
-                          <a className="btn btn-ghost btn-sm" href={`tel:${o.phone}`}>{common.call[lang]}</a>
-                          <a className="btn btn-ghost btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.whatsapp[lang]}</a>
-                          <a className="btn btn-ghost btn-sm" href={mapsLink(o.address)} target="_blank" rel="noopener">{common.directions[lang]}</a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <OfficeTabs lang={lang} />
         </div>
       </section>
     </>

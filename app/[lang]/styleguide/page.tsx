@@ -114,12 +114,10 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           </div>
           <div>
-          <div className="list-head"><h3>小按钮</h3><span>chip · 选中或主要领域（data-lead）变黑 · 前面可加 filter-label</span></div>
+          <div className="list-head"><h3>小按钮</h3><span>chip · 主要领域（data-lead）变黑</span></div>
           <div className="btn-row">
-            <span className="filter-label">筛选说明（filter-label）</span>
             <a className="chip" data-lead href="#">抚养权与监护权（data-lead）→</a>
             <a className="chip" href="#">探视权（chip）→</a>
-            <button type="button" className="chip" aria-pressed="true">新山（aria-pressed）</button>
           </div>
           </div>
           </div>
@@ -141,7 +139,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </div>
           </div>
           <div>
-            <div className="list-head"><h2>人物卡片</h2><span>人像 4:5 · 手机 2 栏、电脑 4 栏</span></div>
+            <div className="list-head"><h2>人物卡片</h2><span>人像 4:5 · 手机 2 栏、电脑 6 栏</span></div>
             <div className="person-grid">
               {text.people.map((p) => (
                 <article key={p.initials} className="person-card reveal">
@@ -152,6 +150,14 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 </article>
               ))}
             </div>
+          </div>
+          <div>
+            {["合伙人与顾问律师", "律师"].map((t) => (
+              <details key={t} className="fold">
+                <summary><h2>{t}</h2><span>fold · 2 位</span></summary>
+                <p>点开才看到里面的内容（律师团队的职位分组）</p>
+              </details>
+            ))}
           </div>
           <div>
             <div className="list-head"><h2>照片框</h2><span>photo-frame · 场景 3:2</span></div>
@@ -166,25 +172,26 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <p className="muted">muted：次要文字用灰色</p>
           </div>
           <div>
-            <div className="list-head"><h2>首屏与重点三栏</h2><span>hero（照片下缘淡出，压小标签 + 标题）· hero-intro · points</span></div>
+            <div className="list-head"><h2>满版照片</h2><span>照片格式 ②：真正页面上左右贴齐画面（这里放在 container 里只是示范）</span></div>
             <div className="hero">
-              <Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" />
-              <div>
+              <div className="hero-photo"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" /></div>
+              <div className="hero-body">
                 <p className="tag">新山 · 雪兰莪 · 马六甲</p>
-                <h1>{lang === "en" ? "Family law,\nhandled with care." : "专注家事法律，\n陪你走过人生转折"}</h1>
+                <h1>hero</h1>
+                <p>电脑：照片靠右、文字在左；手机：照片在上、文字在下（首页首屏、主管合伙人的话）</p>
               </div>
             </div>
             <div className="hero-intro">
-              <p>hero-intro：照片下面接说明 → 按钮</p>
-              <div className="btn-row"><a className="btn btn-outline" href="#">了解我们的服务 →</a></div>
               <ul className="points">
                 {["多年经验", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
               </ul>
             </div>
-            <div className="cover">
-              <Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" />
-              <h1>{lang === "en" ? "cover: article title" : "cover：百科文章封面"}</h1>
-              <p>手机 16:9、电脑 4:1；照片 2400 × 1350，标题压在下方</p>
+            <div className="bleed"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" /></div>
+            <div className="cover-panel">
+              <div>
+                <h1>cover-panel</h1>
+                <p>bleed + cover-panel：满版照片 + 白色标题框（百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）</p>
+              </div>
             </div>
           </div>
           <div>

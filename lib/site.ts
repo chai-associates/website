@@ -164,6 +164,8 @@ export const services: { slug: string; category: ServiceCategory; title: Bi; sho
 
 // ── 关于我们的子页面（选单、/about/[section] 都读这里）：对应「律所问卷」Tab 6–8 ──
 // 网址：/about/media、/about/community、/about/events；内容写在 app/[lang]/about/[section]/page.tsx
+// image：页面顶部的满版照片（跟离婚百科文章同一个格式：2400 × 1350，主体放在中间那条 2400 × 600 里；换照片用新文件名）
+// 「我们的理念」「荣誉与认可」也是独立页面，但内容格式不同，各自写在 app/[lang]/about/values、recognitions
 export const aboutSections = [
   { slug: "media", title: { zh: "媒体报道", en: "In the Media" }, image: "/images/about/media.png" },
   { slug: "community", title: { zh: "公益活动", en: "Community" }, image: "/images/about/community.png" },

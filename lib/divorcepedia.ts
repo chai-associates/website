@@ -8,7 +8,8 @@
 //   services  相关服务的 slug（服务页的「相关文章」、文章页的「相关服务」用）
 //   title     标题（顾客会问的问题）· summary 一句话重点（列表卡片和文章开头）
 //   body      内文：{ h2 } 小标题 · { p } 段落 · { list } 清单
-//   law       法律依据（文章开头的资料栏）：name 法令名称 · amended 这条法律最近一次修订的日期（由律师确认）；文章没有引用法令就不填
+//   law       法律依据（文章开头的资料栏，一条法令一项）：act 法令 · sections 文章引用的条文 · inForce 这条法令最近一次修订的生效日期（由律师确认）
+//             来源统一连到总检察署的「马来西亚联邦法律资料库」；文章没有引用法令就不填
 //   image     封面照片（可不填，没填就是深灰底）：放进 public/images/divorcepedia/，填 "/images/divorcepedia/文件名.png"（换照片时用新文件名，才不会被旧缓存卡住）
 //             尺寸统一 2400 × 1350 px（16:9）；主体放在中间那条 2400 × 600 里（电脑版只显示这一条）
 // 新增文章：照格式加一个物件就好。不要的文章：删掉那一个物件。
@@ -18,18 +19,30 @@
 import type { Bi, ServiceCategory } from "@/lib/site";
 
 export type Block = { h2: Bi } | { p: Bi } | { list: Bi[] };
-export type Article = { slug: string; category: ServiceCategory; services: string[]; title: Bi; summary: Bi; body: Block[]; image?: string; law?: { name: Bi; amended: Bi } };
+export type Act = { name: Bi; source: Bi; inForce: Bi };
+export type Law = { act: Act; sections?: Bi };
+export type Article = { slug: string; category: ServiceCategory; services: string[]; title: Bi; summary: Bi; body: Block[]; image?: string; law?: Law[] };
 
-// 法令名称（多篇共用）；修订日期由律师确认后填上
-const LRA: Bi = { zh: "1976 年法律改革（婚姻与离婚）法令", en: "Law Reform (Marriage and Divorce) Act 1976" };
-const GIA: Bi = { zh: "1961 年未成年人监护法令", en: "Guardianship of Infants Act 1961" };
+// 法令（多篇共用）。source = 资料来源的文字；网址统一是 lawsPortal（总检察署的资料库每次打开都会产生新的连结，
+// 没办法直接连到某一条法令，所以写上法令编号，读者在资料库里搜寻）。最近修订的生效日期由律师确认后填上。
+export const lawsPortal = "https://lom.agc.gov.my/";
 const TBC: Bi = { zh: "[待律师确认]", en: "[to be confirmed]" };
+const LRA: Act = {
+  name: { zh: "1976 年法律改革（婚姻与离婚）法令", en: "Law Reform (Marriage and Divorce) Act 1976" },
+  source: { zh: "马来西亚联邦法律资料库 · 第 164 号法令", en: "Laws of Malaysia portal · Act 164" },
+  inForce: TBC,
+};
+const GIA: Act = {
+  name: { zh: "1961 年未成年人监护法令", en: "Guardianship of Infants Act 1961" },
+  source: { zh: "马来西亚联邦法律资料库 · 第 351 号法令", en: "Laws of Malaysia portal · Act 351" },
+  inForce: TBC,
+};
 
 export const articles: Article[] = [
   // ── 办理离婚 ─────────────────────────────────
   {
     slug: "joint-or-single-petition",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 52、53、54 条", en: "ss.52, 53, 54" } }],
     image: "/images/divorcepedia/joint-single-petition.png",
     category: "divorce",
     services: ["joint-petition", "single-petition"],
@@ -52,7 +65,7 @@ export const articles: Article[] = [
   },
   {
     slug: "marriage-counselling",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 106 条", en: "s.106" } }],
     image: "/images/divorcepedia/marriage-counsel.png",
     category: "divorce",
     services: ["single-petition"],
@@ -126,7 +139,7 @@ export const articles: Article[] = [
   },
   {
     slug: "adultery",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 58、59 条", en: "ss.58, 59" } }],
     image: "/images/divorcepedia/adultery.png",
     category: "divorce",
     services: ["adultery"],
@@ -151,7 +164,7 @@ export const articles: Article[] = [
   },
   {
     slug: "annulment-vs-divorce",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 69、70 条", en: "ss.69, 70" } }],
     image: "/images/divorcepedia/annulment-divorce.png",
     category: "divorce",
     services: ["annulment"],
@@ -185,7 +198,7 @@ export const articles: Article[] = [
   // ── 孩子 ───────────────────────────────────
   {
     slug: "custody-and-guardianship",
-    law: { name: { zh: `${LRA.zh} · ${GIA.zh}`, en: `${LRA.en} · ${GIA.en}` }, amended: TBC },
+    law: [{ act: LRA }, { act: GIA }],
     image: "/images/divorcepedia/custody-and-guardianship.png",
     category: "children",
     services: ["custody"],
@@ -235,7 +248,7 @@ export const articles: Article[] = [
   // ── 财产与赡养费 ───────────────────────────────
   {
     slug: "maintenance",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 78 条", en: "s.78" } }],
     image: "/images/divorcepedia/maintenance.png",
     category: "finances",
     services: ["spousal-maintenance", "child-maintenance"],
@@ -263,7 +276,7 @@ export const articles: Article[] = [
   },
   {
     slug: "matrimonial-assets",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 76 条", en: "s.76" } }],
     image: "/images/divorcepedia/matrimonial-assets.png",
     category: "finances",
     services: ["matrimonial-assets", "debt-recovery"],
@@ -318,7 +331,7 @@ export const articles: Article[] = [
   },
   {
     slug: "foreign-divorce",
-    law: { name: LRA, amended: TBC },
+    law: [{ act: LRA, sections: { zh: "第 107(3) 条", en: "s.107(3)" } }],
     image: "/images/divorcepedia/foreign-divorce.png",
     category: "after-divorce",
     services: ["foreign-divorce"],

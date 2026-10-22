@@ -71,17 +71,26 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .quote blockquote p::after { content: close-quote; }
 .quote figcaption { margin-top: var(--space-4); color: var(--color-ink-muted); font-size: var(--text-caption); font-weight: var(--weight-medium); }
 .quote + .text-link { margin-top: var(--space-3); }
-/* 首屏（首页）：照片约占画面 52% 高，下缘淡出成白色；小标签 + 大标题压在淡出的地方。
-   照片是品牌语法 6 的例外（满版宽，不用 3:2 / 4:5）。
-   下面接 .hero-intro：说明（lead）→ 按钮 */
-.hero { position: relative; isolation: isolate; display: flex; align-items: flex-end; min-height: 52svh; padding-top: var(--space-6); }
-.hero > img { z-index: -2; object-fit: cover; }
-.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-hero); }
-.hero .tag + h1 { margin-top: var(--space-2); }
-.hero-intro { padding-top: var(--space-3); }
-.hero-intro > p { color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
-.hero-intro > p + .btn-row { margin-top: var(--space-4); }
-.hero-intro > .btn-row + .points { margin-top: var(--space-5); }
+/* 照片格式 ②「满版」：左右贴齐画面边缘，不留白、不圆角（卡片里的照片才圆角留白）。
+   首屏（首页）与主管合伙人的话共用 .hero：
+   电脑：照片铺满整个区块、永远靠右对齐（画面缩窄时切掉的是左边，右边的人不会被切掉），左边淡出成白色，文字放左边；
+   手机：照片 16:9 在上，文字接在下面。 */
+.hero { position: relative; isolation: isolate; display: grid; }
+.hero-photo { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--color-line); }
+.hero-photo > img { object-fit: cover; object-position: right center; }
+.hero-body { padding-top: var(--space-4); }
+.hero-body > * { max-width: var(--measure); }
+.hero-body .tag + h1 { margin-top: var(--space-2); }
+.hero-body h1 + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
+.hero-body > p + .btn-row { margin-top: var(--space-4); }
+@media (min-width: 860px) {
+  .hero { min-height: 70svh; align-items: center; }
+  .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; }
+  .hero-photo::after { content: ""; position: absolute; inset: 0; background: var(--scrim-side); }
+  .hero-body { padding-block: var(--space-6); }
+  .hero-body > * { max-width: 26em; } /* 文字只占左边，不压到右边的人 */
+}
+.hero-intro { padding-top: var(--space-5); } /* 首屏下方：重点三栏 */
 /* 重点三栏（首屏下方）：上下细线，每一点 = 图示 + 一个短标题 */
 .points { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); padding: var(--space-4) 0; border-block: var(--hairline) solid var(--color-line); } /* 一排放不下（320 宽英文）就自动换行，不会撑出画面 */
 .points li { display: flex; align-items: center; gap: var(--space-2); font-weight: var(--weight-medium); white-space: nowrap; } /* 图示和字同一排 */
@@ -91,22 +100,21 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 左右并排：照片（左）+ 文字（右）；手机上下排。文字那边用 section-head 等积木 */
 .split { display: grid; gap: var(--space-4); align-items: center; }
 @media (min-width: 860px) { .split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); } }
-/* split-golden：左窄右宽 1 : 1.618，上缘对齐（办事处页：办事处卡片 + 那里的律师）；手机上下排，相隔 24 */
-.split-golden { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
-@media (min-width: 860px) { .split-golden { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: start; } }
 .split .section-head { margin-bottom: 0; }
 .split .section-head + * { margin-top: var(--space-4); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); } /* minmax(0, 1fr)：里面的滑动列、长字不会把整页撑宽 */
 /* 正文段落（个人介绍、离婚百科文章、服务重点）：段落 · 小标题 h2 · 清单 ul；整块限制在一个阅读行宽（读文章的感觉）
-   间距层级：新的小节前 48 → 小标题 ↔ 它的内容 8 → 段落 ↔ 段落 16 → 「如下：」↔ 清单 8 → 清单项目之间 8 */
+   间距层级：每一级都比「行与行」（行距 1.75 → 字与字上下约 12–14）大，眼睛才分得出换行和分段：
+   新的小节前 64 → 段落 ↔ 段落 24（约一行高）→ 小标题 ↔ 它的内容 16 → 「如下：」↔ 清单 16 → 清单项目之间 16
+   小标题上方 64 远大于下方 16，标题才看得出属于下面那一段 */
 .prose { max-width: var(--measure); }
-.prose > * + * { margin-top: var(--space-3); }
-.prose > * + h2 { margin-top: var(--space-5); }
-.prose > h2 + * { margin-top: var(--space-2); }
-.prose > p + ul { margin-top: var(--space-2); }
+.prose > * + * { margin-top: var(--space-4); }
+.prose > * + h2 { margin-top: var(--space-6); }
+.prose > h2 + * { margin-top: var(--space-3); }
+.prose > p + ul { margin-top: var(--space-3); }
 .prose > ul { padding-left: var(--space-4); list-style: disc; }
-.prose > ul > li + li { margin-top: var(--space-2); }
+.prose > ul > li + li { margin-top: var(--space-3); }
 .prose > ul > li::marker { color: var(--color-ink-muted); }
 /* 品牌语法 4：一组清单的开头 = 左标题、右边副标题或链接、下面一条细线 */
 .list-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: var(--hairline) solid var(--color-line); }
@@ -141,9 +149,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-pill); font-weight: var(--weight-medium); white-space: nowrap; }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
 /* 筛选说明：一排 chip 前面的灰色小字，例如团队页的「办事处」 */
-.filter-label { color: var(--color-ink-muted); }
 /* 选中的按钮变黑（城市分页、团队筛选共用）；data-lead = 主要领域（个人页），一样变黑 */
-.chip[aria-pressed="true"], .chip[data-lead], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
+.chip[data-lead], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
 .tab > input:checked + label em { color: var(--color-inverse-muted); }
 
 /* ── 积木：卡片 ─────────────────────────────────── */
@@ -164,16 +171,18 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .photo-card:hover > img { transform: scale(1.03); }
 .photo-card h3 + p { margin-top: var(--space-2); }
 .photo-card-action { align-self: flex-end; }
-/* 封面（离婚百科文章）：照片在上；标题不压在照片上，放进白色标题框（左：标题 + 一句话重点；右：资料栏）。
-   手机：照片 16:9，标题框接在下面。电脑：照片 3:1，标题框从左下角叠上照片 64，右边留一截照片。
-   照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。没有照片时是浅灰底。 */
-.cover { display: grid; margin-top: var(--space-3); }
-.cover > .photo-frame { aspect-ratio: 16 / 9; }
+/* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
+   .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、电脑 3:1；没有照片时是浅灰底。
+   照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
+   .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
+.bleed { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--color-line); }
+.bleed > img { object-fit: cover; }
+.page-head > .bleed { margin-top: var(--space-3); } /* 面包屑 ↔ 照片 16 */
 .cover-panel { position: relative; display: grid; gap: var(--space-4); padding-top: var(--space-4); background: var(--color-bg); }
 .cover-panel h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .cover-panel .facts { grid-template-columns: minmax(0, 1fr); } /* 资料栏一律单栏 */
 @media (min-width: 860px) {
-  .cover > .photo-frame { aspect-ratio: 3 / 1; }
+  .bleed { aspect-ratio: 3 / 1; }
   .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin: calc(-1 * var(--space-6)) var(--space-6) 0 0; padding: var(--space-5) var(--space-5) 0 0; border-top-right-radius: var(--radius-md); }
 }
 /* 照片框：圆角裁切的场景照片（品牌语法 6：3:2；人像用 person-photo 的 4:5） */
@@ -189,7 +198,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* ── 积木：人物卡片（照片 4:5 → 名字 → 职位 → 办事处 · 语言） ── */
 /* 人物网格：手机 2 栏、电脑 4 栏 */
 .person-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); }
-@media (min-width: 860px) { .person-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 860px) { .person-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } } /* 电脑 6 栏：一屏看得到一排完整资料 + 下一排的照片，知道还可以往下看 */
 .person-card { display: flex; flex-direction: column; gap: var(--space-1); }
 .person-photo { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: var(--space-2); border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-size: var(--text-title); }
 .person-photo > img { object-fit: cover; }
@@ -201,6 +210,21 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .facts dt { font-size: var(--text-caption); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-ink-muted); }
 .facts dd { margin-top: var(--space-1); font-weight: var(--weight-medium); }
 .prose + .facts { margin-top: var(--space-4); } /* 一段文字后面接资料列（关于我们的律所简介） */
+/* 资料列里放清单（文章的法律依据：一条法令一项 → 下面小字：条文、生效日期、来源） */
+.facts dd > ul { padding-left: var(--space-4); list-style: disc; }
+.facts dd > ul > li + li { margin-top: var(--space-3); }
+.facts dd > ul > li > p { margin-top: var(--space-1); color: var(--color-ink-muted); font-size: var(--text-caption); font-weight: var(--weight-regular); }
+
+/* ── 积木：折叠分组（律师团队的职位）：一行标题 + 人数 + 「＋」，点开才看到里面的人；原生 details，不需要 JavaScript ── */
+.fold { border-bottom: var(--hairline) solid var(--color-line); }
+.fold:first-of-type { border-top: var(--hairline) solid var(--color-line); }
+.fold > summary { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap); padding-block: var(--space-4); cursor: pointer; list-style: none; }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary > h2 { flex: 1; }
+.fold > summary > span { color: var(--color-ink-muted); }
+.fold > summary::after { content: "+"; font-size: var(--text-title); font-weight: var(--weight-regular); line-height: 1; transition: transform var(--motion-fast) var(--ease); }
+.fold[open] > summary::after { transform: rotate(45deg); }
+.fold > summary + * { padding-bottom: var(--space-5); }
 
 /* ── 积木：横线清单（重点、经历、理念） ── */
 .rule-list > li { padding: var(--space-3) 0; border-bottom: var(--hairline) solid var(--color-line); }

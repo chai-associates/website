@@ -1,8 +1,9 @@
 // ═══════════════════════════════════════════════════════════════
 // 关于我们的子页面 /about/[section]（媒体报道、公益活动、活动与讲座共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 清单（卡片：小标签「年份 · 来源或地点」→ 标题 → 说明 → 链接）
-//          ③ 想先聊聊你的情况？
+// 区块顺序：① 面包屑 → 满版照片 → 标题框（lib/blocks.tsx 的 CoverHead；照片在 lib/site.ts 的 aboutSections.image）
+//          ② 清单（卡片：小标签「年份 · 来源或地点」→ 标题 → 说明 → 链接）
+//          ③ 想先聊聊你的情况？（不放「回到关于我们」：选单里就有，读完不再把人带去别页）
 // 三个页面的名称在 lib/site.ts（aboutSections，选单也读那里）；每一页的内容写在下面 text.sections。
 // 清单是空的就显示「内容准备中」。对应「律所问卷」Tab 6–8。
 // ⚠ 律师公会宣传规定：只列报道 / 活动的事实（名称、来源、日期、链接），不转贴称赞律所的内容、不写案件结果。
@@ -11,6 +12,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CoverHead } from "@/lib/blocks";
 import { aboutSections, common, isLang, pageMeta, whatsappLink, type AboutSection, type Bi } from "@/lib/site";
 
 // 一项：date = 年份或年月；source = 媒体名称、合作单位或地点；href = 外部链接（报道原文、活动页面），没有就不填
@@ -74,17 +76,16 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
   return (
     <>
       {/* ═══ ① 标题 ═══ */}
-      <section className="page-head">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li><Link href={`/${lang}/about`}>{text.about[lang]}</Link></li>
-            <li aria-current="page">{s.title[lang]}</li>
-          </ol>
-          <h1>{s.title[lang]}</h1>
-          <p>{content.lead[lang]}</p>
-        </div>
-      </section>
+      <CoverHead
+        crumbs={<>
+          <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
+          <li><Link href={`/${lang}/about`}>{text.about[lang]}</Link></li>
+          <li aria-current="page">{s.title[lang]}</li>
+        </>}
+        image={s.image}
+        title={s.title[lang]}
+        lead={content.lead[lang]}
+      />
 
       {/* ═══ ② 清单 ═══ */}
       <section className="section">
@@ -113,10 +114,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
             <h2>{text.ask.title[lang]}</h2>
             <p>{text.ask.desc[lang]}</p>
           </div>
-          <div className="btn-row">
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
-            <Link className="text-link" href={`/${lang}/about`}>{text.about[lang]} →</Link>
-          </div>
+          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
         </div>
       </section>
     </>

@@ -1,18 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 // 办事处 /locations
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 标题  ② 每个城市一组：横线标题（右边是办事处数量）
-//            → 每间办事处一行：办事处卡片（左）+ 在这间办事处的律师（右；手机排在下面）
+// 区块顺序：① 标题  ② 城市按钮 + 办事处卡片（跟首页「联系我们」一模一样：lib/blocks.tsx 的 OfficeTabs）
 //          ③ 不确定去哪一间？（浅灰色带）
-// 只显示律师（合伙人、顾问律师、律师）；法律支援团队不列在这里（律师公会规定）。
-// 城市、办事处、团队资料都在 lib/site.ts；这里只放这一页的文字。
-// 办事处只有几间，所以全部列出、按城市分组，不做筛选。
+// 不列律师：每位律师的卡片已经写了城市，这一页只回答「去哪里、怎么联系」。
+// 城市、办事处资料都在 lib/site.ts；这里只放这一页的文字。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cities, common, displayName, initials, isLang, mapsLink, offices, pageMeta, roles, structuredData, team, whatsappLink } from "@/lib/site";
+import { OfficeTabs } from "@/lib/blocks";
+import { common, isLang, pageMeta, structuredData, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -21,10 +19,7 @@ const text = {
   title: { zh: "办事处", en: "Locations" },
   // ① 标题
   heading: { zh: "5 间办事处，\n就近找我们。", en: "Five offices,\nclose to you." },
-  lead: { zh: "所有咨询都需要先预约。", en: "All consultations are by appointment." }, // 每个城市几间，下面的城市标题已经写了
-  // ② 城市
-  count: { zh: "{n} 间办事处", en: "{n} offices" },
-  countOne: { zh: "1 间办事处", en: "1 office" },
+  lead: { zh: "所有咨询都需要先预约。", en: "All consultations are by appointment." }, // 每个城市几间，城市按钮上已经写了
   // ③ 不确定去哪一间？
   ask: {
     title: { zh: "不确定去哪一间？", en: "Not sure which office to visit?" },
@@ -59,54 +54,10 @@ export default async function LocationsPage({ params }: PageProps<"/[lang]/locat
         </div>
       </section>
 
-      {/* ═══ ② 每个城市一组 ═══ */}
+      {/* ═══ ② 城市按钮 + 办事处（白） ═══ */}
       <section className="section">
-        <div className="container stack">
-          {cities.map((c) => {
-            const list = offices.filter((o) => o.city === c.id);
-            return (
-              <div key={c.id}>
-                <div className="list-head">
-                  <h2>{c.full[lang]}</h2>
-                  <span>{list.length === 1 ? text.countOne[lang] : text.count[lang].replace("{n}", String(list.length))}</span>
-                </div>
-                <div className="stack">
-                  {list.map((o) => {
-                    const lawyers = team.filter((p) => p.office === o.id && roles[p.role].group !== "support");
-                    return (
-                      // 一行：办事处卡片（左）+ 律师（右），比例 1 : 1.618
-                      <div key={o.id} className="split-golden">
-                        <div className="card reveal">
-                          <h3>{o.name[lang]}</h3>
-                          <p>{o.address}</p>
-                          <p>{o.phoneDisplay}</p>
-                          <div className="btn-row">
-                            <a className="btn btn-ghost btn-sm" href={`tel:${o.phone}`}>{common.call[lang]}</a>
-                            <a className="btn btn-ghost btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.whatsapp[lang]}</a>
-                            <a className="btn btn-ghost btn-sm" href={mapsLink(o.address)} target="_blank" rel="noopener">{common.directions[lang]}</a>
-                          </div>
-                        </div>
-                        {lawyers.length > 0 && (
-                          <div className="person-grid">
-                            {lawyers.map((p) => (
-                              <Link key={p.slug} href={`/${lang}/people/${p.slug}`} className="person-card reveal">
-                                <div className="person-photo">
-                                  {p.image ? <Image src={p.image} alt={displayName(p, lang)} fill sizes="(min-width: 860px) 15vw, 50vw" /> : initials(p.name)}
-                                </div>
-                                <h3>{displayName(p, lang)}</h3>
-                                <strong>{roles[p.role].label[lang]}</strong>
-                                <p>{p.languages[lang]}</p>
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+        <div className="container">
+          <OfficeTabs lang={lang} />
         </div>
       </section>
 

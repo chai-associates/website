@@ -36,9 +36,9 @@ const text = {
     {
       href: "/about", label: { zh: "关于我们", en: "Profile" },
       children: [
-        { href: "/about#firm", label: { zh: "律所简介", en: "Our Firm" } },
-        { href: "/about#values", label: { zh: "我们的理念", en: "Our Values" } },
-        { href: "/about#recognitions", label: { zh: "荣誉与认可", en: "Recognitions" } },
+        { href: "/about", label: { zh: "律所简介", en: "Our Firm" } },
+        { href: "/about/values", label: { zh: "我们的理念", en: "Our Values" } },
+        { href: "/about/recognitions", label: { zh: "荣誉与认可", en: "Recognitions" } },
         ...aboutSections.map((s) => ({ href: `/about/${s.slug}`, label: s.title })),
       ],
     },
