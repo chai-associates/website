@@ -27,7 +27,7 @@ const text = {
   // ② 我的情况是
   picker: {
     label: { zh: "选择你的情况", en: "Choose your situation" }, // 不显示，给读屏软件用
-    placeholder: { zh: "我们可以怎么帮你？", en: "How can we help?" },
+    placeholder: { zh: "选择最接近你的情况", en: "Choose the closest situation" },
     // 每个情况对应哪些服务（写服务的 slug，顺序 = 显示顺序）
     options: [
       { label: { zh: "我们都同意离婚", en: "We both agree to divorce" }, slugs: ["joint-petition"] },

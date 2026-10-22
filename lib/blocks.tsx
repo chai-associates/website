@@ -5,10 +5,13 @@
 //               用在：离婚百科文章、关于我们的子页面（理念、荣誉、媒体、公益、活动）
 // · OfficeTabs  办事处：城市按钮 + 该城市的办事处卡片
 //               用在：首页「联系我们」、办事处页（两边一模一样，改这里就好）
-// 样式在 globals.css 的 .bleed / .cover-panel / .tabs / .card
+// · PersonCard  人卡：照片 + 名字 + 地区 · 职位；电脑鼠标移上去多显示语言、主要领域
+//               用在：首页「我们的团队」、律师团队、个人页底部
+// 样式在 globals.css 的 .bleed / .cover-panel / .tabs / .card / .person-card
 // ═══════════════════════════════════════════════════════════════
 import Image from "next/image";
-import { cities, common, mapsLink, offices, whatsappLink, type Lang } from "@/lib/site";
+import Link from "next/link";
+import { cities, cityOf, common, displayName, initials, mapsLink, offices, roles, services, whatsappLink, type Lang, type Member } from "@/lib/site";
 
 // 封面标题区。aside = 标题框右边的资料栏（例如文章的分类、法律依据），没有就不填
 export function CoverHead({ crumbs, image, title, lead, aside }: {
@@ -68,5 +71,25 @@ export function OfficeTabs({ lang }: { lang: Lang }) {
         </div>
       ))}
     </div>
+  );
+}
+
+// 人卡。sizes = 照片在画面上大约多宽（给 next/image 挑合适的尺寸）
+export function PersonCard({ p, lang, sizes }: { p: Member; lang: Lang; sizes: string }) {
+  const name = displayName(p, lang);
+  const lead = services.find((s) => s.slug === p.lead);
+  return (
+    <Link href={`/${lang}/people/${p.slug}`} className="person-card">
+      <div className="person-photo">
+        {p.image ? <Image src={p.image} alt={name} fill sizes={sizes} /> : initials(p.name)}
+      </div>
+      <div className="person-info">
+        <h3>{name}</h3>
+        <p>{cityOf(p).label[lang]} · {roles[p.role].label[lang]}</p>
+        <div className="person-more">
+          <p>{p.languages[lang]}{lead && <><br />{lead.title[lang]}</>}</p>
+        </div>
+      </div>
+    </Link>
   );
 }

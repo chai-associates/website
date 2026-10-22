@@ -9,7 +9,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isLang, launched } from "@/lib/site";
+import { PersonCard } from "@/lib/blocks";
+import { isLang, launched, team } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Styleguide",
@@ -37,11 +38,6 @@ const text = {
   sizes: [
     ["text-title", "title · 页面标题 h1"], ["text-lead", "lead · 页面副标题（跟 title 一组）"],
     ["text-subtitle", "subtitle · 区块标题 h2"], ["text-body", "body · 说明、正文、卡片标题 h3（跟 subtitle 一组）"], ["text-caption", "caption · 小标签、面包屑、备注"],
-  ],
-  people: [
-    { initials: "LH", name: { zh: "林慧盈", en: "Lim Hui Ying" }, role: { zh: "主管合伙人", en: "Managing Partner" }, meta: { zh: "新山 · English · 华语", en: "Johor Bahru · English · 华语" } },
-    { initials: "TK", name: { zh: "陈国伟", en: "Tan Kok Wai" }, role: { zh: "合伙人", en: "Partner" }, meta: { zh: "八打灵再也 · English · 华语", en: "Petaling Jaya · English · 华语" } },
-    { initials: "NP", name: { zh: "黄佩珊", en: "Ng Pei Shan" }, role: { zh: "合伙人", en: "Partner" }, meta: { zh: "马六甲 · English · BM", en: "Melaka · English · BM" } },
   ],
 };
 
@@ -139,16 +135,9 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             </div>
           </div>
           <div>
-            <div className="list-head"><h2>人物卡片</h2><span>人像 4:5 · 手机 2 栏、电脑 6 栏</span></div>
+            <div className="list-head"><h2>人物卡片</h2><span>PersonCard · 人像 4:5 · 名字 → 地区 · 职位 · 电脑鼠标移上去多显示语言、主要领域 · 手机 2 栏、电脑 6 栏</span></div>
             <div className="person-grid">
-              {text.people.map((p) => (
-                <article key={p.initials} className="person-card reveal">
-                  <div className="person-photo">{p.initials}</div>
-                  <h3>{p.name[lang]}</h3>
-                  <strong>{p.role[lang]}</strong>
-                  <p>{p.meta[lang]}</p>
-                </article>
-              ))}
+              {team.slice(0, 3).map((p) => <PersonCard key={p.slug} p={p} lang={lang} sizes="16vw" />)}
             </div>
           </div>
           <div>

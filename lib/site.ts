@@ -95,7 +95,7 @@ export const teamGroups = [
 // office：所在办事处（上面 offices 的 id）· honorific：Dato'、Dr 等，没有就不填
 // services：负责的服务（服务的 slug）· lead：主要领域（会排第一并加黑）
 // image：照片放进 public/images/people/ 后填上路径（人像 4:5）
-type Member = { slug: string; honorific?: string; name: Bi; role: Role; office: string; languages: Bi; services: string[]; lead?: string; image: string | null };
+export type Member = { slug: string; honorific?: string; name: Bi; role: Role; office: string; languages: Bi; services: string[]; lead?: string; image: string | null };
 const EN_ZH = { zh: "English · 华语", en: "English · Mandarin" };
 export const team: Member[] = [
   { slug: "lim-hui-ying", name: { zh: "林慧盈", en: "Lim Hui Ying" }, role: "managing-partner", office: "impian-emas", languages: { zh: "English · 华语 · 粤语", en: "English · Mandarin · Cantonese" }, services: ["custody", "matrimonial-assets", "joint-petition", "single-petition"], lead: "custody", image: null },

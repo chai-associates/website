@@ -10,7 +10,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { cityOf, common, displayName, initials, isLang, pageMeta, roles, team, teamGroups, whatsappLink } from "@/lib/site";
+import { PersonCard } from "@/lib/blocks";
+import { common, displayName, isLang, pageMeta, roles, team, teamGroups, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -89,16 +90,7 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
                   <span>{text.count[lang].replace("{n}", String(people.length))}</span>
                 </summary>
                 <div className="person-grid">
-                  {people.map((p) => (
-                    <Link key={p.slug} href={`/${lang}/people/${p.slug}`} className="person-card">
-                      <div className="person-photo">
-                        {p.image ? <Image src={p.image} alt={displayName(p, lang)} fill sizes="(min-width: 860px) 16vw, 50vw" /> : initials(p.name)}
-                      </div>
-                      <h3>{displayName(p, lang)}</h3>
-                      <strong>{roles[p.role].label[lang]}</strong>
-                      <p>{cityOf(p).full[lang]} · {p.languages[lang]}</p>
-                    </Link>
-                  ))}
+                  {people.map((p) => <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 860px) 16vw, 50vw" />)}
                 </div>
               </details>
             );
