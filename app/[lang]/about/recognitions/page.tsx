@@ -65,7 +65,7 @@ export default async function RecognitionsPage({ params }: PageProps<"/[lang]/ab
           {text.list.length > 0 ? (
             <div className="card-grid">
               {text.list.map((r) => (
-                <article key={r.title.zh} className="feature reveal">
+                <article key={r.title.zh} className="feature">
                   <span className="tag">{r.kind[lang]}</span>
                   <h3>{r.title[lang]}</h3>
                   <p>{r.desc[lang]}</p>

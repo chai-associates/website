@@ -127,7 +127,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="list-head"><h2>照片卡片</h2><span>场景 3:2</span></div>
             <div className="card-grid">
               {["办理离婚", "孩子"].map((t) => (
-                <a key={t} href="#" className="photo-card reveal">
+                <a key={t} href="#" className="photo-card">
                   <div><h3>{t}</h3><p>photo-card：左上标题、右下按钮</p></div>
                   <span className="btn btn-light btn-sm photo-card-action">查看服务 →</span>
                 </a>
@@ -150,7 +150,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           <div>
             <div className="list-head"><h2>照片框</h2><span>photo-frame · 场景 3:2</span></div>
-            <div className="photo-frame"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="448px" /></div>
+            <div className="photo-frame"><Image src="/images/hero/hero-bg-v4.png" alt="" fill sizes="448px" /></div>
           </div>
           <div>
             <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 3 栏</span></div>
@@ -163,7 +163,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div>
             <div className="list-head"><h2>满版照片</h2><span>照片格式 ②：真正页面上左右贴齐画面（这里放在 container 里只是示范）</span></div>
             <div className="hero">
-              <div className="hero-photo"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" /></div>
+              <div className="hero-photo"><Image src="/images/hero/hero-bg-v4.png" alt="" fill sizes="1152px" /></div>
               <div className="hero-body">
                 <p className="tag">新山 · 雪兰莪 · 马六甲</p>
                 <h1>hero</h1>
@@ -175,7 +175,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 {["多年经验", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
               </ul>
             </div>
-            <div className="bleed"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="1152px" /></div>
+            <div className="bleed"><Image src="/images/hero/hero-bg-v4.png" alt="" fill sizes="1152px" /></div>
             <div className="cover-panel">
               <div>
                 <h1>cover-panel</h1>

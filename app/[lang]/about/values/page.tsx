@@ -64,7 +64,7 @@ export default async function ValuesPage({ params }: PageProps<"/[lang]/about/va
           <div className="prose"><p>{text.vision[lang]}</p></div>
           <div className="card-grid">
             {text.list.map((v) => (
-              <article key={v.title.zh} className="feature reveal">
+              <article key={v.title.zh} className="feature">
                 <h3>{v.title[lang]}</h3>
                 <p>{v.desc[lang]}</p>
               </article>

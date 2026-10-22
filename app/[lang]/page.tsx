@@ -35,7 +35,7 @@ const text = {
       en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",
     },
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
-    image: "/images/hero/hero-bg-v3.png",
+    image: "/images/hero/hero-bg-v4.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
     // 首屏下方的重点（图示可选 award / chat / lock，或在下面 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [

@@ -113,7 +113,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
           </div>
           <ol className="steps">
             {text.process.list.map((s, i) => (
-              <li key={s.title.zh} className="reveal">
+              <li key={s.title.zh}>
                 <span className="tag">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{s.title[lang]}</h3>
                 <p>{s.desc[lang]}</p>

@@ -195,8 +195,8 @@ export const inquiry = {
   // 跳出视窗的标题与说明：先讲清楚「为什么要填」和「填完会怎样」，用户才不会担心没人回复
   title: { zh: "先告诉我们你的情况", en: "Tell us a little about your situation" },
   desc: {
-    zh: "律师先了解你的情况，回复时就能直接针对你的问题，不用来回再问。",
-    en: "So our lawyer can reply to your exact situation, without the back-and-forth.",
+    zh: "这些资料能让律师事先了解你的情况，回复时给你更准确的建议。",
+    en: "These details help our lawyer understand your situation beforehand and give you more accurate advice.",
   },
   intro: { zh: "你好，我想咨询离婚事宜。", en: "Hi, I'd like to ask about a divorce matter." }, // 讯息第一句（各页可以换成自己的，例如文章名称、律师名字）
   placeholder: { zh: "请选择", en: "Choose one" },

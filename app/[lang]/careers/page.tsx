@@ -97,7 +97,7 @@ export default async function CareersPage({ params }: PageProps<"/[lang]/careers
           <div className="list-head"><h2>{text.benefits.title[lang]}</h2></div>
           <div className="card-grid">
             {text.benefits.list.map((b) => (
-              <div key={b.title.zh} className="card reveal">
+              <div key={b.title.zh} className="card">
                 <h3>{b.title[lang]}</h3>
                 <p>{b.desc[lang]}</p>
               </div>

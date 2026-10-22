@@ -94,7 +94,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
           {content.list.length > 0 ? (
             <div className="card-grid">
               {content.list.map((e, i) => (
-                <article key={`${e.title.en}-${i}`} className="card reveal">
+                <article key={`${e.title.en}-${i}`} className="card">
                   <span className="tag">{e.date} · {e.source[lang]}</span>
                   <h3>{e.title[lang]}</h3>
                   {e.desc && <p>{e.desc[lang]}</p>}

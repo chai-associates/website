@@ -18,7 +18,7 @@
 /* 基础样式放在 @layer base（优先级最低，积木可以直接覆盖） */
 @layer base {
 /* ── 基础 ──────────────────────────────────────── */
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header-h); }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header-h); interpolate-size: allow-keywords; } /* interpolate-size：让高度可以从 0 平滑变成 auto（折叠展开） */
 body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-sans); font-size: var(--text-body); line-height: var(--leading-zh); -webkit-font-smoothing: antialiased; }
 body.lang-en { line-height: var(--leading-en); } /* 字体同一种，只有行距按语言不同 */
 /* 键盘操作时的焦点框：全站一条规则（连结、按钮、选单、输入框都一样）；深色带、页脚里换成浅色 */
@@ -140,9 +140,16 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 
 /* ── 积木：按钮与链接 ─────────────────────────────── */
 /* 按钮文字太长时（例如长的律师名字）会换行，不会撑出画面 */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap); padding: var(--space-2) var(--space-4); border: var(--border) solid transparent; border-radius: var(--radius-pill); font: inherit; font-size: var(--text-body); font-weight: var(--weight-medium); line-height: var(--leading-heading); text-align: center; cursor: pointer; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap); padding: var(--space-2) var(--space-4); border: var(--border) solid transparent; border-radius: var(--radius-pill); font: inherit; font-size: var(--text-body); font-weight: var(--weight-medium); line-height: var(--leading-heading); text-align: center; cursor: pointer;  transition: background-color var(--motion-fast) var(--ease), color var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease), filter var(--motion-fast) var(--ease); }
 .btn-cta { background: var(--color-accent); color: var(--color-on-accent); }
-.btn-cta:hover { filter: brightness(1.12); }
+/* 悬停（只有电脑：有鼠标才有；手机点一下不会卡在悬停的样子） */
+@media (hover: hover) {
+  .btn-cta:hover { filter: brightness(1.12); }
+  .btn-ghost:hover { background: var(--color-ink); color: var(--color-bg); }
+  .btn-outline:hover { background: var(--color-accent); color: var(--color-on-accent); }
+  .btn-light:hover { background: var(--color-subtle); }
+  .chip:not([data-lead]):hover { border-color: var(--color-ink); }
+}
 .btn-ghost { background: var(--color-bg); color: var(--color-ink); border-color: var(--color-ink); }
 .btn-light { background: var(--color-white); color: var(--color-ink); }
 .btn-outline { background: transparent; color: var(--color-accent); border-color: var(--color-accent); }
@@ -150,7 +157,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 按钮并排（放不下自动换行） */
 .btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .text-link { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); font-weight: var(--weight-medium); }
-.chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-pill); font-weight: var(--weight-medium); white-space: nowrap; }
+.chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-pill); font-weight: var(--weight-medium); white-space: nowrap;  transition: border-color var(--motion-fast) var(--ease); }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
 /* 筛选说明：一排 chip 前面的灰色小字，例如团队页的「办事处」 */
 /* 选中的按钮变黑（城市分页、团队筛选共用）；data-lead = 主要领域（个人页），一样变黑 */
@@ -172,7 +179,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
 .photo-card > img { z-index: -2; object-fit: cover; }
 .photo-card > img { transition: transform var(--motion) var(--ease); }
-.photo-card:hover > img { transform: scale(1.03); }
+@media (hover: hover) { .photo-card:hover > img, .person-card:hover .person-photo > img { transform: scale(1.03); } } /* 悬停：照片轻轻放大 */
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
@@ -209,7 +216,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    电脑（有鼠标）：鼠标移上去，深色带往上长，多显示语言、主要领域；手机、平板（没有鼠标）不显示，点进个人页看 */
 .person-card { position: relative; display: block; overflow: hidden; border-radius: var(--radius-md); }
 .person-photo { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-size: var(--text-title); }
-.person-photo > img { object-fit: cover; }
+.person-photo > img { object-fit: cover; transition: transform var(--motion) var(--ease); }
 .person-info { position: absolute; inset-inline: 0; bottom: 0; display: grid; gap: var(--space-1); padding: var(--space-5) var(--space-3) var(--space-3); background: var(--scrim-person); color: var(--color-white); }
 .person-info p { font-size: var(--text-caption); line-height: var(--leading-lead); } /* 地区 · 职位，以及滑上来的语言、主要领域 */
 .person-more { display: none; }
@@ -240,6 +247,9 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 :is(.fold, .menu-group) > summary::-webkit-details-marker { display: none; }
 :is(.fold, .menu-group) > summary::after { content: "+"; font-size: var(--text-title); font-weight: var(--weight-regular); line-height: 1; transition: transform var(--motion-fast) var(--ease); }
 .fold[open] > summary::after, .menu-group[open] > summary::after { transform: rotate(45deg); }
+/* 展开时内容的高度平滑长出来（Chrome、Edge；其他浏览器直接展开） */
+:is(.fold, .menu-group)::details-content { block-size: 0; overflow: clip; transition: block-size var(--motion) var(--ease), content-visibility var(--motion) allow-discrete; }
+:is(.fold, .menu-group)[open]::details-content { block-size: auto; }
 .fold > summary + * { padding-bottom: var(--space-5); }
 
 /* ── 积木：横线清单（重点、经历、理念） ── */
@@ -255,7 +265,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* ── 积木：链接清单（不加框）：每一行一个链接，细线分隔，右边 →；用在分类下的服务、服务页的「继续了解其他服务」
    一行可以只放文字，也可以放「h3 标题 + p 一句说明」（服务索引） ── */
 .link-list a { display: grid; grid-template-columns: 1fr auto; align-content: center; align-items: baseline; gap: var(--space-1) var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: var(--hairline) solid var(--color-line); }
-.link-list a::after { content: "→"; grid-column: 2; grid-row: 1; color: var(--color-ink-muted); line-height: var(--leading-heading); } /* 箭头对齐第一行（标题） */
+.link-list a::after { content: "→"; grid-column: 2; grid-row: 1; color: var(--color-ink-muted); line-height: var(--leading-heading);  transition: transform var(--motion-fast) var(--ease); } /* 箭头对齐第一行（标题） */
+@media (hover: hover) { .link-list a:hover::after { transform: translateX(var(--space-1)); } } /* 悬停：箭头往右推一点 */
 .link-list a > p { grid-column: 1; color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」：相隔 4、行距 1.5 */
 .link-list a:has(> p) { padding-block: var(--space-3); } /* 两行的（标题 + 说明）上下多留一点 */
 .link-list:has(p) { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); column-gap: var(--space-5); } /* 服务索引：电脑 2 栏，手机 1 栏 */
@@ -277,6 +288,14 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 弹出视窗（律师个人页的预约表格）：原生 dialog，置中；后面变暗 */
 .dialog { margin: auto; width: min(100% - 2 * var(--gutter), var(--measure)); max-height: calc(100svh - 2 * var(--gutter)); padding: var(--space-4); border: 0; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-float); }
 .dialog::backdrop { background: var(--color-backdrop); }
+/* 打开：淡入 + 从 0.98 倍放大；后面渐暗。关闭时反过来（@starting-style = 刚打开那一刻的样子） */
+.dialog, .dialog::backdrop { transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease), overlay var(--motion) allow-discrete, display var(--motion) allow-discrete; }
+.dialog:not([open]) { opacity: 0; transform: scale(0.98); }
+.dialog:not([open])::backdrop { opacity: 0; }
+@starting-style {
+  .dialog[open] { opacity: 0; transform: scale(0.98); }
+  .dialog[open]::backdrop { opacity: 0; }
+}
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
 .dialog-desc { margin-block: var(--space-2) var(--space-4); color: var(--color-ink-muted); font-size: var(--text-caption); line-height: var(--leading-lead); } /* 标题 ↔ 说明 8；说明 ↔ 表格 24 */
 .dialog-close { min-width: var(--tap-min); min-height: var(--tap-min); border: 0; background: none; color: var(--color-ink); font: inherit; font-size: var(--text-title); font-weight: var(--weight-regular); line-height: 1; cursor: pointer; }
@@ -306,7 +325,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .tab > label { user-select: none; }
 .tab > input:focus-visible + label { outline: var(--focus-width) solid var(--focus-color); outline-offset: var(--focus-offset); } /* 输入框是隐藏的，焦点框画在按钮文字上 */
 .tab-panel { display: none; order: 1; flex-basis: 100%; margin-top: var(--space-2); } /* order 1 = 排到所有按钮后面；8 + 8 = 按钮与内容相隔 16 */
-.tab > input:checked ~ .tab-panel { display: block; }
+.tab > input:checked ~ .tab-panel { display: block; animation: fade-in var(--motion) var(--ease); } /* 切换分页：内容淡入 */
 /* 底线分页（律师个人页「概览 · 资历」：同一个人的不同章节，比药丸按钮安静）：文字分页，选中的变黑、下面一条黑线；整排下面一条细线。
    结构跟 .tabs 一样，只是 label 不加 .chip：<div class="tabs tabs-line"> */
 .tabs-line { column-gap: var(--space-5); row-gap: 0; }
@@ -365,11 +384,24 @@ html[data-over-hero] .site-header::before { opacity: 0; }
 .footer-links a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
 .footer-disc { padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-inverse-line); font-size: var(--text-caption); }
 
-/* ── 品牌语法 8：往下滑时轻轻浮现（加 class="reveal"；不支援的浏览器直接显示，不影响阅读） ── */
+/* ── 品牌语法 8：动态（速度、距离都在 tokens.css：--motion* / --ease / --reveal-distance / --stagger） ──────────
+   ① 进场：往下滑时，一组一组的项目（卡片、人卡、清单、流程步骤）轻轻浮现。自动套用，页面上不用加 class。
+      同一排的第 2、3 个稍微晚一点出现（错开）。滑动列（手机左右滑）不套用。
+      用浏览器原生的滚动动画：Chrome、Edge、Safari 26 有；Firefox 等不支援的浏览器直接显示，不影响阅读。 */
 @supports (animation-timeline: view()) {
-  .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  :is(.card-grid, .person-grid, .steps, .link-list) > * { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  :is(.card-grid, .person-grid, .steps, .link-list) > :nth-child(3n + 2) { animation-range: entry 10% entry 70%; }
+  :is(.card-grid, .person-grid, .steps, .link-list) > :nth-child(3n + 3) { animation-range: entry 20% entry 80%; }
 }
-@keyframes reveal { from { opacity: 0; transform: translateY(var(--space-3)); } }
+/* ② 首屏（首页、律师团队的主管合伙人）：一打开，文字一行一行浮现；照片从 1.05 倍慢慢缩回原本大小 */
+.hero-body > * { animation: reveal var(--motion-slow) var(--ease) both; }
+.hero-body > :nth-child(2) { animation-delay: var(--stagger); }
+.hero-body > :nth-child(3) { animation-delay: calc(2 * var(--stagger)); }
+.hero-body > :nth-child(4) { animation-delay: calc(3 * var(--stagger)); }
+.hero-photo > img { animation: settle calc(2 * var(--motion-slow)) var(--ease) both; }
+@keyframes reveal { from { opacity: 0; transform: translateY(var(--reveal-distance)); } }
+@keyframes settle { from { transform: scale(1.05); } }
+@keyframes fade-in { from { opacity: 0; } }
 @keyframes fade-out { to { opacity: 0; } }
 
 /* ── 品牌语法 8：换页动态（lib/interactive.tsx 的 PageTransition 包住 <main>）──
