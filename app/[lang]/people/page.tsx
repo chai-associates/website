@@ -1,10 +1,9 @@
 // ═══════════════════════════════════════════════════════════════
 // 律师团队 /people（原本的「关于我们 › 律所简介」并进来了：介绍律所 = 介绍律所的人）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 全屏团队合照 → 标题（白；跟首页一样先照片、后标题；照片延伸到透明页首后面）
-//          ② 律所简介：左边标题 + 一段重点、右边古铜超大数字（10+ 年经验 · 5 间办事处）（浅灰）
+// 区块顺序：① 首屏：团队合照 + 面包屑 + 标题（lib/blocks.tsx 的 PageHero），说明在照片下面
+//          ② 律所简介：左边标题 + 三段、右边古铜超大数字（10+ 年经验 · 5 间办事处）（浅灰）
 //          ③ 主管合伙人的话 + 按钮「认识我们的团队」（照片满版靠右、引言在左；手机照片在上。跟首页首屏同一个积木 .hero）
-//          ④ 我们怎么陪你（浅灰）
 // 完整的成员名单在 /people/all（按职位折叠）。成员资料、职位、年经验、办事处在 lib/site.ts；这里只放这一页的文字。
 // ⚠ 中括号 [ ] 里的都是占位，等律所问卷回来后照题目替换。
 // ═══════════════════════════════════════════════════════════════
@@ -12,14 +11,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { HeaderOverHero } from "@/lib/interactive";
-import { common, displayName, firm, isLang, offices, pageMeta, roles, team } from "@/lib/site";
+import { PageHero } from "@/lib/blocks";
+import { common, displayName, firm, isLang, offices, pageMeta, roles, team, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
 // ─────────────────────────────────────────────
 const text = {
-  // ① 全屏团队合照（2400 × 1350，16:9）→ 标题
+  // ① 首屏：团队合照 + 标题（现在这张 2400 × 1350 的人站满整张，标题会压到人 → 新图请出 2400 × 1260，左边 45% 留白）
   image: "/images/about/our-firm-v2.png" as string | null,
   heading: { zh: "坦诚相待，\n重视每一段关系。", en: "Open, approachable,\nbuilt on relationships." },
   lead: {
@@ -29,23 +28,21 @@ const text = {
   // ② 律所简介 + 数字（数字本身在 lib/site.ts：firm.experience、办事处数量自动算）
   firm: {
     title: { zh: "律所简介", en: "Our Firm" },
-    body: { zh: "Chai & Associates 成立于 2017 年，现由 Chai Mei Ching 律师主持，专注处理非穆斯林的离婚与家事案件。", en: "Chai & Associates was founded in 2017 and is led today by Chai Mei Ching. The firm acts in divorce and family matters for non-Muslims." },
+    // 第 2、3 段参考 Hogan Lovells 的语气改写（律师公会规定：不自夸、不比较）
+    paragraphs: [
+      { zh: "Chai & Associates 成立于 2017 年，现由 Chai Mei Ching 律师主持，专注处理非穆斯林的离婚与家事案件。", en: "Chai & Associates was founded in 2017 and is led today by Chai Mei Ching. The firm acts in divorce and family matters for non-Muslims." },
+      { zh: "家庭面对变化的时候，你需要的不只是一个法律答案。", en: "When your family is going through change, you need more than a legal answer." },
+      { zh: "我们和你一起把复杂的事情理清楚，告诉你还有哪些可以考虑的选择，让你每一步都走得安心。无论是抚养权、赡养费还是财产分配，我们都会用实际的判断，协助你做出对你和家人最重要的决定。", en: "We work through it with you: we make the complicated parts clear, show you the options you may not have considered, and help you take each step with confidence. Whether it is custody, maintenance or the division of assets, we bring practical judgment to the decisions that matter most to you and your family." },
+    ] as Bi[],
     experience: { zh: "年经验", en: "Years of Experience" },
     offices: { zh: "间办事处", en: "Offices" },
   },
-  // ③ 主管合伙人的话（照片、名字取自 team 里的 Managing Partner；照片规格：横向 2400 × 1350，人放在右边三分之一、左边留白放字）
+  // ③ 主管合伙人的话（照片、名字取自 team 里的 Managing Partner）
+  //    照片规格：横向 2400 × 1350（16:9）；人放在右边三分之一，左边一半留白放字；脸在画面中间高度，上下各 15% 不放重要东西（电脑版会裁上下、平板会从左边裁）
   message: {
     quote: { zh: "[主管合伙人想对客户说的话，两三句，由本人确认]", en: "[A short message to clients from the Managing Partner, two or three sentences, confirmed by them]" },
     image: null as string | null, // 放进 public/images/people/ 后填 "/images/people/文件名.png"
     cta: { zh: "认识我们的团队", en: "See All Our People" },
-  },
-  // ④ 我们怎么陪你（参考 Hogan Lovells 的语气改写；律师公会规定：不自夸、不比较）
-  approach: {
-    title: { zh: "家庭面对变化的时候，你需要的不只是一个法律答案。", en: "When your family is going through change, you need more than a legal answer." },
-    body: {
-      zh: "我们和你一起把复杂的事情理清楚，告诉你还有哪些可以考虑的选择，让你每一步都走得安心。无论是抚养权、赡养费还是财产分配，我们都会用实际的判断，协助你做出对你和家人最重要的决定。",
-      en: "We work through it with you: we make the complicated parts clear, show you the options you may not have considered, and help you take each step with confidence. Whether it is custody, maintenance or the division of assets, we bring practical judgment to the decisions that matter most to you and your family.",
-    },
   },
 };
 
@@ -62,26 +59,21 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
 
   return (
     <>
-      {/* ═══ ① 全屏团队合照 → 标题（白） ═══ */}
-      <HeaderOverHero />
-      <div className="cover-full">{text.image && <Image src={text.image} alt={firm.name} fill preload sizes="100vw" />}</div>
-      <section className="page-head">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li aria-current="page">{common.people[lang]}</li>
-          </ol>
-          <h1>{text.heading[lang]}</h1>
-          <p>{text.lead[lang]}</p>
-        </div>
-      </section>
+      {/* ═══ ① 首屏（PageHero） ═══ */}
+      <PageHero
+        image={text.image}
+        alt={firm.name}
+        eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li aria-current="page">{common.people[lang]}</li></ol>}
+        title={text.heading[lang]}
+        lead={text.lead[lang]}
+      />
 
       {/* ═══ ② 律所简介：左边文字、右边古铜超大数字（浅灰） ═══ */}
       <section className="section section-muted">
         <div className="container intro">
           <div>
             <div className="section-head"><h2>{text.firm.title[lang]}</h2></div>
-            <div className="prose"><p>{text.firm.body[lang]}</p></div>
+            <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
           </div>
           <ul className="figures">
             <li><span className="big-num">{firm.experience}</span><span>{text.firm.experience[lang]}</span></li>
@@ -108,15 +100,6 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
         </div>
       </section>
 
-      {/* ═══ ④ 我们怎么陪你（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.approach.title[lang]}</h2>
-            <p>{text.approach.body[lang]}</p>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

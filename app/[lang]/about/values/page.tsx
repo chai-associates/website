@@ -17,7 +17,6 @@ type Item = { title: Bi; desc: Bi };
 // 这一页的文字（中英对照）
 // ─────────────────────────────────────────────
 const text = {
-  about: { zh: "关于我们", en: "About Us" },
   title: { zh: "我们的理念", en: "Our Values" },
   image: "/images/about/firm.png" as string | null, // 满版照片（建议 2400 × 1350；现在这张 1536 × 1024，电脑版会被放大、裁掉上下）
   mission: { zh: "用清楚、实际的方式，和你一起处理离婚与家事问题。", en: "To work through divorce and family matters with you, clearly and practically." },
@@ -52,7 +51,7 @@ export default async function ValuesPage({ params }: PageProps<"/[lang]/about/va
       <CoverHead
         crumbs={<>
           <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-          <li>{text.about[lang]}</li>
+          <li><Link href={`/${lang}/people`}>{common.people[lang]}</Link></li>
           <li aria-current="page">{text.title[lang]}</li>
         </>}
         image={text.image}

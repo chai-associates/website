@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AskSection, PhotoCard } from "@/lib/blocks";
+import { AskSection, PageHero, PhotoCard } from "@/lib/blocks";
 import { SituationPicker } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
@@ -23,6 +23,7 @@ const text = {
     },
   },
   // ① 标题
+  image: null as string | null, // 首屏照片：放进 public/images/ 后填路径（2400 × 1260，规格见 lib/blocks.tsx 的 PageHero）
   lead: { zh: "从你的情况开始，找到对应的服务。", en: "Start with your situation and find the right service." },
   // ② 我的情况是
   picker: {
@@ -68,17 +69,13 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
 
   return (
     <>
-      {/* ═══ ① 标题（白） ═══ */}
-      <section className="page-head">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li aria-current="page">{common.services[lang]}</li>
-          </ol>
-          <h1>{common.services[lang]}</h1>
-          <p>{text.lead[lang]}</p>
-        </div>
-      </section>
+      {/* ═══ ① 首屏（PageHero） ═══ */}
+      <PageHero
+        image={text.image}
+        eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li aria-current="page">{common.services[lang]}</li></ol>}
+        title={common.services[lang]}
+        lead={text.lead[lang]}
+      />
 
       {/* ═══ ② 选单「我们可以怎么帮你？」（浅灰） ═══ */}
       <section className="section section-muted">

@@ -8,7 +8,7 @@
 // · ConsultButton   全站的「咨询」按钮：点了跳出咨询表格（不是直接去 WhatsApp）
 // · ConsultDialog   咨询表格视窗（layout.tsx，全站一个）：3 个问题 + 其他 → 打开 WhatsApp，讯息已写好
 // · NavLinks       电脑版页首的导航：目前所在的页面标古铜线；有子页面的鼠标移上去展开下拉（layout.tsx）
-// · HeaderOverHero  首页、律师团队：最上面的照片还在页首下面时，页首透明；滑过照片变白底（只设定 <html data-over-hero>，样式在 globals.css）
+// · HeaderOverHero  有首屏照片的页面：在最上面时页首透明，一往下滑变毛玻璃（只设定 <html data-over-hero>，样式在 globals.css）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
 // · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
 // · TabsHash        分页选择记住选了哪一个：网址加 #代号，按返回会回到同一个分页（离婚百科）
@@ -224,21 +224,19 @@ export function NavLinks({ label, items, home }: { label: string; items: NavItem
   );
 }
 
-// ── 首页页首透明 ─────────────────────────────────
-// 看最上面的照片（首页 .hero-top 的照片、律师团队的 .cover-full）：照片还在页首下面 → <html data-over-hero>（页首透明）；照片滑过页首 → 拿掉（页首白底）。
-// 离开该页时自动拿掉。没有 JavaScript 时页首一直是白底。
+// ── 首屏页首透明 ─────────────────────────────────
+// 有首屏照片的页面（lib/blocks.tsx 的 PageHero）：在最上面时 <html data-over-hero>（页首透明，看得到整张照片）；
+// 一往下滑就拿掉（页首变毛玻璃）。离开该页时自动拿掉。没有 JavaScript 时页首一直是毛玻璃。
 export function HeaderOverHero() {
   useEffect(() => {
-    const photo = document.querySelector(".hero-top .hero-photo, .cover-full");
-    if (!photo) return;
     const root = document.documentElement;
-    const header = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) root.dataset.overHero = "";
+    const update = () => {
+      if (scrollY <= 0) root.dataset.overHero = "";
       else delete root.dataset.overHero;
-    }, { rootMargin: `-${header}px 0px 0px 0px` });
-    io.observe(photo);
-    return () => { io.disconnect(); delete root.dataset.overHero; };
+    };
+    update();
+    addEventListener("scroll", update, { passive: true });
+    return () => { removeEventListener("scroll", update); delete root.dataset.overHero; };
   }, []);
   return null;
 }

@@ -9,10 +9,8 @@
 // 律所资料、服务清单、办事处来自 lib/site.ts（全站共用）。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { Icon, OfficeTabs, PersonCard, PhotoCard, type IconName } from "@/lib/blocks";
-import { HeaderOverHero } from "@/lib/interactive";
+import { Icon, OfficeTabs, PageHero, PersonCard, PhotoCard, type IconName } from "@/lib/blocks";
 import { cities, common, isLang, pageMeta, roles, serviceCategories, structuredData, team, type Bi, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -35,7 +33,7 @@ const text = {
       en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",
     },
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
-    image: "/images/hero/hero-bg-v6.png",
+    image: "/images/hero/hero-bg-v6.png", // 2400 × 1800（旧比例，会裁掉上下）→ 新图请出 2400 × 1260
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
     // 首屏下方的重点（图示可选 award / chat / lock / update，或在 lib/blocks.tsx 的 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
@@ -80,24 +78,20 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       {/* 给 Google 看的律所与办事处资料（画面上看不到） */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(lang) }} />
 
-      {/* ═════════ ① 首屏 ═════════
-          电脑：照片满版、靠右对齐（缩放时右边的人不会被切掉），小标签 → 标题 → 说明 → 按钮放左边；
-          手机：照片在上，文字在下。下面接重点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
-      <section className="hero hero-top">
-        <HeaderOverHero />
-        <div className="hero-photo">
-          <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" />
+      {/* ═════════ ① 首屏（PageHero：小标签 + 标题叠在照片左边；说明、按钮在照片下面）→ 重点 ═════════
+          照片换成律所真实照片时，只改上面 text.hero.image（规格见 lib/blocks.tsx 的 PageHero）。 */}
+      <PageHero
+        image={hero.image}
+        alt={hero.imageAlt[lang]}
+        eyebrow={<p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>}
+        title={hero.title[lang]}
+        lead={hero.sub[lang]}
+      >
+        <div className="btn-row">
+          <Link className="btn btn-ghost btn-next" href={`/${lang}/services`}>{hero.cta[lang]}</Link>
         </div>
-        <div className="container hero-body">
-          <p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>
-          <h1>{hero.title[lang]}</h1>
-          <p>{hero.sub[lang]}</p>
-          <div className="btn-row">
-            <Link className="btn btn-ghost btn-next" href={`/${lang}/services`}>{hero.cta[lang]}</Link>
-          </div>
-        </div>
-      </section>
-      <div className="container hero-intro">
+      </PageHero>
+      <div className="container">
         <ul className="points">
           {hero.points.map((p) => <li key={p.icon}><Icon name={p.icon} /> {p.title[lang]}</li>)}
         </ul>

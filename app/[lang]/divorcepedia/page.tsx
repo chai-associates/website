@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AskSection, PhotoCard } from "@/lib/blocks";
+import { AskSection, PageHero, PhotoCard } from "@/lib/blocks";
 import { articles } from "@/lib/divorcepedia";
 import { TabsHash } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories } from "@/lib/site";
@@ -20,6 +20,7 @@ const text = {
   title: { zh: "离婚百科", en: "Divorcepedia" },
   // ① 标题
   heading: { zh: "离婚前后，\n你会想知道的事。", en: "What you'll want to know,\nbefore and after divorce." },
+  image: null as string | null, // 首屏照片：放进 public/images/ 后填路径（2400 × 1260，规格见 lib/blocks.tsx 的 PageHero）
   lead: { zh: "用简单的话，解释马来西亚非穆斯林离婚的常见问题。", en: "Plain answers to common questions about non-Muslim divorce in Malaysia." },
   // ② 分类
   services: { zh: "查看{category}的服务", en: "View {category} services" }, // 读完百科 → 去看服务：一律用动词开头
@@ -45,17 +46,13 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
 
   return (
     <>
-      {/* ═══ ① 标题 ═══ */}
-      <section className="page-head">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li aria-current="page">{text.title[lang]}</li>
-          </ol>
-          <h1>{text.heading[lang]}</h1>
-          <p>{text.lead[lang]}</p>
-        </div>
-      </section>
+      {/* ═══ ① 首屏（PageHero） ═══ */}
+      <PageHero
+        image={text.image}
+        eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li aria-current="page">{text.title[lang]}</li></ol>}
+        title={text.heading[lang]}
+        lead={text.lead[lang]}
+      />
 
       {/* ═══ ② 分类按钮 → 该分类的文章（浅灰色带） ═══ */}
       <section className="section section-muted">

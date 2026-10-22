@@ -46,6 +46,7 @@
   --color-inverse-muted: #a1a1a6;  /* 深底上的次要文字 · 对比 6.5:1 */
   --color-inverse-line: color-mix(in srgb, var(--color-inverse-ink) 15%, transparent); /* 深底上的细线 */
   --color-backdrop: rgb(0 0 0 / 0.4); /* 选单打开时，后面变暗的部分 */
+  --color-glass: rgb(255 255 255 / 0.4); /* 页首毛玻璃：40% 白，后面的内容模糊透出来 */
 
   /* ── 字体 ──────────────────────────────────── */
   --font-sans: "MiSans", "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif; /* 全站唯一字体（中英文、标题、正文）；载入在 lib/fonts.ts */
@@ -102,8 +103,9 @@
   --container: 1152px;     /* 内容最大宽度 */
   --section-y: clamp(3rem, 2.143rem + 4.286vw, 6rem);   /* 区块上下留白 48 → 96（流体） */
   --measure: 34em;         /* 正文最大行宽 */
-  --ratio-hero: 4 / 3;     /* 首页首屏的宽 : 高（电脑、平板）：跟首屏照片 2400 × 1800 同比例 */
-  --ratio-photo: 16 / 9;   /* 满版照片的宽 : 高（照片 2400 × 1350）：手机版封面、律师团队页的团队合照 */
+  --ratio-hero: 40 / 21;   /* 首屏的宽 : 高（任何尺寸）：跟首屏照片 2400 × 1260 同比例，整张不裁 */
+  --hero-copy: 45%;        /* 首屏文字框占照片左边多宽（照片的人放在右边 55%，不会被字碰到） */
+  --ratio-photo: 16 / 9;   /* 满版封面在手机的宽 : 高（照片 2400 × 1350） */
   --ratio-banner: 3 / 1;   /* 满版封面在平板以上的宽 : 高（同一张 2400 × 1350，主体放中间那条） */
   --ratio-card: 3 / 2;     /* 照片卡片、照片框（场景照） */
   --ratio-portrait: 4 / 5; /* 人像（人卡、个人页） */
@@ -114,7 +116,8 @@
   --col-min-sm: 220px;     /* 编号清单 .numbered */
   --col-min-md: 300px;     /* 卡片网格 .card-grid */
   --col-min-lg: 400px;     /* 服务索引 .link-list */
-  --hero-min-h: 70svh;     /* 首屏（.hero）在平板以上最矮多高 */
+  --hero-min-h: 70svh;     /* 主管合伙人的话（.hero）在平板以上最矮多高 */
+  --blur-glass: 16px;      /* 页首毛玻璃的模糊程度 */
   --menu-w: min(360px, 85vw); /* ☰ 选单面板宽度 */
   --tracking-logo: 0.04em;    /* 字距：logo 英文字（全大写） */
   --tracking-logo-sub: 0.08em; /* 字距：logo 下面的小字 */

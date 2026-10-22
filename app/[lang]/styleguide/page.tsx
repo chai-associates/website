@@ -175,7 +175,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="cover-panel">
               <div>
                 <h1>cover-panel</h1>
-                <p>bleed + cover-panel：满版照片 + 白色标题框（百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）</p>
+                <p>bleed + cover-panel：满版照片 + 白色标题框（百科文章、理念 · 荣誉等子页面；lib/blocks.tsx 的 CoverHead）</p>
               </div>
             </div>
           </div>

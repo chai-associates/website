@@ -22,7 +22,6 @@ type Entry = { date: string; source: Bi; title: Bi; desc?: Bi; href?: string };
 // 这一页的文字（中英对照）
 // ─────────────────────────────────────────────
 const text = {
-  about: { zh: "关于我们", en: "About Us" },
   sections: {
     media: {
       lead: { zh: "[一句话：律所律师接受访问、发表意见的媒体报道]", en: "[One line: interviews and commentary by our lawyers in the media]" },
@@ -75,7 +74,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
       <CoverHead
         crumbs={<>
           <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-          <li>{text.about[lang]}</li>
+          <li><Link href={`/${lang}/people`}>{common.people[lang]}</Link></li>
           <li aria-current="page">{s.title[lang]}</li>
         </>}
         image={s.image}

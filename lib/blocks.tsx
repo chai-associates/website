@@ -1,6 +1,8 @@
 // ═══════════════════════════════════════════════════════════════
 // 多个页面共用的区块（伺服器端组件，不需要 JavaScript）
 // ───────────────────────────────────────────────────────────────
+// · PageHero    首屏：照片满版，标题叠在照片左边（不碰到右边的人）；说明、按钮在照片下面
+//               用在：首页、离婚服务、离婚百科、律师团队、荣誉与认可
 // · CoverHead   封面标题区：面包屑 → 满版照片 → 白色标题框（叠在照片下缘）
 //               用在：离婚百科文章、关于我们的子页面（理念、荣誉、媒体、公益、活动）
 // · OfficeTabs  办事处：城市按钮 + 该城市的办事处卡片
@@ -16,8 +18,38 @@
 // ═══════════════════════════════════════════════════════════════
 import Image from "next/image";
 import Link from "next/link";
-import { ConsultButton } from "@/lib/interactive";
+import { ConsultButton, HeaderOverHero } from "@/lib/interactive";
 import { cities, cityOf, common, displayName, initials, mapsLink, offices, roles, services, whatsappLink, type Bi, type Lang, type Member } from "@/lib/site";
+
+// 首屏。eyebrow = 标题上面的一行（面包屑或小标签）；lead = 照片下面的说明；children = 说明下面的按钮
+// 照片规格：2400 × 1260（--ratio-hero）；人放在右边 55%，左边 45% 留白、要亮（放深色字）；最上面 15% 不放重要东西（电脑版页首会盖住）
+export function PageHero({ image, alt = "", eyebrow, title, lead, children }: {
+  image: string | null;
+  alt?: string;
+  eyebrow: React.ReactNode;
+  title: string;
+  lead?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <>
+      <section className="hero hero-top">
+        <HeaderOverHero />
+        <div className="hero-photo">{image && <Image src={image} alt={alt} fill preload sizes="100vw" />}</div>
+        <div className="hero-body">
+          {eyebrow}
+          <h1>{title}</h1>
+        </div>
+      </section>
+      {(lead || children) && (
+        <div className="container hero-below">
+          {lead && <p>{lead}</p>}
+          {children}
+        </div>
+      )}
+    </>
+  );
+}
 
 // 封面标题区。aside = 标题框右边的资料栏（例如文章的分类、法律依据），没有就不填
 export function CoverHead({ crumbs, image, title, lead, aside }: {
