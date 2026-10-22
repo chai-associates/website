@@ -207,6 +207,16 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 @media (hover: hover) { .photo-card:hover > img, .person-card:hover .person-photo > img { transform: scale(var(--zoom-hover)); } } /* 悬停：照片轻轻放大 */
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
+/* 照片卡片满版、左右各一半（加入我们的「按职位申请」）：贴齐画面两边、不圆角、直的 4:5，标题放大；手机上下排 */
+.photo-split { display: grid; gap: var(--hairline); }
+.photo-split > .photo-card { aspect-ratio: var(--ratio-portrait); border-radius: 0; padding: var(--space-5) var(--gutter); }
+.photo-split > .photo-card h3 { font-size: var(--text-title); }
+@media (width >= --theme(--breakpoint-md)) {
+  .photo-split { --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); grid-template-columns: repeat(2, minmax(0, 1fr)); } /* --edge = 页面内容的左右边距 */
+  .photo-split > .photo-card { padding-inline: var(--space-5); }
+  .photo-split > .photo-card:first-child { padding-left: var(--edge); } /* 外侧的字、按钮跟页面内容对齐 */
+  .photo-split > .photo-card:last-child { padding-right: var(--edge); }
+}
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
    .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、平板以上 3:1；没有照片时是浅灰底。
    照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。

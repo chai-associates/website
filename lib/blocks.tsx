@@ -49,7 +49,7 @@ export function CoverHead({ crumbs, image, title, lead, aside }: {
   crumbs: React.ReactNode;
   image: string | null;
   title: string;
-  lead: string;
+  lead?: string; // 标题下面一句话；不填就只有标题
   aside?: React.ReactNode;
 }) {
   return (
@@ -64,7 +64,7 @@ export function CoverHead({ crumbs, image, title, lead, aside }: {
         <div className="cover-panel">
           <div>
             <h1>{title}</h1>
-            <p>{lead}</p>
+            {lead && <p>{lead}</p>}
           </div>
           {aside}
         </div>
@@ -140,10 +140,11 @@ export function Icon({ name }: { name: IconName }) {
 }
 
 // 照片卡片（3:2，文字放在照片里）。desc 不填 = 只有标题（离婚百科的文章清单）
-export function PhotoCard({ href, image, title, desc, action }: { href: string; image?: string | null; title: string; desc?: string; action: string }) {
+// sizes：照片在画面上大约多宽（预设 = 卡片网格的一格）
+export function PhotoCard({ href, image, title, desc, action, sizes = "(min-width: 768px) 33vw, 100vw" }: { href: string; image?: string | null; title: string; desc?: string; action: string; sizes?: string }) {
   return (
     <Link href={href} className="photo-card">
-      {image && <Image src={image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
+      {image && <Image src={image} alt="" fill sizes={sizes} />}
       <div>
         <h3>{title}</h3>
         {desc && <p>{desc}</p>}
