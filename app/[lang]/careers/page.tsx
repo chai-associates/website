@@ -19,31 +19,31 @@ import { cities, common, firm, isLang, offices, pageMeta, type Bi } from "@/lib/
 // ─────────────────────────────────────────────
 const text = {
   title: { zh: "加入我们", en: "Careers" },
-  description: { zh: "在 Chai & Associates 发展你的法律事业：律师、业务与支援团队、实习律师计划。", en: "Build your legal career at Chai & Associates: lawyers, business and support team, and our chambering programme." }, // 给 Google 的说明
+  description: { zh: "在 Chai & Associates 开展你的法律事业：律师、行政与支援团队，以及实习律师计划。", en: "Build your legal career at Chai & Associates: lawyers, business and support team, and our chambering programme." }, // 给 Google 的说明
   // ① 标题
-  heading: { zh: "在这里发展你的事业", en: "Build Your Career With Us" },
+  heading: { zh: "走出属于你的路", en: "Define your future" },
   // ② 为什么选择我们（{email} 会换成可以点的招聘电邮）
   why: {
-    title: { zh: "为什么选择 Chai & Associates", en: "Why Chai & Associates" },
+    title: { zh: "一起，写下新的一页", en: "Make history. Together." },
     paragraphs: [
-      { zh: "我们相信，好的服务来自好的团队，所以我们用心为年轻律师营造一个可以成长的环境。团队秉持同样的做事原则：讲清楚、讲实际、有时限；我们会给你空间、指导和机会，让你的能力慢慢发挥出来。", en: "We believe good service starts with a good team, so we work to give young lawyers an environment where they can grow. Our team shares the same principles: be clear, be practical and keep to time. We give you the room, guidance and opportunities to develop." },
-      { zh: "如果你有冲劲、好奇心强，想找一家重视你的成长、也让你实际处理案件的律所，我们很想认识你。请把求职信、详细履历和成绩单电邮到 {email}。", en: "If you are driven and curious, and want a firm that invests in your development while giving you real casework, we would like to meet you. Email your cover letter, a detailed CV and your academic transcripts to {email}." },
-      { zh: "[年份] 年度实习律师（Chambering）计划将于 [日期] 开放申请，随到随审。我们希望申请人有冲劲、求知欲强、学业成绩良好，并积极参与模拟法庭或其他课外活动。", en: "Applications for our [Year] chambering programme open on [date] and are reviewed on a rolling basis. We look for candidates who are driven and intellectually curious, with a good academic record and involvement in mooting or other extracurricular activities." },
+      { zh: "好的团队，才有好的服务。所以我们很重视年轻律师的成长：给你发挥的空间，有前辈带、有人教，也有机会接触不同的案件。我们做事的原则很简单：讲清楚、讲实际、有时限。对客户是这样，对同事也一样。", en: "We believe good service starts with a good team, so we work to give young lawyers an environment where they can grow. Our team shares the same principles: be clear, be practical and keep to time. We give you the room, guidance and opportunities to develop." },
+      { zh: "如果你有冲劲、肯学，希望找一家愿意栽培你、也让你真正上手办案的律所，欢迎来信。请把求职信、详细履历和成绩单电邮至 {email}。", en: "If you are driven and curious, and want a firm that invests in your development while giving you real casework, we would like to meet you. Email your cover letter, a detailed CV and your academic transcripts to {email}." },
+      { zh: "[年份] 年实习律师（Chambering）计划将在 [日期] 开始接受申请，收到申请后会陆续安排面试。我们希望你积极主动、对法律有好奇心、成绩不错，最好也参加过模拟法庭或其他课外活动。", en: "Applications for our [Year] chambering programme open on [date] and are reviewed on a rolling basis. We look for candidates who are driven and intellectually curious, with a good academic record and involvement in mooting or other extracurricular activities." },
     ] as Bi[],
   },
   // ③ 满版照片（2400 × 1350）
   image: "/images/about/join-us.png" as string | null,
   // ④ 按职位申请（照片 3:2：放进 public/images/ 后填路径；没有照片时是灰底）
   roles: {
-    title: { zh: "按职位申请", en: "Apply by Role" },
+    title: { zh: "选择你想应征的职位", en: "Apply by Role" },
     list: [
-      { title: { zh: "律师", en: "Lawyers" }, desc: { zh: "Associates 与资深律师", en: "Associates and senior associates" }, image: null },
-      { title: { zh: "业务与支援团队", en: "Business & Support Team" }, desc: { zh: "法律助理与行政", en: "Legal assistants and administration" }, image: null },
+      { title: { zh: "律师", en: "Lawyers" }, desc: { zh: "律师与资深律师", en: "Associates and senior associates" }, image: null },
+      { title: { zh: "行政与支援团队", en: "Business & Support Team" }, desc: { zh: "法律助理、行政人员", en: "Legal assistants and administration" }, image: null },
     ] as { title: Bi; desc: Bi; image: string | null }[],
   },
   // ⑤ 按地点申请
-  locations: { title: { zh: "按地点申请", en: "Apply by Location" } },
-  apply: { zh: "申请", en: "Apply Now" },
+  locations: { title: { zh: "选择你想工作的办事处", en: "Apply by Location" } },
+  apply: { zh: "立即应征", en: "Apply Now" },
   subject: { zh: "应征：{x}", en: "Application: {x}" }, // 电邮标题，{x} = 职位或办事处
 };
 
