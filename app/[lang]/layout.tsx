@@ -11,7 +11,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import "@/lib/fonts"; // 字体（MiSans）
-import { ConsultButton, ConsultDialog, CookieConsent, LangSwitch, Menu, PageTransition } from "@/lib/interactive";
+import { ConsultButton, ConsultDialog, CookieConsent, HeaderAutoHide, LangSwitch, Menu, NavLinks, PageTransition } from "@/lib/interactive";
 import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, inquiry, inquiryForm, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
@@ -22,7 +22,7 @@ const text = {
     accept: { zh: "同意", en: "Accept" },
     decline: { zh: "不同意", en: "Decline" },
   },
-  // 选单（有 children 的会展开；href 同时给页脚用）
+  // 导航：手机的 ☰ 选单、电脑的页首导航（不含首页；有 children 的展开下拉）、页脚都读这里
   nav: [
     { href: "", label: common.home },
     {
@@ -78,17 +78,30 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
     <html lang={lang === "zh" ? "zh-Hans" : "en"} data-scroll-behavior="smooth">
       <body className={`lang-${lang}`}>
         {/* ── 页首 ───────────────────────────── */}
+        {/* 手机、平板：logo · 咨询 · ☰。电脑（≥ 1024）：上排 语言 · 咨询；下排 logo · 导航（有子页面的展开下拉），没有 ☰。
+            往下滑收起、往上滑出现（HeaderAutoHide）；首页最上面透明（HeaderOverHero，在首页 page.tsx） */}
         <header className="site-header">
+          <HeaderAutoHide />
           <div className="container nav">
             <Link href={home} className="logo" aria-label={firm.name}>
               <span className="logo-wm">CHAI &amp; ASSOCIATES</span>
               <span className="logo-sub">{text.logoSub[lang]}</span>
             </Link>
 
+            <NavLinks
+              label={text.menu[lang]}
+              items={text.nav.filter((l) => l.href).map((l) => ({
+                href: `${home}${l.href}`,
+                label: l.label[lang],
+                children: l.children?.map((c) => ({ href: `${home}${c.href}`, label: c.label[lang] })),
+              }))}
+            />
+
             <div className="nav-right">
+              <LangSwitch label={text.language[lang]} current={lang} />
               <ConsultButton className="btn btn-cta btn-sm" href={whatsappLink(lang)}>{text.book[lang]}</ConsultButton>
 
-              {/* 选单：里面放什么写在这里；打开 / 关闭由 lib/interactive.tsx 负责 */}
+              {/* 选单（手机、平板）：里面放什么写在这里；打开 / 关闭由 lib/interactive.tsx 负责 */}
               <Menu label={text.menu[lang]}>
                 <nav className="menu-links" aria-label="Main">
                   {text.nav.map((l) =>

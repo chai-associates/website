@@ -85,7 +85,8 @@
 
   /* ── 断点：只有一个，md = 电脑版 ─────────────── */
   --breakpoint-*: initial;
-  --breakpoint-md: 860px;
+  --breakpoint-md: 860px;  /* 平板 → 电脑：多栏排版 */
+  --breakpoint-lg: 1024px; /* 页首：导航整排摊开（放得下 6 个项目 + logo，英文也不换行）；以下用 ☰ */
 }
 
 /* ── 全站尺寸（不属于 Tailwind 分类的共用值） ──── */
@@ -117,7 +118,7 @@
   --weight-bold: 700;
   --tap: 48px;             /* 主要按钮、栏位高度（8pt 网格；Apple 最小 44） */
   --tap-min: 44px;         /* 最小可点击尺寸（HIG） */
-  --header-h: 64px;        /* 页首高度 */
+  --header-h: 64px;        /* 页首高度（手机、平板）；电脑版见最下面 */
   --motion: 0.35s;         /* 动态：一般（选单、卡片） */
   --motion-fast: 0.2s;     /* 动态：小（按钮、图示） */
   --motion-slow: 0.6s;     /* 动态：慢（首屏进场；照片轻轻缩回是它的 2 倍） */
@@ -127,8 +128,11 @@
   --focus-color: var(--color-ink); /* 键盘操作时的焦点框颜色（深色带、页脚里换成浅色） */
   --focus-width: 2px;
   --focus-offset: 2px;
-  --glass-bg: color-mix(in srgb, var(--color-bg) 72%, transparent); /* 页首毛玻璃：半透明白 */
-  --glass-blur: saturate(180%) blur(20px); /* 页首毛玻璃：后面的东西模糊、颜色稍微饱和（Apple 的做法） */
   --scrim-person: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.6) 100%); /* 人卡下方的深色带：放白色的名字、地区 · 职位 */
   --scrim-photo: linear-gradient(180deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.2) 55%, rgb(0 0 0 / 0.45) 100%); /* 照片卡片的暗角：上方放文字、下方放按钮 */
+}
+
+/* 电脑版页首比较高：上排（语言、咨询）+ 下排（logo、导航），参考 Hogan Lovells 的比例 */
+@media (width >= --theme(--breakpoint-lg)) {
+  :root { --header-h: 112px; } /* 上排 8 + 咨询按钮 44 + 下排 60（logo 两行、导航） */
 }

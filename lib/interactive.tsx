@@ -7,6 +7,8 @@
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
 // · ConsultButton   全站的「咨询」按钮：点了跳出咨询表格（不是直接去 WhatsApp）
 // · ConsultDialog   咨询表格视窗（layout.tsx，全站一个）：3 个问题 + 其他 → 打开 WhatsApp，讯息已写好
+// · NavLinks       电脑版页首的导航：目前所在的页面标古铜线；有子页面的鼠标移上去展开下拉（layout.tsx）
+// · HeaderAutoHide 往下滑页首收起、往上滑马上出现（只设定 <html data-header-hidden>；选单打开时不收）
 // · HeaderOverHero  首页：首屏照片还在页首下面时，页首透明；滑过照片变毛玻璃（只设定 <html data-over-hero>，样式在 globals.css）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
 // · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
@@ -174,6 +176,52 @@ export function ConsultDialog({ title, desc, close, form }: {
       <InquiryForm key={intro} {...form} intro={intro} />
     </dialog>
   );
+}
+
+// ── 电脑版导航 ─────────────────────────────────────
+// 目前所在的页面（或它的子页面）标 aria-current，样式在 globals.css（古铜线，跟 .tabs-line 同一个做法）。
+// 有 children 的项目：鼠标移上去、或用键盘 Tab 到它时，展开下拉（纯 CSS）。
+type NavItem = { href: string; label: string; children?: { href: string; label: string }[] };
+export function NavLinks({ label, items }: { label: string; items: NavItem[] }) {
+  const path = usePathname();
+  const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+  return (
+    <nav className="nav-links" aria-label={label}>
+      {items.map((l) =>
+        l.children ? (
+          <div key={l.href} className="nav-drop">
+            <Link href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</Link>
+            <div className="nav-drop-panel">
+              {l.children.map((c) => <Link key={c.href} href={c.href} aria-current={path === c.href ? "page" : undefined}>{c.label}</Link>)}
+            </div>
+          </div>
+        ) : (
+          <Link key={l.href} href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</Link>
+        ),
+      )}
+    </nav>
+  );
+}
+
+// ── 页首自动收起 ───────────────────────────────────
+// 往下滑超过页首高度 → <html data-header-hidden>（页首往上收）；往上滑 → 拿掉（马上出现）。
+// 选单打开时（body 不能滑）不动。没有 JavaScript 时页首一直在。
+export function HeaderAutoHide() {
+  useEffect(() => {
+    const root = document.documentElement;
+    let last = scrollY;
+    const onScroll = () => {
+      const y = scrollY;
+      const header = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+      if (document.body.style.overflow === "hidden") { last = y; return; }
+      if (y > last && y > header) root.dataset.headerHidden = "";
+      else if (y < last) delete root.dataset.headerHidden;
+      last = y;
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    return () => { removeEventListener("scroll", onScroll); delete root.dataset.headerHidden; };
+  }, []);
+  return null;
 }
 
 // ── 首页页首透明 ─────────────────────────────────
