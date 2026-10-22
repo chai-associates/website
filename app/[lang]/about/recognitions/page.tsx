@@ -22,7 +22,7 @@ type Item = { kind: Bi; title: Bi; desc: Bi };
 const text = {
   about: { zh: "关于我们", en: "About Us" },
   title: { zh: "荣誉与认可", en: "Recognitions" },
-  image: null as string | null, // 满版照片：放进 public/images/about/ 后填 "/images/about/recognitions.png"（2400 × 1350）
+  image: "/images/about/Recognition.png" as string | null, // 满版照片（1800 × 1200；建议 2400 × 1350）
   lead: { zh: "[一句话：律所获得的荣誉、认可与会员资格]", en: "[One line: the firm's awards, recognitions and memberships]" },
   list: [
     { kind: { zh: "荣誉", en: "Award" }, title: { zh: "[奖项或认可名称]", en: "[Award or recognition]" }, desc: { zh: "[颁发单位 · 年份]", en: "[Awarding body · Year]" } },

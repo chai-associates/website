@@ -30,7 +30,7 @@ const text = {
   // ② 律所简介 + 律所资料
   firm: {
     title: { zh: "律所简介", en: "Our Firm" },
-    image: null as string | null, // 团队合照：放进 public/images/about/ 后填 "/images/about/team.jpg"（1800 × 1200，3:2）
+    image: "/images/about/our-firm.png" as string | null, // 团队合照（1800 × 1200，3:2）
     paragraphs: [
       { zh: "Chai & Associates 成立于 2017 年，现由 Chai Mei Ching 律师主持，专注处理非穆斯林的离婚与家事案件。", en: "Chai & Associates was founded in 2017 and is led today by Chai Mei Ching. The firm acts in divorce and family matters for non-Muslims." },
       { zh: "家事案件牵涉孩子、财产和往后的生活。我们会先把你的处境和可以走的路讲清楚，说明每一步要做什么、大概需要多久，再按你的决定往下办。", en: "Family matters touch your children, your finances and what comes next. We start by explaining where you stand and what your options are, set out what each step involves and roughly how long it will take, and then act on your instructions." },

@@ -16,10 +16,10 @@ import { common, displayName, isLang, pageMeta, roles, team } from "@/lib/site";
 // ─────────────────────────────────────────────
 const text = {
   // ① 标题
-  heading: { zh: "在人生转折的时候，\n陪在你身边的人。", en: "The people beside you\nthrough a difficult chapter." },
+  heading: { zh: "坦诚相待，\n重视每一段关系。", en: "Open, approachable,\nbuilt on relationships." },
   lead: {
-    zh: "我们的家事律师在新山、八打灵再也和马六甲。联系我们之前，先认识会处理你案件的人。",
-    en: "Family lawyers in Johor Bahru, Petaling Jaya and Melaka. Get to know who will handle your matter before you get in touch.",
+    zh: "无论是同事之间，还是和客户之间，我们都以坦诚为本。我们鼓励每一位成员发挥所长，也持续培养他们，好好为客户办事。",
+    en: "We keep our relationships open and honest, with each other and with our clients. We encourage our people to be themselves, and we invest in their development so they can serve our clients well.",
   },
   // ② 主管合伙人的话（照片、名字取自 team 里的 Managing Partner；照片规格：横向 2400 × 1350，人放在右边三分之一、左边留白放字）
   message: {

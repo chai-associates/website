@@ -340,10 +340,9 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 
 /* ── 外框：页首 ─────────────────────────────────── */
 /* 页首：白底。首页的首屏照片还在页首下面时透明（lib/interactive.tsx 的 HeaderOverHero 切换 data-over-hero）。
-   往下滑收起、往上滑马上出现（HeaderAutoHide 切换 data-header-hidden）。 */
-.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: var(--hairline) solid var(--color-line); transition: top var(--motion) var(--ease), background-color var(--motion) var(--ease), border-color var(--motion) var(--ease); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
+   一直固定在最上面（往下滑也在）。 */
+.site-header { position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: var(--hairline) solid var(--color-line); transition: background-color var(--motion) var(--ease), border-color var(--motion) var(--ease); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
 html[data-over-hero] .site-header { background: transparent; border-bottom-color: transparent; }
-html[data-header-hidden] .site-header { top: calc(-1 * var(--header-h) - var(--hairline)); } /* 收起：用 top 往上推，不用 transform（transform 会让选单 position: fixed 改成跟着页首定位，整页被撑宽） */
 /* 手机、平板：logo · 咨询 · ☰ 一排 */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
 .nav-links, .nav-right .lang-switch { display: none; } /* 导航、语言切换在 ☰ 选单里 */
@@ -365,16 +364,18 @@ html[data-header-hidden] .site-header { top: calc(-1 * var(--header-h) - var(--h
   .nav-links { grid-area: links; display: flex; justify-content: flex-end; gap: var(--space-4); white-space: nowrap; } /* 不换行：1024 宽英文也放得下 */
 }
 /* 导航项目：目前所在的页面下面一条古铜线（跟 .tabs-line 同一个做法）；鼠标移上去也出现 */
-.nav-links > a, .nav-drop > a { display: flex; align-items: center; height: 100%; border-bottom: var(--border) solid transparent; font-weight: var(--weight-medium); transition: border-color var(--motion-fast) var(--ease); }
-.nav-links > a[aria-current="page"], .nav-drop > a[aria-current="page"] { border-color: var(--color-accent); }
-@media (hover: hover) { .nav-links > a:hover, .nav-drop:hover > a { border-color: var(--color-accent); } }
-/* 下拉（有子页面的项目）：鼠标移上去或键盘 Tab 到它时展开；靠右对齐（关于我们在导航最右边，靠左会超出画面） */
+.nav-links > a, .nav-drop > summary { display: flex; align-items: center; height: 100%; border-bottom: var(--border) solid transparent; font-weight: var(--weight-medium); transition: border-color var(--motion-fast) var(--ease); }
+.nav-links > a[aria-current], .nav-drop > summary[aria-current] { border-color: var(--color-accent); }
+@media (hover: hover) { .nav-links > a:hover, .nav-drop > summary:hover { border-color: var(--color-accent); } }
+/* 下拉（有子页面的项目）：原生 details，点一下展开、再点一下收起；靠右对齐（关于我们在导航最右边，靠左会超出画面） */
 .nav-drop { position: relative; display: flex; }
+.nav-drop > summary { cursor: pointer; list-style: none; }
+.nav-drop > summary::-webkit-details-marker { display: none; }
 /* 有下拉的项目：名字旁边一个向下的小箭头（CSS 画的，跟着字的颜色和大小）；展开时翻成向上 */
-.nav-drop > a::after { content: ""; width: 0.4em; height: 0.4em; margin: -0.2em 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
-.nav-drop:hover > a::after, .nav-drop:focus-within > a::after { transform: translateY(0.2em) rotate(-135deg); }
-.nav-drop-panel { position: absolute; top: 100%; right: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--space-1))); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease), visibility var(--motion-fast); }
-.nav-drop:hover > .nav-drop-panel, .nav-drop:focus-within > .nav-drop-panel { opacity: 1; visibility: visible; transform: none; }
+.nav-drop > summary::after { content: ""; width: 0.4em; height: 0.4em; margin: -0.2em 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
+.nav-drop[open] > summary::after { transform: translateY(0.2em) rotate(-135deg); }
+.nav-drop-panel { position: absolute; top: 100%; right: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease); }
+@starting-style { .nav-drop[open] > .nav-drop-panel { opacity: 0; transform: translateY(calc(-1 * var(--space-1))); } } /* 展开那一刻：淡入 + 往下一点 */
 .nav-drop-panel a { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); color: var(--color-ink-muted); transition: color var(--motion-fast) var(--ease); }
 .nav-drop-panel a:hover, .nav-drop-panel a[aria-current="page"] { color: var(--color-ink); }
 
