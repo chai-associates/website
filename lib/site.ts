@@ -236,6 +236,7 @@ export const common = {
     title: { zh: "想先聊聊你的情况？", en: "Want to talk through your situation?" },
     desc: { zh: "WhatsApp 我们，律师会了解你的情况，再告诉你可以怎么做。", en: "Message us on WhatsApp. A lawyer will understand your situation and explain your options." },
   },
+  swipe: { zh: "← 左右滑动 →", en: "← Swipe →" }, // 滑动列下面的提示（手机）
   notYours: {
     title: { zh: "不是你的情况？", en: "Not quite your situation?" },
     desc: { zh: "看看我们的全部服务，或直接问律师。", en: "Browse all our services, or ask a lawyer directly." },

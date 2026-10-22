@@ -90,11 +90,11 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
             <div className="section-head"><h2>{text.firm.title[lang]}</h2></div>
             <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
           </div>
-          <dl className="stats">
-            <div><dt>{text.stats.founded[lang]}</dt><dd>{firm.founded}</dd></div>
-            <div><dt>{text.stats.lawyers[lang]}</dt><dd>{lawyerCount}</dd></div>
-            <div><dt>{text.stats.offices[lang]}</dt><dd>{offices.length}</dd><dd>{cities.map((c) => c.full[lang]).join(" · ")}</dd></div>
-          </dl>
+          <ul className="stats">
+            <li><span className="stats-num">{firm.founded}</span><h3>{text.stats.founded[lang]}</h3></li>
+            <li><span className="stats-num">{lawyerCount}</span><h3>{text.stats.lawyers[lang]}</h3></li>
+            <li><span className="stats-num">{offices.length}</span><h3>{text.stats.offices[lang]}</h3><p>{cities.map((c) => c.full[lang]).join(" · ")}</p></li>
+          </ul>
         </div>
       </section>
 

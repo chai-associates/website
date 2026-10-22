@@ -90,7 +90,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
       </section>
 
       {/* ═══ ③ 不是你的情况？（浅灰） ═══ */}
-      <AskSection lang={lang} title={common.notYours.title} desc={common.notYours.desc} action={<Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>} />
+      <AskSection lang={lang} title={common.notYours.title} desc={common.notYours.desc} action={<Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]}</Link>} />
     </>
   );
 }

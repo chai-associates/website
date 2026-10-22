@@ -7,7 +7,7 @@
 //               用在：首页「联系我们」、办事处页（两边一模一样，改这里就好）
 // · PersonCard  人卡：照片 + 名字 + 地区 · 职位；电脑鼠标移上去多显示语言、主要领域
 //               用在：首页「我们的团队」、律师团队、个人页底部
-// · Icon        线条图示（全站一套）：首页重点、首屏按钮的箭头、☰ 选单「关注我们」的社群
+// · Icon        线条图示（全站一套）：首页重点、☰ 选单「关注我们」的社群（箭头不用图示，由 CSS 加 →）
 // · PhotoCard   照片卡片：照片 + 标题（+ 一句说明）+ 右下角按钮；整张可点
 //               用在：首页、离婚服务（服务分类）、离婚百科（文章）、文章页底部
 // · AskSection  页面结尾「问律师」：标题 + 说明 + 直接咨询律师按钮（可加旁边的链接、下面的清单）
@@ -106,7 +106,6 @@ const iconPaths = {
   lock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
   chat: <path d="M4 5h16v11H9l-5 4z" />,
   update: <><path d="M20 12a8 8 0 1 1-2.34-5.66" /><path d="M20 4v5h-5" /></>,
-  arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   facebook: <path d="M16 3.5h-2.5A3.5 3.5 0 0 0 10 7v14M7 11h7.5" />,
   instagram: <><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.25" cy="6.75" r="0.5" fill="currentColor" /></>,
 };
@@ -124,7 +123,7 @@ export function PhotoCard({ href, image, title, desc, action }: { href: string; 
         <h3>{title}</h3>
         {desc && <p>{desc}</p>}
       </div>
-      <span className="btn btn-light btn-sm photo-card-action">{action} →</span>
+      <span className="btn btn-light btn-sm photo-card-action">{action}</span>
     </Link>
   );
 }

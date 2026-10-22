@@ -55,7 +55,6 @@ const text = {
   // ③ 我们的团队（成员资料在 lib/site.ts 的 team）
   people: {
     title: { zh: "我们的团队", en: "Our People" },
-    swipe: { zh: "← 左右滑动 →", en: "← Swipe →" },
   },
 
   // ④ 联系我们（办事处资料在 lib/site.ts）
@@ -94,9 +93,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <h1>{hero.title[lang]}</h1>
           <p>{hero.sub[lang]}</p>
           <div className="btn-row">
-            <Link className="btn btn-outline" href={`/${lang}/services`}>
-              {hero.cta[lang]} <Icon name="arrow" />
-            </Link>
+            <Link className="btn btn-ghost btn-next" href={`/${lang}/services`}>{hero.cta[lang]}</Link>
           </div>
         </div>
       </section>
@@ -134,7 +131,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 768px) 33vw, 80vw" />
             ))}
           </div>
-          <p className="scroll-hint">{people.swipe[lang]}</p>
+          <p className="scroll-hint">{common.swipe[lang]}</p>
         </div>
       </section>
 

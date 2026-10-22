@@ -48,7 +48,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .section-dark .link-list a::after { color: var(--color-inverse-muted); }
 /* 深色带里的细线：改成深底用的细线 */
 .section-dark :is(.list-head, .link-list a) { border-color: var(--color-inverse-line); }
-.section-dark .steps > li { border-top-color: var(--color-inverse-ink); }
+.section-dark .steps > li { border-top-color: var(--color-inverse-line); }
 .section-head { margin-bottom: var(--space-4); }
 .section-head :is(h2, h3) + p { margin-top: var(--space-2); color: var(--color-ink-muted); }
 .section-head p + p { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); } /* 第二段 = 备注：caption（跟 page-head 一样） */
@@ -79,11 +79,14 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    首屏（首页）与主管合伙人的话共用 .hero：
    电脑：照片铺满整个区块、永远靠右对齐（画面缩窄时切掉的是左边，右边的人不会被切掉），黑字直接放左边（不加淡出层，照片要用亮的、左边留白）；
    手机：照片 16:9 在上，文字接在下面。 */
+/* 照片容器（首屏照片、满版封面、全屏照片、人像）共用：裁切、照片铺满、没照片时浅灰底 */
+:is(.hero-photo, .bleed, .cover-full, .person-photo) { position: relative; overflow: hidden; background: var(--color-line); }
+:is(.hero-photo, .bleed, .cover-full, .person-photo, .photo-card) > img { object-fit: cover; }
 .hero { position: relative; isolation: isolate; display: grid; }
 .hero-top { margin-top: calc(-1 * var(--header-h)); } /* 首页首屏：往上延伸到页首后面，页首透明时看得到整张照片 */
 .hero-top .hero-photo { aspect-ratio: auto; height: calc(100vw / var(--ratio-golden) + var(--header-h)); } /* 手机：照片多出页首的高度，页首下面露出来的部分刚好是黄金比例 */
-.hero-photo { position: relative; aspect-ratio: var(--ratio-golden); overflow: hidden; background: var(--color-line); } /* 手机：黄金比例 1.618 : 1 */
-.hero-photo > img { object-fit: cover; object-position: right center; }
+.hero-photo { aspect-ratio: var(--ratio-golden); } /* 手机：黄金比例 1.618 : 1 */
+.hero-photo > img { object-position: right center; }
 .hero-body { padding-block: var(--space-4) var(--space-5); } /* 手机：照片 ↔ 文字 24；下方 48，后面接页尾或下一段都不会贴住 */
 .hero-body > * { max-width: var(--measure); }
 .hero-intro { padding-top: 0; } /* 首屏下方：重点三栏 */
@@ -106,23 +109,19 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 @media (width >= --theme(--breakpoint-md)) {
   .points { justify-content: center; column-gap: var(--space-6); } /* 平板以上：四点置中，点与点之间拉开 */
 }
-/* 左右并排：照片（左）+ 文字（右）；手机上下排。文字那边用 section-head 等积木 */
-.split { display: grid; gap: var(--space-4); align-items: center; }
-@media (width >= --theme(--breakpoint-md)) { .split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); } }
-.split .section-head { margin-bottom: 0; }
-.split .section-head + * { margin-top: var(--space-4); }
 /* 介绍：左边区块标题、右边文字（第一段放大当重点，后面正常字）；手机上下排。下面可接 .stats */
 .intro { display: grid; gap: var(--space-4); }
 .intro .section-head { margin-bottom: 0; }
 .intro .prose > p:first-child { font-size: var(--text-lead); line-height: var(--leading-lead); }
 @media (width >= --theme(--breakpoint-md)) { .intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr); align-items: start; gap: var(--space-6); } }
-/* 积木：数字（全站通用）—— 大数字（--text-display）→ 标签（lead）→ 备注小字（可省略）。
-   每格只占自己的宽度、靠左一格接一格，放不下就换行；不平均撑满整排（数字才有份量） */
-.stats { display: flex; flex-wrap: wrap; gap: var(--space-5) var(--space-6); margin-top: var(--space-5); }
-.stats > div { display: flex; flex-direction: column; }
-.stats dd:first-of-type { order: -1; font-size: var(--text-display); font-weight: var(--weight-medium); line-height: var(--leading-heading); letter-spacing: var(--tracking-tight); } /* 数字排在标签上面（HTML 里标签在前，读屏顺序才对） */
-.stats dt { font-size: var(--text-lead); font-weight: var(--weight-medium); line-height: var(--leading-heading); }
-.stats dd + dd { margin-top: var(--space-1); color: var(--color-ink-muted); font-size: var(--text-caption); }
+/* 积木：大数字清单（全站通用）—— 超大数字（--text-display）→ 细线 → 标签 → 细线 → 说明（可省略）。
+   用在：律所简介的数字（2017 年成立……）、我们的理念 01 02 03。手机一栏，平板以上自动并排 */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-sm)), 1fr)); gap: var(--space-5) var(--space-4); }
+.stats > li { display: flex; flex-direction: column; }
+.stats-num { font-size: var(--text-display); font-weight: var(--weight-regular); line-height: var(--leading-display); letter-spacing: var(--tracking-tight); }
+.stats-num + * { margin-top: var(--space-4); padding-block: var(--space-3); border-block: var(--hairline) solid var(--color-line); font-size: var(--text-lead); } /* 标签：上下各一条细线 */
+.stats > li > p { margin-top: var(--space-3); }
+.intro + .stats { margin-top: var(--space-6); }
 /* 一组一组往下排（例如多个横线标题 + 内容） */
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); } /* minmax(0, 1fr)：里面的滑动列、长字不会把整页撑宽 */
 /* 正文段落（个人介绍、离婚百科文章、服务重点）：段落 · 小标题 h2 · 清单 ul；整块限制在一个阅读行宽（读文章的感觉）
@@ -151,7 +150,9 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
   .with-aside > aside { position: sticky; top: calc(var(--header-h) + var(--space-4)); }
 }
 /* 品牌语法 5：小标签 = 大写、拉开字距、古铜色 */
-.tag { font-size: var(--text-caption); font-weight: var(--weight-medium); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-accent); }
+/* 小标签（全站一种样式；:where 不加优先级，下面的颜色才盖得过）：caption、拉开字距、英文大写；颜色两种 —— 古铜 .tag（标题上方），灰色（资料列标签、下拉里的小标题） */
+:where(.tag, .facts dt, .nav-drop-extra > span) { font-size: var(--text-caption); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-ink-muted); }
+.tag { font-weight: var(--weight-medium); color: var(--color-accent); }
 .muted { color: var(--color-ink-muted); }
 
 /* ── 积木：按钮与链接 ─────────────────────────────── */
@@ -162,16 +163,17 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 @media (hover: hover) {
   .btn-cta:hover { filter: brightness(1.12); }
   .btn-ghost:hover { background: var(--color-ink); color: var(--color-bg); }
-  .btn-outline:hover { background: var(--color-accent); color: var(--color-on-accent); }
   .btn-light:hover { background: var(--color-subtle); }
   .chip:not([data-lead]):hover { border-color: var(--color-ink); }
 }
 .btn-ghost { background: var(--color-bg); color: var(--color-ink); border-color: var(--color-ink); }
 .btn-light { background: var(--color-white); color: var(--color-ink); }
-.btn-outline { background: transparent; color: var(--color-accent); border-color: var(--color-accent); }
 .btn-sm { min-height: var(--tap-min); padding: 0 var(--space-3); font-size: var(--text-caption); } /* 小按钮 = caption 字（页首「咨询」在 320 宽英文才放得下） */
 /* 按钮并排（放不下自动换行） */
 .btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+/* 箭头（全站一种做法）：「去别的地方」的链接和按钮由 CSS 自动加 →，文案里不打箭头 */
+:is(.text-link, .link-list a, .photo-card-action, .btn-next)::after { content: "→"; transition: transform var(--motion-fast) var(--ease); }
+@media (hover: hover) { :is(.text-link, .link-list a, .photo-card-action, .btn-next):hover::after { transform: translateX(var(--space-1)); } } /* 悬停：箭头往右推一点 */
 .text-link { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); font-weight: var(--weight-medium); }
 .chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-pill); font-weight: var(--weight-medium); white-space: nowrap;  transition: border-color var(--motion-fast) var(--ease); }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
@@ -183,7 +185,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* ── 积木：卡片 ─────────────────────────────────── */
 .card { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
 /* 卡片里的字：标题 → 说明（灰色小字）→ 最下面放链接或按钮 */
-.card > p { color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」：相隔 4、说明行距 1.5（比页面标题那一组 8 更紧） */
+/* 小组「h3 + 说明」（卡片、文字项目、步骤、链接清单、大数字清单共用）：说明灰色、行距 1.5（比页面标题那一组更紧） */
+:is(.card, .feature, .steps > li, .link-list a, .stats > li) > p { color: var(--color-ink-muted); line-height: var(--leading-lead); }
 .card > .text-link { margin-top: auto; padding-top: calc(var(--space-4) - var(--space-1)); font-size: var(--text-caption); } /* 动作比标题小一号；4（gap）+ 20 = 跟内容相隔 24 */
 .card > .btn-row { margin-top: auto; padding-top: calc(var(--space-4) - var(--space-1)); } /* 4（gap）+ 20 = 跟内容相隔 24 */
 .card > .btn-row > .btn { flex: 1 1 auto; } /* 按钮照字的宽度排，放不下就换行再撑满；不会把中文挤成直的 */
@@ -193,7 +196,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    固定排版：标题 + 说明在左上，按钮在右下。有照片的导览项目（服务分类、百科文章、更多关于我们）都用这个；单项服务用 .link-list（不放照片） */
 .photo-card { aspect-ratio: var(--ratio-card); position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: clip; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); } /* 至少 3:2；字多的时候往下长，不会被切掉（clip 才会长，hidden 会切字） */
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
-.photo-card > img { z-index: -2; object-fit: cover; transition: transform var(--motion) var(--ease); }
+.photo-card > img { z-index: -2; transition: transform var(--motion) var(--ease); }
 @media (hover: hover) { .photo-card:hover > img, .person-card:hover .person-photo > img { transform: scale(var(--zoom-hover)); } } /* 悬停：照片轻轻放大 */
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
@@ -201,8 +204,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、平板以上 3:1；没有照片时是浅灰底。
    照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
    .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
-.bleed, .cover-full { position: relative; aspect-ratio: var(--ratio-photo); overflow: hidden; background: var(--color-line); } /* .cover-full 见下面 */
-:is(.bleed, .cover-full) > img { object-fit: cover; }
+.bleed, .cover-full { aspect-ratio: var(--ratio-photo); } /* .cover-full 见下面 */
 .page-head > .bleed { margin-top: var(--space-3); } /* 面包屑 ↔ 照片 16 */
 /* 全屏照片（关于我们 › 律所简介的团队合照）：跟首页一样先照片、后标题。满版 16:9，整张不裁；
    平板以上往上延伸到页首后面（页首透明，HeaderOverHero）。手机页首占比太大会挡到后排的头，所以手机接在页首下面 */
@@ -215,14 +217,10 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
   /* 往左多伸出一个页边距、里面留同样的空白：两个上角都能圆角，标题离框边有空间，而且标题仍然跟下面正文的左边对齐 */
   .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin: calc(-1 * var(--space-6)) var(--space-6) 0 calc(-1 * var(--gutter)); padding: var(--space-5) var(--space-5) 0 var(--gutter); border-radius: var(--radius-md) var(--radius-md) 0 0; }
 }
-/* 照片框：圆角裁切的场景照片（品牌语法 6：3:2；人像用 person-photo 的 4:5） */
-.photo-frame { position: relative; overflow: hidden; aspect-ratio: var(--ratio-card); border-radius: var(--radius-md); background: var(--color-line); }
-.photo-frame > img { object-fit: cover; }
 
 /* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句。不加框 ──
    有照片的项目一律用 .photo-card（文字放在照片里面） */
 .feature { display: flex; flex-direction: column; gap: var(--space-1); }
-.feature > p { color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .card-grid:has(> .feature) { row-gap: var(--space-5); } /* 导览项目不加框：上下两行之间 48，比项目里面的 8 / 16 大很多，才看得出是不同项目 */
 
 /* ── 积木：人物卡片（照片 4:5 → 名字 → 职位 → 办事处 · 语言） ── */
@@ -233,8 +231,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 人卡：照片 4:5，下方深色带压白字：名字 → 地区 · 职位。
    电脑（有鼠标）：鼠标移上去，深色带往上长，多显示语言、主要领域；手机、平板（没有鼠标）不显示，点进个人页看 */
 .person-card { position: relative; display: block; overflow: hidden; border-radius: var(--radius-md); }
-.person-photo { position: relative; display: grid; place-items: center; aspect-ratio: var(--ratio-portrait); overflow: hidden; border-radius: var(--radius-md); background: var(--color-line); color: var(--color-ink-muted); font-size: var(--text-title); }
-.person-photo > img { object-fit: cover; transition: transform var(--motion) var(--ease); }
+.person-photo { display: grid; place-items: center; aspect-ratio: var(--ratio-portrait); border-radius: var(--radius-md); color: var(--color-ink-muted); font-size: var(--text-title); }
+.person-photo > img { transition: transform var(--motion) var(--ease); }
 .person-info { position: absolute; inset-inline: 0; bottom: 0; display: grid; gap: var(--space-1); padding: var(--space-5) var(--space-3) var(--space-3); background: var(--scrim-person); color: var(--color-white); }
 .person-info p { font-size: var(--text-caption); line-height: var(--leading-lead); } /* 地区 · 职位，以及滑上来的语言、主要领域 */
 .person-more { display: none; }
@@ -246,7 +244,6 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 
 /* ── 积木：资料列（小标签 + 内容，例如 语言 / 执业年份 / 办事处） ── */
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-xs)), 1fr)); gap: var(--space-3); padding: var(--space-3) 0; border-block: var(--hairline) solid var(--color-line); }
-.facts dt { font-size: var(--text-caption); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-ink-muted); }
 .facts dd { margin-top: var(--space-1); font-weight: var(--weight-medium); }
 /* 资料列里放清单（文章的法律依据：一条法令一项 → 下面小字：条文、生效日期、来源） */
 .facts dd > ul { padding-left: var(--space-4); list-style: disc; }
@@ -276,15 +273,13 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 
 /* ── 积木：步骤（合作流程）：每一步 = 小标签编号 → h3 → 说明；手机一栏，电脑自动并排 ── */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-sm)), 1fr)); gap: var(--space-5) var(--space-4); }
-.steps > li { display: flex; flex-direction: column; gap: var(--space-1); padding-top: var(--space-3); border-top: var(--border) solid var(--color-ink); }
-.steps > li > p { color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
+.steps > li { display: flex; flex-direction: column; gap: var(--space-1); padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-line); }
 
 /* ── 积木：链接清单（不加框）：每一行一个链接，细线分隔，右边 →；用在分类下的服务、服务页的「继续了解其他服务」
    一行可以只放文字，也可以放「h3 标题 + p 一句说明」（服务索引） ── */
 .link-list a { display: grid; grid-template-columns: 1fr auto; align-content: center; align-items: baseline; gap: var(--space-1) var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: var(--hairline) solid var(--color-line); }
-.link-list a::after { content: "→"; grid-column: 2; grid-row: 1; color: var(--color-ink-muted); line-height: var(--leading-heading);  transition: transform var(--motion-fast) var(--ease); } /* 箭头对齐第一行（标题） */
-@media (hover: hover) { .link-list a:hover::after { transform: translateX(var(--space-1)); } } /* 悬停：箭头往右推一点 */
-.link-list a > p { grid-column: 1; color: var(--color-ink-muted); line-height: var(--leading-lead); } /* 小组「h3 + 说明」：相隔 4、行距 1.5 */
+.link-list a::after { grid-column: 2; grid-row: 1; color: var(--color-ink-muted); line-height: var(--leading-heading); } /* 箭头对齐第一行（标题） */
+.link-list a > p { grid-column: 1; }
 .link-list a:has(> p) { padding-block: var(--space-3); } /* 两行的（标题 + 说明）上下多留一点 */
 .link-list:has(p) { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--col-min-lg)), 1fr)); column-gap: var(--space-5); } /* 服务索引：电脑 2 栏，手机 1 栏 */
 :is(.btn, .btn-row) + .link-list { margin-top: var(--space-4); } /* 主要按钮下面再列几个去处（百科读完 → 相关服务） */
@@ -395,7 +390,7 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 .nav-drop-panel a:hover, .nav-drop-panel a[aria-current="page"] { color: var(--color-ink); }
 /* 下拉最后一组「关注我们」：细线隔开 + 小标题，下面是社群连结（开新视窗） */
 .nav-drop-extra { display: grid; margin-top: var(--space-2); padding-top: var(--space-2); border-top: var(--hairline) solid var(--color-line); }
-.nav-drop-extra > span { padding: var(--space-1) var(--space-4); font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: var(--tracking-wide); }
+.nav-drop-extra > span { padding: var(--space-1) var(--space-4); }
 
 /* ── 外框：选单（打开 / 关闭由 lib/interactive.tsx 切换 data-open） ── */
 /* ☰ 三条线（只属于这个按钮的尺寸）；打开时上下两条移到中间、转成 ✕：移动距离 = 线距 + 线粗 */

@@ -2,7 +2,7 @@
 // 我们的理念 /about/values（选单「关于我们 › 我们的理念」）
 // ───────────────────────────────────────────────────────────────
 // 区块顺序：① 面包屑 → 满版照片 → 标题框：我们的理念 + 使命（lib/blocks.tsx 的 CoverHead）
-//          ② 愿景与做法（4 段）→ 3 个理念（白）  ③ 想先聊聊（浅灰）
+//          ② 愿景与做法（4 段）→ 3 个理念：超大编号 01 02 03（白）  ③ 想先聊聊（浅灰）
 // 使命、3 个理念已由律所确认（2026 年 10 月）；② 的 4 段是参考旧网站改写的草稿，待确认。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -64,14 +64,15 @@ export default async function ValuesPage({ params }: PageProps<"/[lang]/about/va
       <section className="section">
         <div className="container stack">
           <div className="prose">{text.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
-          <div className="card-grid">
-            {text.list.map((v) => (
-              <article key={v.title.zh} className="feature">
+          <ol className="stats">
+            {text.list.map((v, i) => (
+              <li key={v.title.zh}>
+                <span className="stats-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{v.title[lang]}</h3>
                 <p>{v.desc[lang]}</p>
-              </article>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 

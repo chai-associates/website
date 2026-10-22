@@ -67,7 +67,7 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
             </figure>
           )}
           <div className="btn-row">
-            <Link className="btn btn-outline" href={`/${lang}/people/all`}>{text.message.cta[lang]} →</Link>
+            <Link className="btn btn-ghost btn-next" href={`/${lang}/people/all`}>{text.message.cta[lang]}</Link>
           </div>
         </div>
       </section>

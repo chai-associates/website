@@ -93,7 +93,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
                   <span className="tag">{e.date} · {e.source[lang]}</span>
                   <h3>{e.title[lang]}</h3>
                   {e.desc && <p>{e.desc[lang]}</p>}
-                  {e.href && <a className="text-link" href={e.href} target="_blank" rel="noopener">{content.link[lang]} →</a>}
+                  {e.href && <a className="text-link" href={e.href} target="_blank" rel="noopener">{content.link[lang]}</a>}
                 </article>
               ))}
             </div>

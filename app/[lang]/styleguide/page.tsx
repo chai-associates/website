@@ -36,7 +36,7 @@ const text = {
     ["bg-subtle", "subtle 浅灰区块"], ["bg-accent", "accent 古铜"], ["bg-inverse", "inverse 深色底"],
   ],
   sizes: [
-    ["text-display", "display · 大数字（.stats，跟 lead 标签一组）"],
+    ["text-display", "display · 超大数字（.stats：01 02 03、2017）"],
     ["text-title", "title · 页面标题 h1"], ["text-lead", "lead · 页面副标题（跟 title 一组）"],
     ["text-subtitle", "subtitle · 区块标题 h2"], ["text-body", "body · 说明、正文、卡片标题 h3（跟 subtitle 一组）"], ["text-caption", "caption · 小标签、面包屑、备注"],
   ],
@@ -78,7 +78,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
             <div className="list-head"><h2>颜色</h2><span>tokens.css</span></div>
             <div className="card-grid">
               {text.colors.map(([cls, label]) => (
-                <div key={cls} className="feature"><div className={`photo-frame ${cls}`} /><p>{label}</p></div>
+                <div key={cls} className="feature"><div className={`card ${cls}`} /><p>{label}</p></div>
               ))}
             </div>
           </div>
@@ -104,17 +104,16 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div className="list-head"><h3>按钮</h3><span>全部胶囊形 · 文字一律用动词</span></div>
           <div className="btn-row">
             <a className="btn btn-cta" href="#">立即咨询（btn-cta · 主要）</a>
-            <a className="btn btn-outline" href="#">了解我们的服务（btn-outline）</a>
-            <a className="btn btn-ghost" href="#">查看全部服务（btn-ghost · 次要）</a>
+            <a className="btn btn-ghost btn-next" href="#">了解我们的服务（btn-ghost · 次要；btn-next 自动加箭头）</a>
             <a className="btn btn-ghost btn-sm" href="#">小按钮（btn-sm）</a>
-            <a className="text-link" href="#">文字链接（text-link）→</a>
+            <a className="text-link" href="#">文字链接（text-link，箭头自动加）</a>
           </div>
           </div>
           <div>
           <div className="list-head"><h3>小按钮</h3><span>chip · 主要领域（data-lead）变黑</span></div>
           <div className="btn-row">
-            <a className="chip" data-lead href="#">抚养权与监护权（data-lead）→</a>
-            <a className="chip" href="#">探视权（chip）→</a>
+            <a className="chip" data-lead href="#">抚养权与监护权（data-lead）</a>
+            <a className="chip" href="#">探视权（chip）</a>
           </div>
           </div>
           </div>
@@ -130,7 +129,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               {["办理离婚", "孩子"].map((t) => (
                 <a key={t} href="#" className="photo-card">
                   <div><h3>{t}</h3><p>photo-card：左上标题、右下按钮</p></div>
-                  <span className="btn btn-light btn-sm photo-card-action">查看服务 →</span>
+                  <span className="btn btn-light btn-sm photo-card-action">查看服务</span>
                 </a>
               ))}
             </div>
@@ -148,10 +147,6 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 <p>点开才看到里面的内容（律师团队的职位分组）</p>
               </details>
             ))}
-          </div>
-          <div>
-            <div className="list-head"><h2>照片框</h2><span>photo-frame · 场景 3:2</span></div>
-            <div className="photo-frame"><Image src="/images/hero/hero-bg-v6.png" alt="" fill sizes="448px" /></div>
           </div>
           <div>
             <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 3 栏</span></div>
@@ -213,12 +208,12 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
         <div className="container with-aside">
           <div className="stack">
             <div>
-              <div className="list-head"><h2>数字</h2><span>stats · 大数字 → 标签 → 备注</span></div>
-              <dl className="stats">
-                <div><dt>{lang === "en" ? "Founded" : "年成立"}</dt><dd>2017</dd></div>
-                <div><dt>{lang === "en" ? "Lawyers" : "位律师"}</dt><dd>8</dd></div>
-                <div><dt>{lang === "en" ? "Offices" : "间办事处"}</dt><dd>5</dd><dd>{lang === "en" ? "Johor Bahru · Petaling Jaya · Melaka" : "新山 · 八打灵再也 · 马六甲"}</dd></div>
-              </dl>
+              <div className="list-head"><h2>大数字清单</h2><span>stats · 超大数字 → 细线 → 标签 → 细线 → 说明</span></div>
+              <ol className="stats">
+                <li><span className="stats-num">01</span><h3>讲清楚</h3><p>一句话说明</p></li>
+                <li><span className="stats-num">2017</span><h3>{lang === "en" ? "Founded" : "年成立"}</h3></li>
+                <li><span className="stats-num">5</span><h3>{lang === "en" ? "Offices" : "间办事处"}</h3><p>{lang === "en" ? "Johor Bahru · Petaling Jaya · Melaka" : "新山 · 八打灵再也 · 马六甲"}</p></li>
+              </ol>
             </div>
             <div>
               <div className="list-head"><h2>资料列</h2><span>facts</span></div>
@@ -332,13 +327,6 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               ))}
             </div>
           </div>
-          <div className="split">
-            <div className="photo-frame" />
-            <div>
-              <div className="section-head"><h2>左右并排</h2></div>
-              <p>照片（左）+ 文字（右）；手机上下排。</p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -351,7 +339,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           <div className="btn-row">
             <a className="btn btn-cta" href="#">直接咨询律师</a>
-            <a className="text-link" href="#">查看全部服务 →</a>
+            <a className="text-link" href="#">查看全部服务</a>
           </div>
         </div>
       </section>

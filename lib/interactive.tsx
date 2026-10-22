@@ -354,7 +354,7 @@ export function CookieConsent({ gaId, text, policyHref }: {
   if (consent !== null) return null;
   return (
     <div className="consent" role="region" aria-label={text.policy}>
-      <p>{text.message} <Link className="text-link" href={policyHref}>{text.policy} →</Link></p>
+      <p>{text.message} <Link className="text-link" href={policyHref}>{text.policy}</Link></p>
       <div className="btn-row">
         <button type="button" className="btn btn-cta btn-sm" onClick={() => setConsent("granted")}>{text.accept}</button>
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => setConsent("denied")}>{text.decline}</button>

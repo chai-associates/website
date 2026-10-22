@@ -128,7 +128,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
           <div className="container">
             <div className="list-head">
               <h2>{fill(text.more)}</h2>
-              <Link className="text-link" href={`/${lang}/divorcepedia#${a.category}`}>{text.browse[lang]} →</Link>
+              <Link className="text-link" href={`/${lang}/divorcepedia#${a.category}`}>{text.browse[lang]}</Link>
             </div>
             <div className="card-grid">
               {more.slice(0, 3).map((m) => (

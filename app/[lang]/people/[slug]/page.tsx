@@ -84,7 +84,6 @@ const text = {
   overview: { zh: "概览", en: "Overview" },
   credentials: { zh: "资历", en: "Credentials" },
   // ④ 同城成员
-  swipe: { zh: "← 左右滑动 →", en: "← Swipe →" },
   alsoIn: { zh: "{city}的其他成员", en: "Also in {city}" },
   allPeople: { zh: "全部成员", en: "All our people" },
 };
@@ -217,12 +216,12 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
           <div className="container">
             <div className="list-head">
               <h2>{fill(text.alsoIn)}</h2>
-              <Link className="text-link" href={`/${lang}/people/all`}>{text.allPeople[lang]} →</Link>
+              <Link className="text-link" href={`/${lang}/people/all`}>{text.allPeople[lang]}</Link>
             </div>
             <div className="scroll-row">
               {others.map((o) => <PersonCard key={o.slug} p={o} lang={lang} sizes="(min-width: 768px) 33vw, 80vw" />)}
             </div>
-            <p className="scroll-hint">{text.swipe[lang]}</p>
+            <p className="scroll-hint">{common.swipe[lang]}</p>
           </div>
         </section>
       )}

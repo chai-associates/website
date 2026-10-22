@@ -74,7 +74,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
                         <PhotoCard key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} image={a.image} title={a.title[lang]} action={common.readArticle[lang]} />
                       ))}
                     </div>
-                    <Link className="text-link" href={`/${lang}/services/${g.slug}`}>{text.services[lang].replace("{category}", g.title[lang])} →</Link>
+                    <Link className="text-link" href={`/${lang}/services/${g.slug}`}>{text.services[lang].replace("{category}", g.title[lang])}</Link>
                   </div>
                 </div>
               </div>
