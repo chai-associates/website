@@ -73,8 +73,9 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   const lang: Lang = raw;
   const home = `/${lang}`;
 
+  // <html data-scroll-behavior="smooth">：换页时 Next.js 直接跳到顶（不用 smooth 慢慢滑），否则会被换页动画打断、停在页面中间。页内 #锚点 仍然平滑滑动
   return (
-    <html lang={lang === "zh" ? "zh-Hans" : "en"}>
+    <html lang={lang === "zh" ? "zh-Hans" : "en"} data-scroll-behavior="smooth">
       <body className={`lang-${lang}`}>
         {/* ── 页首 ───────────────────────────── */}
         <header className="site-header">

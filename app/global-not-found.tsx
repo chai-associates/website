@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang="zh-Hans">
+    <html lang="zh-Hans" data-scroll-behavior="smooth">
       <body className="lang-zh">
         <main>
           <section className="section">

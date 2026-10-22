@@ -80,7 +80,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    手机：照片 16:9 在上，文字接在下面。 */
 .hero { position: relative; isolation: isolate; display: grid; }
 .hero-top { margin-top: calc(-1 * var(--header-h)); } /* 首页首屏：往上延伸到页首后面，页首透明时看得到整张照片 */
-.hero-photo { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--color-line); }
+.hero-top .hero-photo { aspect-ratio: auto; height: calc(100vw / var(--ratio-golden) + var(--header-h)); } /* 手机：照片多出页首的高度，页首下面露出来的部分刚好是黄金比例 */
+.hero-photo { position: relative; aspect-ratio: var(--ratio-golden); overflow: hidden; background: var(--color-line); } /* 手机：黄金比例 1.618 : 1 */
 .hero-photo > img { object-fit: cover; object-position: right center; }
 .hero-body { padding-block: var(--space-4) var(--space-5); } /* 手机：照片 ↔ 文字 24；下方 48，后面接页尾或下一段都不会贴住 */
 .hero-body > * { max-width: var(--measure); }
@@ -90,7 +91,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .hero-body > * + .btn-row { margin-top: var(--space-4); } /* 说明或引言 ↔ 按钮 24 */
 @media (width >= --theme(--breakpoint-md)) {
   .hero { min-height: 70svh; align-items: center; }
-  .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; }
+  .hero-photo, .hero-top .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; height: auto; }
   .hero-body { padding-block: var(--space-6); }
   .hero-intro { padding-top: var(--space-5); } /* 电脑：照片 ↔ 重点三栏 48（手机的 48 已经在 .hero-body 下方） */
   .hero-body > * { max-width: var(--measure-short); } /* 文字只占左边，不压到右边的人 */
