@@ -142,7 +142,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             <div className="card-grid">
               {more.slice(0, 3).map((m) => (
                 <Link key={m.slug} href={`/${lang}/divorcepedia/${m.slug}`} className="photo-card">
-                  {m.image && <Image src={m.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                  {m.image && <Image src={m.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
                   <div>
                     <h3>{m.title[lang]}</h3>
                     <p>{m.summary[lang]}</p>

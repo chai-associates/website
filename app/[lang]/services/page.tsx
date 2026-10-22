@@ -103,7 +103,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           <div className="card-grid">
             {serviceCategories.map((c) => (
               <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card">
-                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
                 <div>
                   <h3>{c.title[lang]}</h3>
                   <p>{c.short[lang]}</p>

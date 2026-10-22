@@ -22,10 +22,10 @@ type Item = { title: Bi; desc: Bi };
 const text = {
   title: { zh: "关于我们", en: "About Us" },
   // ① 标题
-  heading: { zh: "专注家事法律的\n律师事务所。", en: "A law firm focused\non family matters." },
+  heading: { zh: "坦诚相待，\n重视每一段关系。", en: "Open, approachable,\nbuilt on relationships." },
   lead: {
-    zh: "Chai & Associates 专注处理非穆斯林的离婚与家事案件，在新山、八打灵再也和马六甲设有 5 间办事处。",
-    en: "Chai & Associates acts in divorce and family matters for non-Muslims, with five offices across Johor Bahru, Petaling Jaya and Melaka.",
+    zh: "我们对客户坦诚，对同事也一样：你的案件进展如何、有什么风险，我们都会直接告诉你。团队里的每一位成员，我们也持续培养，让他们能把你的案件处理好。",
+    en: "We are open and honest with our clients and with each other, so you will hear plainly how your matter is going and what the risks are. We also keep developing everyone on our team, so they are well equipped to handle your matter.",
   },
   // ② 律所简介 + 律所资料
   firm: {
@@ -90,7 +90,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       {/* ═══ ② 律所简介：照片 + 文字 + 资料（浅灰） ═══ */}
       <section id="firm" className="section section-muted">
         <div className="container split">
-          <div className="photo-frame">{text.firm.image && <Image src={text.firm.image} alt={firm.name} fill sizes="(min-width: 860px) 50vw, 100vw" />}</div>
+          <div className="photo-frame">{text.firm.image && <Image src={text.firm.image} alt={firm.name} fill sizes="(min-width: 768px) 50vw, 100vw" />}</div>
           <div>
             <div className="section-head"><h2>{text.firm.title[lang]}</h2></div>
             <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>

@@ -24,10 +24,10 @@ const text = {
   mission: { zh: "用清楚、实际的方式，和你一起处理离婚与家事问题。", en: "To work through divorce and family matters with you, clearly and practically." },
   // ② 愿景与做法（参考旧网站改写；律师公会规定：不自夸、不比较）
   paragraphs: [
-    { zh: "我们的愿景，是让每一位客户在做决定之前，都清楚自己的权利、选择和下一步；也希望以及时、实际的建议，成为客户在家事问题上可以信赖的律所。", en: "Our vision is that every client understands their rights, options and next step before they decide, and that we are a firm clients can rely on for timely, practical advice in family matters." },
-    { zh: "我们从你的处境出发。离婚与家事案件关系到孩子、财务和往后的生活，所以在给建议之前，我们会先花时间了解，对你来说什么最重要。", en: "We start with your circumstances. Divorce and family matters affect your children, your finances and your future, so we take the time to understand what matters most to you before we advise." },
-    { zh: "需要处理的事情，我们会及时回应。我们在新山、八打灵再也和马六甲设有办事处，彼此配合，无论你在哪里，案件都能继续推进。", en: "When something needs attention, we respond promptly. Our offices in Johor Bahru, Petaling Jaya and Melaka work together, so your matter keeps moving wherever you are." },
-    { zh: "我们会在案件的需要和所花的费用之间，找一个合理的平衡。能和解的，我们会直说；不能和解的，我们也会直说，并告诉你接下来会面对什么。", en: "We look for a sensible balance between what a matter needs and what it costs. If a dispute can be settled, we will say so. If it cannot, we will say that too, and explain what lies ahead." },
+    { zh: "我们希望你在做任何决定之前，都清楚自己有哪些权利、可以怎么选、下一步是什么。遇到家事问题时，你可以放心来问我们，得到及时、实际的答案。", en: "We want you to know your rights, your options and your next step before you make any decision. When a family matter comes up, you can come to us for a timely, practical answer." },
+    { zh: "我们先了解你的处境。离婚与家事关系到孩子、财务和往后的生活，所以在给建议之前，我们会先问清楚，对你来说什么最重要。", en: "We start with your situation. Divorce and family matters affect your children, your finances and your future, so before we advise, we ask what matters most to you." },
+    { zh: "案件交给我们之后，推进是我们的事。每一步要做什么、你需要准备什么，我们会提前告诉你；有进展或有变化，我们会主动通知你，不用你追着问。我们在新山、八打灵再也和马六甲都有办事处，你可以就近和我们见面。", en: "Once you instruct us, moving your matter forward is our job. We tell you in advance what each step involves and what you need to prepare, and we update you when things progress or change, so you never have to chase us. With offices in Johor Bahru, Petaling Jaya and Melaka, you can meet us close to where you are." },
+    { zh: "我们会帮你衡量：哪些值得花时间和费用去争取，哪些不值得。能和解的，我们会直接告诉你；不能和解的，也会直接告诉你，并说明接下来会面对什么。", en: "We help you weigh what is worth the time and cost to pursue, and what is not. If a dispute can be settled, we will tell you. If it cannot, we will tell you that too, and explain what lies ahead." },
   ] as Bi[],
   list: [
     { title: { zh: "讲清楚", en: "Plain terms" }, desc: { zh: "用你听得懂的话说明法律和程序，不绕弯。", en: "We explain the law and the process in plain terms." } },

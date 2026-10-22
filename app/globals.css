@@ -12,7 +12,7 @@
    新的版面需求 → 先找现有积木；真的没有才在这里加一个积木，不在页面里各自写。
    ═══════════════════════════════════════════════════════════════ */
 
-/* 内容容器：用 @utility 取代 Tailwind 自带的 container（自带的会把宽度锁在断点 860px） */
+/* 内容容器：用 @utility 取代 Tailwind 自带的 container（自带的会把宽度锁在断点宽度） */
 @utility container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
 
 /* 基础样式放在 @layer base（优先级最低，积木可以直接覆盖） */
@@ -93,16 +93,17 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
   .hero { min-height: 70svh; align-items: center; }
   .hero-photo, .hero-top .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; height: auto; }
   .hero-body { padding-block: var(--space-6); }
-  .hero-top { aspect-ratio: var(--ratio-hero); } /* 首页首屏：跟照片同比例 4:3，照片完整不裁切；文字垂直置中 */
+  .hero-top { min-height: 0; aspect-ratio: var(--ratio-hero); max-height: calc(var(--container) / (var(--ratio-hero))); } /* 首页首屏：高度只看比例 4:3（不用 .hero 的 70svh，不然平板会被撑宽）；文字垂直置中。最高 = 1024 宽时的高度（768），更大的屏幕不再变高，照片裁上下 */
   .hero-top .hero-body { padding-top: calc(var(--header-h) + var(--space-6)); } /* 首页首屏在页首后面：文字从页首下面开始算 */
   .hero-intro { padding-top: var(--space-5); } /* 电脑：照片 ↔ 重点三栏 48（手机的 48 已经在 .hero-body 下方） */
   .hero-body > * { max-width: var(--measure-short); } /* 文字只占左边，不压到右边的人 */
 }
-/* 重点（首屏下方）：上下细线，每一点 = 图示 + 一个短标题；手机 2 × 2，电脑一排 4 个 */
-.points { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); justify-content: center; gap: var(--space-3) var(--space-4); padding: var(--space-4) 0; border-block: var(--hairline) solid var(--color-line); } /* 一排放不下（320 宽英文）就自动换行，不会撑出画面 */
-.points li { display: flex; align-items: center; gap: var(--space-2); font-weight: var(--weight-medium); line-height: var(--leading-heading); } /* 图示和字同一排；很窄的画面（320 宽英文）字可以在自己那格里换行，不会被切掉 */
+/* 重点（首屏下方）：上下细线，任何尺寸都是一排 4 个；每一点 = 图示（上）+ 一个短词（下，caption）。
+   320 宽每格只有约 70px：英文只用一个字（见首页 page.tsx） */
+.points { display: grid; grid-template-columns: repeat(4, minmax(0, max-content)); justify-content: space-evenly; column-gap: var(--space-2); padding: var(--space-4) 0; border-block: var(--hairline) solid var(--color-line); }
+.points li { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); font-size: var(--text-caption); font-weight: var(--weight-medium); line-height: var(--leading-heading); text-align: center; }
 @media (width >= --theme(--breakpoint-md)) {
-  .points { grid-template-columns: repeat(4, auto); column-gap: var(--space-6); } /* 电脑：四点一排置中，点与点之间拉开 */
+  .points { justify-content: center; column-gap: var(--space-6); } /* 平板以上：四点置中，点与点之间拉开 */
 }
 /* 左右并排：照片（左）+ 文字（右）；手机上下排。文字那边用 section-head 等积木 */
 .split { display: grid; gap: var(--space-4); align-items: center; }
@@ -185,7 +186,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
-   .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、电脑 3:1；没有照片时是浅灰底。
+   .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、平板以上 3:1（--ratio-cover）；没有照片时是浅灰底。
    照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
    .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
 .bleed { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--color-line); }
@@ -195,7 +196,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .cover-panel h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .cover-panel .facts { grid-template-columns: minmax(0, 1fr); } /* 资料栏一律单栏 */
 @media (width >= --theme(--breakpoint-md)) {
-  .bleed { aspect-ratio: 3 / 1; }
+  .bleed { aspect-ratio: var(--ratio-cover); max-height: calc(var(--container) / (var(--ratio-cover))); } /* 最高 = 1024 宽时的高度，更大的屏幕不再变高 */
   /* 往左多伸出一个页边距、里面留同样的空白：两个上角都能圆角，标题离框边有空间，而且标题仍然跟下面正文的左边对齐 */
   .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin: calc(-1 * var(--space-6)) var(--space-6) 0 calc(-1 * var(--gutter)); padding: var(--space-5) var(--space-5) 0 var(--gutter); border-radius: var(--radius-md) var(--radius-md) 0 0; }
 }
@@ -345,7 +346,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 html[data-over-hero] .site-header { background: transparent; border-bottom-color: transparent; }
 /* 手机、平板：logo · 咨询 · ☰ 一排 */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
-.nav-links, .nav-right .lang-switch { display: none; } /* 导航、语言切换在 ☰ 选单里 */
+.nav-links, .nav-right > .lang-switch { display: none; } /* 导航、语言切换在 ☰ 选单里（只藏页首上的那个，选单里的照常显示） */
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
 .logo-wm { font-size: var(--text-caption); font-weight: var(--weight-medium); letter-spacing: 0.04em; } /* 手机 caption（全大写加字距，整排很宽）；电脑 subtitle */
 .logo-sub { font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: 0.08em; }
@@ -358,8 +359,8 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
   .nav { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; grid-template-areas: ". tools" "logo links"; column-gap: var(--space-5); padding-top: var(--space-2); }
   .logo { grid-area: logo; align-self: center; }
   .nav-right { grid-area: tools; justify-self: end; gap: var(--space-3); }
-  .nav-right .lang-switch { display: flex; align-self: center; }
-  .nav-right .lang-switch a { min-height: 0; padding-block: var(--space-1); font-size: var(--text-caption); } /* 上排比较矮：语言切换缩小 */
+  .nav-right > .lang-switch { display: flex; align-self: center; }
+  .nav-right > .lang-switch a { min-height: 0; padding-block: var(--space-1); font-size: var(--text-caption); } /* 上排比较矮：语言切换缩小 */
   .nav-right .menu { display: none; }
   .nav-links { grid-area: links; display: flex; justify-content: flex-end; gap: var(--space-4); white-space: nowrap; } /* 不换行：1024 宽英文也放得下 */
 }
@@ -378,6 +379,9 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 @starting-style { .nav-drop[open] > .nav-drop-panel { opacity: 0; transform: translateY(calc(-1 * var(--space-1))); } } /* 展开那一刻：淡入 + 往下一点 */
 .nav-drop-panel a { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); color: var(--color-ink-muted); transition: color var(--motion-fast) var(--ease); }
 .nav-drop-panel a:hover, .nav-drop-panel a[aria-current="page"] { color: var(--color-ink); }
+/* 下拉最后一组「关注我们」：细线隔开 + 小标题，下面是社群连结（开新视窗） */
+.nav-drop-extra { display: grid; margin-top: var(--space-2); padding-top: var(--space-2); border-top: var(--hairline) solid var(--color-line); }
+.nav-drop-extra > span, .menu-sub-label { padding: var(--space-1) var(--space-4); font-size: var(--text-caption); color: var(--color-ink-muted); letter-spacing: var(--tracking-wide); }
 
 /* ── 外框：选单（打开 / 关闭由 lib/interactive.tsx 切换 data-open） ── */
 .menu-btn { display: grid; place-content: center; gap: 5px; width: var(--tap-min); height: var(--tap-min); cursor: pointer; }
@@ -398,6 +402,7 @@ html[data-over-hero] .site-header { background: transparent; border-bottom-color
 .menu-links > a, .menu-group > summary { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap); border-bottom: var(--hairline) solid var(--color-line); font-size: var(--text-lead); font-weight: var(--weight-medium); } /* 「＋」跟折叠分组共用（见「折叠分组」） */
 /* 第二层：子目录 */
 .menu-sub { display: flex; flex-direction: column; padding: var(--space-2) 0; border-bottom: var(--hairline) solid var(--color-line); }
+.menu-sub-label { margin-top: var(--space-2); padding-inline: var(--space-3) 0; } /* 选单里「关注我们」小标题：跟上面的连结对齐 */
 .menu-sub a { display: flex; align-items: center; min-height: var(--tap-min); padding-left: var(--space-3); font-size: var(--text-body); color: var(--color-ink-muted); }
 .lang-switch { display: flex; align-self: flex-start; padding: var(--space-1); border-radius: var(--radius-pill); background: var(--color-subtle); }
 .lang-switch a { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-3); border-radius: var(--radius-pill); font-weight: var(--weight-medium); color: var(--color-ink-muted); white-space: nowrap; }

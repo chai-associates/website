@@ -72,7 +72,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
                     <div className="card-grid">
                       {g.list.map((a) => (
                         <Link key={a.slug} href={`/${lang}/divorcepedia/${a.slug}`} className="photo-card">
-                          {a.image && <Image src={a.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                          {a.image && <Image src={a.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
                           <h3>{a.title[lang]}</h3>
                           <span className="btn btn-light btn-sm photo-card-action">{common.readArticle[lang]} →</span>
                         </Link>

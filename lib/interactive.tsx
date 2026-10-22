@@ -181,7 +181,8 @@ export function ConsultDialog({ title, desc, close, form }: {
 // 目前所在的页面（或它的子页面）标 aria-current，样式在 globals.css（古铜线，跟 .tabs-line 同一个做法）。
 // 有 children 的项目：原生 <details> 下拉 —— 点一下展开、再点一下收起（不会跳去别的页面；没有 JavaScript 也能用）。
 // 另外：点下拉以外的地方、按 Esc、换页 → 自动收起。
-type NavItem = { href: string; label: string; children?: { href: string; label: string }[] };
+// extra：下拉最后一组外部连结（关注我们 → 社群），开新视窗
+type NavItem = { href: string; label: string; children?: { href: string; label: string }[]; extra?: { label: string; links: { href: string; label: string }[] } };
 export function NavLinks({ label, items, home }: { label: string; items: NavItem[]; home: string }) {
   const path = usePathname();
   const ref = useRef<HTMLElement>(null);
@@ -207,6 +208,12 @@ export function NavLinks({ label, items, home }: { label: string; items: NavItem
             <summary aria-current={isCurrent(l) ? "true" : undefined}>{l.label}</summary>
             <div className="nav-drop-panel">
               {l.children.map((c) => <Link key={c.href} href={c.href} aria-current={path === c.href ? "page" : undefined}>{c.label}</Link>)}
+              {l.extra && (
+                <div className="nav-drop-extra">
+                  <span>{l.extra.label}</span>
+                  {l.extra.links.map((s) => <a key={s.href} href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
+                </div>
+              )}
             </div>
           </details>
         ) : (

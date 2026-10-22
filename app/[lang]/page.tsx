@@ -39,10 +39,11 @@ const text = {
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
     // 首屏下方的重点（图示可选 award / chat / lock / update，或在下面 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
-      { icon: "award", title: { zh: "多年经验", en: "Experienced" } },
-      { icon: "chat", title: { zh: "在线咨询", en: "Online Consultation" } },
-      { icon: "lock", title: { zh: "隐私保密", en: "Confidential" } },
-      { icon: "update", title: { zh: "主动跟进", en: "Proactive Updates" } }, // 律所的承诺：进度有变会主动告诉客户（见我们的理念「有时限」）
+      // 任何尺寸都一排 4 个：英文只用一个字（320 宽每格约 70px）
+      { icon: "award", title: { zh: "多年经验", en: "Experience" } },
+      { icon: "chat", title: { zh: "在线咨询", en: "Online" } },
+      { icon: "lock", title: { zh: "隐私保密", en: "Privacy" } },
+      { icon: "update", title: { zh: "主动跟进", en: "Updates" } }, // 律所的承诺：进度有变会主动告诉客户（见我们的理念「有时限」）
     ],
   },
 
@@ -132,7 +133,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <div className="card-grid">
             {serviceCategories.map((c) => (
               <Link key={c.slug} href={`/${lang}/services/${c.slug}`} className="photo-card">
-                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 860px) 33vw, 100vw" />}
+                {c.image && <Image src={c.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" />}
                 <div>
                   <h3>{c.title[lang]}</h3>
                   <p>{c.short[lang]}</p>
@@ -153,7 +154,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           </div>
           <div className="scroll-row">
             {team.filter((p) => roles[p.role].group !== "support").map((p) => (
-              <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 860px) 33vw, 80vw" />
+              <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 768px) 33vw, 80vw" />
             ))}
           </div>
           <p className="scroll-hint">{people.swipe[lang]}</p>
