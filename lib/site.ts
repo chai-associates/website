@@ -12,11 +12,11 @@ export type Bi = { zh: string; en: string }; // 中英对照文字
 export const isLang = (v: string): v is Lang => (locales as readonly string[]).includes(v);
 
 // ── 律所 ─────────────────────────────────────────
-// founded 已确认。⚠ email、careersEmail 暂定用 chaiassociates.my（等律所确认网域）。不写营业时间：时间由律师和客户直接约。律师人数由 team 自动算
+// founded 已确认。email、careersEmail 用 chaiassociates.my（已确认）。不写营业时间：时间由律师和客户直接约。律师人数由 team 自动算
 export const firm = {
   name: "Chai & Associates",
   nameZh: "律师事务所",
-  founded: 2010, // 页脚和关于我们显示「Est. 2010」
+  founded: 2017, // 关于我们显示「成立 2017」（2017 年成立，现由 Chai Mei Ching 主持）
   phone: "+60194774149",
   phoneDisplay: "+6019-477 4149",
   email: "enquiry@chaiassociates.my",

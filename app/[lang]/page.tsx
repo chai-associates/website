@@ -37,11 +37,12 @@ const text = {
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
     image: "/images/hero/hero-bg-v6.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
-    // 首屏下方的重点（图示可选 award / chat / lock，或在下面 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
+    // 首屏下方的重点（图示可选 award / chat / lock / update，或在下面 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
       { icon: "award", title: { zh: "多年经验", en: "Experienced" } },
       { icon: "chat", title: { zh: "在线咨询", en: "Online Consultation" } },
       { icon: "lock", title: { zh: "隐私保密", en: "Confidential" } },
+      { icon: "update", title: { zh: "主动跟进", en: "Proactive Updates" } }, // 律所的承诺：进度有变会主动告诉客户（见我们的理念「有时限」）
     ],
   },
 
@@ -68,6 +69,7 @@ function Icon({ name }: { name: string }) {
     award: <><circle cx="12" cy="8" r="5" /><path d="M8.5 12.5 7 21l5-3 5 3-1.5-8.5" /></>,
     lock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
     chat: <path d="M4 5h16v11H9l-5 4z" />,
+    update: <><path d="M20 12a8 8 0 1 1-2.34-5.66" /><path d="M20 4v5h-5" /></>,
     arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   };
   return (

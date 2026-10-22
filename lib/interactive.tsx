@@ -184,19 +184,20 @@ export function ConsultDialog({ title, desc, close, form }: {
 type NavItem = { href: string; label: string; children?: { href: string; label: string }[] };
 export function NavLinks({ label, items }: { label: string; items: NavItem[] }) {
   const path = usePathname();
-  const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+  // 有子页面的项目：只有在它自己的子页面里才标（荣誉与认可在 /about/ 下面，但它是独立的项目，不会让「关于我们」也亮）
+  const isCurrent = (l: NavItem) => (l.children ? l.children.some((c) => c.href === path) : path === l.href || path.startsWith(`${l.href}/`));
   return (
     <nav className="nav-links" aria-label={label}>
       {items.map((l) =>
         l.children ? (
           <div key={l.href} className="nav-drop">
-            <Link href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</Link>
+            <Link href={l.href} aria-current={isCurrent(l) ? "page" : undefined}>{l.label}</Link>
             <div className="nav-drop-panel">
               {l.children.map((c) => <Link key={c.href} href={c.href} aria-current={path === c.href ? "page" : undefined}>{c.label}</Link>)}
             </div>
           </div>
         ) : (
-          <Link key={l.href} href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</Link>
+          <Link key={l.href} href={l.href} aria-current={isCurrent(l) ? "page" : undefined}>{l.label}</Link>
         ),
       )}
     </nav>

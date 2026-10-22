@@ -12,7 +12,7 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import "@/lib/fonts"; // 字体（MiSans）
 import { ConsultButton, ConsultDialog, CookieConsent, HeaderAutoHide, LangSwitch, Menu, NavLinks, PageTransition } from "@/lib/interactive";
-import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, inquiry, inquiryForm, type Bi, type Lang } from "@/lib/site";
+import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, siteUrl, socials, whatsappLink, inquiry, inquiryForm, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
 const text = {
@@ -25,27 +25,21 @@ const text = {
   // 导航：手机的 ☰ 选单、电脑的页首导航（不含首页；有 children 的展开下拉）、页脚都读这里
   nav: [
     { href: "", label: common.home },
-    {
-      href: "/services", label: common.services,
-      children: [
-        { href: "/services", label: common.viewAll },
-        ...serviceCategories.map((c) => ({ href: `/services/${c.slug}`, label: c.title })),
-      ],
-    },
+    { href: "/services", label: common.services }, // 服务分类在离婚服务页里，不另外下拉
     { href: "/divorcepedia", label: { zh: "离婚百科", en: "Divorcepedia" } },
+    { href: "/people", label: { zh: "律师团队", en: "People" } },
+    { href: "/about/recognitions", label: { zh: "荣誉与认可", en: "Recognitions" } },
     {
       href: "/about", label: { zh: "关于我们", en: "Profile" },
       children: [
         { href: "/about", label: { zh: "律所简介", en: "Our Firm" } },
         { href: "/about/values", label: { zh: "我们的理念", en: "Our Values" } },
-        { href: "/about/recognitions", label: { zh: "荣誉与认可", en: "Recognitions" } },
         ...aboutSections.map((s) => ({ href: `/about/${s.slug}`, label: s.title })),
+        { href: "/careers", label: { zh: "加入我们", en: "Join Us" }, footer: true },
+        { href: "/locations", label: { zh: "办事处", en: "Locations" }, footer: true },
       ],
     },
-    { href: "/people", label: { zh: "律师团队", en: "People" } },
-    { href: "/locations", label: { zh: "办事处", en: "Locations" } },
-    { href: "/careers", label: { zh: "加入我们", en: "Join Us" } },
-  ] as { href: string; label: Bi; children?: { href: string; label: Bi }[] }[],
+  ] as { href: string; label: Bi; children?: { href: string; label: Bi; footer?: boolean }[] }[], // footer：子项目也列在页脚
   social: { zh: "关注我们", en: "Social Media" },
   logoSub: { zh: "律师事务所", en: "Advocates & Solicitors" },
   book: { zh: "咨询", en: "Enquire" },
@@ -143,7 +137,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
               <span className="logo-sub">{text.logoSub[lang]}</span>
             </Link>
             <nav className="footer-links">
-              {text.nav.map((l) => <Link key={l.href} href={`${home}${l.href}`}>{l.label[lang]}</Link>)}
+              {text.nav.flatMap((l) => [l, ...(l.children ?? []).filter((c) => c.footer)]).map((l) => <Link key={l.href} href={`${home}${l.href}`}>{l.label[lang]}</Link>)}
               {socials.map((s) => <a key={s.label} href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
               <Link href={`${home}/privacy`}>{text.privacy[lang]}</Link>
             </nav>

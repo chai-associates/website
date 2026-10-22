@@ -93,15 +93,16 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
   .hero { min-height: 70svh; align-items: center; }
   .hero-photo, .hero-top .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; height: auto; }
   .hero-body { padding-block: var(--space-6); }
+  .hero-top { min-height: var(--hero-home-h); align-items: start; } /* 首页首屏：固定高度；文字放在上方（一打开就看得到，不用先往下滑） */
   .hero-top .hero-body { padding-top: calc(var(--header-h) + var(--space-6)); } /* 首页首屏在页首后面：文字从页首下面开始算 */
   .hero-intro { padding-top: var(--space-5); } /* 电脑：照片 ↔ 重点三栏 48（手机的 48 已经在 .hero-body 下方） */
   .hero-body > * { max-width: var(--measure-short); } /* 文字只占左边，不压到右边的人 */
 }
-/* 重点三栏（首屏下方）：上下细线，每一点 = 图示 + 一个短标题 */
-.points { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-4); padding: var(--space-4) 0; border-block: var(--hairline) solid var(--color-line); } /* 一排放不下（320 宽英文）就自动换行，不会撑出画面 */
-.points li { display: flex; align-items: center; gap: var(--space-2); font-weight: var(--weight-medium); white-space: nowrap; } /* 图示和字同一排 */
+/* 重点（首屏下方）：上下细线，每一点 = 图示 + 一个短标题；手机 2 × 2，电脑一排 4 个 */
+.points { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); justify-content: center; gap: var(--space-3) var(--space-4); padding: var(--space-4) 0; border-block: var(--hairline) solid var(--color-line); } /* 一排放不下（320 宽英文）就自动换行，不会撑出画面 */
+.points li { display: flex; align-items: center; gap: var(--space-2); font-weight: var(--weight-medium); line-height: var(--leading-heading); } /* 图示和字同一排；很窄的画面（320 宽英文）字可以在自己那格里换行，不会被切掉 */
 @media (width >= --theme(--breakpoint-md)) {
-  .points { column-gap: var(--space-6); } /* 桌面：三点置中，点与点之间拉开 */
+  .points { grid-template-columns: repeat(4, auto); column-gap: var(--space-6); } /* 电脑：四点一排置中，点与点之间拉开 */
 }
 /* 左右并排：照片（左）+ 文字（右）；手机上下排。文字那边用 section-head 等积木 */
 .split { display: grid; gap: var(--space-4); align-items: center; }
@@ -367,12 +368,12 @@ html[data-header-hidden] .site-header { top: calc(-1 * var(--header-h) - var(--h
 .nav-links > a, .nav-drop > a { display: flex; align-items: center; height: 100%; border-bottom: var(--border) solid transparent; font-weight: var(--weight-medium); transition: border-color var(--motion-fast) var(--ease); }
 .nav-links > a[aria-current="page"], .nav-drop > a[aria-current="page"] { border-color: var(--color-accent); }
 @media (hover: hover) { .nav-links > a:hover, .nav-drop:hover > a { border-color: var(--color-accent); } }
-/* 下拉（有子页面的项目）：鼠标移上去或键盘 Tab 到它时展开 */
+/* 下拉（有子页面的项目）：鼠标移上去或键盘 Tab 到它时展开；靠右对齐（关于我们在导航最右边，靠左会超出画面） */
 .nav-drop { position: relative; display: flex; }
 /* 有下拉的项目：名字旁边一个向下的小箭头（CSS 画的，跟着字的颜色和大小）；展开时翻成向上 */
 .nav-drop > a::after { content: ""; width: 0.4em; height: 0.4em; margin: -0.2em 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
 .nav-drop:hover > a::after, .nav-drop:focus-within > a::after { transform: translateY(0.2em) rotate(-135deg); }
-.nav-drop-panel { position: absolute; top: 100%; left: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--space-1))); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease), visibility var(--motion-fast); }
+.nav-drop-panel { position: absolute; top: 100%; right: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--space-1))); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease), visibility var(--motion-fast); }
 .nav-drop:hover > .nav-drop-panel, .nav-drop:focus-within > .nav-drop-panel { opacity: 1; visibility: visible; transform: none; }
 .nav-drop-panel a { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); color: var(--color-ink-muted); transition: color var(--motion-fast) var(--ease); }
 .nav-drop-panel a:hover, .nav-drop-panel a[aria-current="page"] { color: var(--color-ink); }
