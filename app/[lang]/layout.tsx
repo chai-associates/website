@@ -12,6 +12,7 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import "@/lib/fonts"; // 字体（MiSans）
 import { ConsultButton, ConsultDialog, CookieConsent, LangSwitch, Menu, NavLinks, PageTransition } from "@/lib/interactive";
+import { SocialIcon } from "@/lib/blocks";
 import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, siteUrl, socials, whatsappLink, inquiry, inquiryForm, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
@@ -107,10 +108,13 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
                         <summary>{l.label[lang]}</summary>
                         <div className="menu-sub">
                           {l.children.map((c) => <Link key={c.href} href={`${home}${c.href}`}>{c.label[lang]}</Link>)}
-                          {l.social && <>
-                            <span className="menu-sub-label">{text.social[lang]}</span>
-                            {socials.map((s) => <a key={s.label} href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
-                          </>}
+                          {l.social && (
+                            // 关注我们：一行，后面接社群图示（开新视窗）
+                            <div className="menu-social">
+                              {text.social[lang]}
+                              {socials.map((s) => <a key={s.label} href={s.url} target="_blank" rel="noopener" aria-label={s.label}><SocialIcon name={s.icon} /></a>)}
+                            </div>
+                          )}
                         </div>
                       </details>
                     ) : (

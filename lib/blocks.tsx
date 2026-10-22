@@ -7,6 +7,7 @@
 //               用在：首页「联系我们」、办事处页（两边一模一样，改这里就好）
 // · PersonCard  人卡：照片 + 名字 + 地区 · 职位；电脑鼠标移上去多显示语言、主要领域
 //               用在：首页「我们的团队」、律师团队、个人页底部
+// · SocialIcon  社群图示（线条，跟着字的颜色）：用在 ☰ 选单「关注我们」
 // 样式在 globals.css 的 .bleed / .cover-panel / .tabs / .card / .person-card
 // ═══════════════════════════════════════════════════════════════
 import Image from "next/image";
@@ -92,5 +93,16 @@ export function PersonCard({ p, lang, sizes }: { p: Member; lang: Lang; sizes: s
         </div>
       </div>
     </Link>
+  );
+}
+
+// 社群图示：线条风格，跟首页重点的图示一样（1.5 粗、跟着字的颜色）
+export function SocialIcon({ name }: { name: "facebook" | "instagram" }) {
+  const paths = {
+    facebook: <path d="M16 3.5h-2.5A3.5 3.5 0 0 0 10 7v14M7 11h7.5" />,
+    instagram: <><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.25" cy="6.75" r="0.5" fill="currentColor" /></>,
+  };
+  return (
+    <svg className="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>
   );
 }

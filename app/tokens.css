@@ -9,7 +9,7 @@
        间距  7 级阶梯 --space-1 … --space-6 + --section-y（见「间距阶梯」）
        线    --hairline 1px 分隔线 · --border 1.5px 外框（卡片、按钮、栏位）
        圆角  --radius-sm 栏位 · --radius-md 卡片、照片 · --radius-pill 按钮、chip
-       尺寸  手机 320 · 平板 ≥ 768 · 笔电 ≥ 1024（更大的屏幕跟 1024 一样）
+       尺寸  手机 320 · 平板 ≥ 768 · 笔电 ≥ 1024
    · 已关闭 Tailwind 自带的颜色、字号、圆角、断点，只能用这里定义的，确保全站统一。
 
    依据：流体字号（字与荧幕等比例）· Apple HIG（可点击 ≥ 44px）· 8pt 网格 ·
@@ -51,23 +51,23 @@
   --font-sans: "MiSans", "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif; /* 全站唯一字体（中英文、标题、正文）；载入在 lib/fonts.ts */
 
   /* ── 字号：流体字号（跟着荧幕宽度等比例缩放） ─────────
-     每一级在 320px 荧幕是最小值，1024px（笔电）是最大值，中间按比例平滑变化；更大的屏幕不再放大。
+     每一级在 320px 荧幕是最小值，1440px 是最大值，中间按比例平滑变化。
      只有 5 级（减法：删掉了 display 和 small）。两两一组使用：
        页面标题区：title（h1）+ lead（副标题）
        区块：      subtitle（h2）+ body（说明、正文）；卡片标题 h3 = body 粗体
        caption：小标签、面包屑、备注
      层级（小 → 大）：caption < body < lead < subtitle < title
-                     320   768  1024 （px：手机 · 平板 · 笔电） */
+                     320   375   425   768  1024  1440 （px）                       */
   --tracking-*: initial;   /* 清掉 Tailwind 预设的字距，只留下面两个 */
   --tracking-tight: -0.01em; /* 字距：标题、引言稍微收紧 */
   --tracking-wide: 0.12em;   /* 字距：小标签、资料列标题（大写）拉开 */
 
   --text-*: initial;
-  --text-caption:  clamp(0.8125rem, 0.7557rem + 0.2841vw, 0.9375rem); /* 13 → 15 · 标签、备注 */
-  --text-body:     clamp(1rem, 0.9432rem + 0.2841vw, 1.125rem);       /* 16 → 18 · 正文、说明、按钮、卡片标题 h3（粗体） */
-  --text-lead:     clamp(1.125rem, 1.0682rem + 0.2841vw, 1.25rem);    /* 18 → 20 · 页面副标题（h1 下面那一句） */
-  --text-subtitle: clamp(1.25rem, 1.1364rem + 0.5682vw, 1.5rem);      /* 20 → 24 · 区块标题 h2 */
-  --text-title:    clamp(1.625rem, 1.2273rem + 1.9886vw, 2.5rem);        /* 26 → 40 · 页面标题 h1 */
+  --text-caption:  clamp(0.8125rem, 0.7768rem + 0.1786vw, 0.9375rem); /* 13 → 15 · 标签、备注 */
+  --text-body:     clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem);       /* 16 → 18 · 正文、说明、按钮、卡片标题 h3（粗体） */
+  --text-lead:     clamp(1.125rem, 1.0893rem + 0.1786vw, 1.25rem);    /* 18 → 20 · 页面副标题（h1 下面那一句） */
+  --text-subtitle: clamp(1.25rem, 1.1786rem + 0.3571vw, 1.5rem);      /* 20 → 24 · 区块标题 h2 */
+  --text-title:    clamp(1.625rem, 1.375rem + 1.25vw, 2.5rem);        /* 26 → 40 · 页面标题 h1 */
 
   /* ── Tailwind 版面单位：1 格 = 4px（只给页面的 grid / gap 等版面 class 用；积木不用，积木用下面的间距阶梯） ── */
   --spacing: 4px;
@@ -83,7 +83,7 @@
   --shadow-soft: 0 1px 3px rgb(0 0 0 / 0.12);
   --shadow-float: 0 8px 24px rgb(0 0 0 / 0.18);
 
-  /* ── 断点：3 个尺寸，各以最小宽度为基准设计：手机 320 → 平板 768 → 笔电 1024（更大的屏幕跟 1024 一样，不再放大） ── */
+  /* ── 断点：3 个尺寸，各以最小宽度为基准设计：手机 320 → 平板 768 → 笔电 1024 ── */
   --breakpoint-*: initial;
   --breakpoint-md: 768px;  /* 平板：多栏排版 */
   --breakpoint-lg: 1024px; /* 笔电：页首导航整排摊开（放得下 6 个项目 + logo，英文也不换行）；以下用 ☰ */
@@ -99,12 +99,11 @@
   --space-4: 24px;   /* 内文 ↔ 按钮、卡片 / 侧栏内距、段落标题 ↔ 段落内容 */
   --space-5: 48px;   /* 组 ↔ 组（.stack、.groups） */
   --space-6: 64px;   /* 电脑版左右并排的照片 ↔ 文字 */
-  --gutter: clamp(1rem, 0.5455rem + 2.2727vw, 2rem);      /* 页面左右边距 16 → 32（流体，320 → 1024） */
-  --container: 1024px;     /* 版面最大宽度（含左右边距）= 笔电尺寸；更大的屏幕内容不再变宽，满版照片也不再变高 */
-  --section-y: clamp(3rem, 1.6364rem + 6.8182vw, 6rem);   /* 区块上下留白 48 → 96（流体，320 → 1024） */
+  --gutter: clamp(1rem, 0.7143rem + 1.429vw, 2rem);      /* 页面左右边距 16 → 32（流体） */
+  --container: 1152px;     /* 内容最大宽度 */
+  --section-y: clamp(3rem, 2.143rem + 4.286vw, 6rem);   /* 区块上下留白 48 → 96（流体） */
   --measure: 34em;         /* 正文最大行宽 */
   --ratio-hero: 4 / 3;     /* 首页首屏的宽 : 高（电脑、平板）：跟首屏照片 2400 × 1800 同比例 */
-  --ratio-cover: 3 / 1;    /* 满版封面照片的宽 : 高（平板、电脑；手机 16:9） */
   --ratio-golden: 1.618;   /* 黄金比例：手机版满版照片的宽 : 高 */
   --measure-short: 24em;   /* 短行宽：引言、首屏文字（大字只占左边，不压到照片里的人） */
   --card-min: 300px;       /* 卡片网格：每张卡片最窄多宽（自动决定一行几张） */

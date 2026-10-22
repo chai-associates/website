@@ -248,9 +248,10 @@ export const disclaimer: Bi = {
 };
 
 // ── 社交媒体（选单和页脚都用这里） ──
-export const socials: { label: string; url: string }[] = [
-  { label: "Facebook", url: "https://www.facebook.com/CHAI.ASSOCIATES/" },
-  { label: "Instagram", url: "https://www.instagram.com/chai.associates/" },
+// icon：图示（lib/blocks.tsx 的 SocialIcon）
+export const socials: { label: string; url: string; icon: "facebook" | "instagram" }[] = [
+  { label: "Facebook", url: "https://www.facebook.com/CHAI.ASSOCIATES/", icon: "facebook" },
+  { label: "Instagram", url: "https://www.instagram.com/chai.associates/", icon: "instagram" },
 ];
 
 // ── 结构化资料（给 Google 看：律所 + 5 间办事处的名称、地址、电话）──

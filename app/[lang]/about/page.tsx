@@ -24,8 +24,8 @@ const text = {
   // ① 标题
   heading: { zh: "坦诚相待，\n重视每一段关系。", en: "Open, approachable,\nbuilt on relationships." },
   lead: {
-    zh: "我们对客户坦诚，对同事也一样：你的案件进展如何、有什么风险，我们都会直接告诉你。团队里的每一位成员，我们也持续培养，让他们能把你的案件处理好。",
-    en: "We are open and honest with our clients and with each other, so you will hear plainly how your matter is going and what the risks are. We also keep developing everyone on our team, so they are well equipped to handle your matter.",
+    zh: "我们力求进取、亲切、重视关系，和同事之间、和客户之间，都坦诚相待。我们鼓励每一位成员做自己，也把握每个机会发掘和培养他们的潜力，让律所和客户都受益。",
+    en: "We aim to be progressive, approachable and relationship-driven, and to keep our relationships open and honest, with each other and with our clients. We encourage our people to be themselves, and we take every opportunity to develop their potential, for the firm and for our clients.",
   },
   // ② 律所简介 + 律所资料
   firm: {

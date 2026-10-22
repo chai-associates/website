@@ -163,7 +163,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           <div>
             <div className="list-head"><h2>满版照片</h2><span>照片格式 ②：真正页面上左右贴齐画面（这里放在 container 里只是示范）</span></div>
             <div className="hero">
-              <div className="hero-photo"><Image src="/images/hero/hero-bg-v6.png" alt="" fill sizes="1024px" /></div>
+              <div className="hero-photo"><Image src="/images/hero/hero-bg-v6.png" alt="" fill sizes="1152px" /></div>
               <div className="hero-body">
                 <p className="tag">新山 · 雪兰莪 · 马六甲</p>
                 <h1>hero</h1>
@@ -175,7 +175,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 {["多年经验", "隐私保密"].map((t) => <li key={t}>{t}</li>)}
               </ul>
             </div>
-            <div className="bleed"><Image src="/images/hero/hero-bg-v6.png" alt="" fill sizes="1024px" /></div>
+            <div className="bleed"><Image src="/images/hero/hero-bg-v6.png" alt="" fill sizes="1152px" /></div>
             <div className="cover-panel">
               <div>
                 <h1>cover-panel</h1>
