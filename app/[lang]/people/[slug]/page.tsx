@@ -2,7 +2,7 @@
 // 律师个人页 /people/[slug]（所有成员共用这一个模板）
 // ───────────────────────────────────────────────────────────────
 // 区块顺序：① 职位 · 地区 → 名字 → 资料列（语言 · 办事处 · 执业年份）→ 安排说明 → 预约按钮（左）+ 照片（右；手机在上）
-//             预约按钮 = 这一页唯一的主要行动：跳出询问表格，讯息已写好「我要预约某某咨询离婚事宜」
+//             预约按钮 = 这一页唯一的主要行动：跳出全站的咨询表格，讯息已写好「我要预约某某咨询离婚事宜」
 //          ② 底线分页 .tabs-line（不需要 JavaScript；没有内容的分页自动隐藏）：
 //             概览：简介（标题）→ 段落 → 工作以外 → 用自己的话（引言）
 //             资历：资格 · 经历 · 奖项 · 讲座与著作 · 会员资格（每一小组一个小标题）
@@ -17,8 +17,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PersonCard } from "@/lib/blocks";
-import { BookDialog } from "@/lib/interactive";
-import { cityOf, common, displayName, inquiry, isLang, initials, pageMeta, roles, team, type Bi } from "@/lib/site";
+import { ConsultButton } from "@/lib/interactive";
+import { cityOf, common, displayName, isLang, initials, pageMeta, roles, team, whatsappLink, type Bi } from "@/lib/site";
 
 type Profile = {
   admitted?: number;                         // 执业年份（只显示在标题区的资料列）
@@ -69,11 +69,9 @@ const text = {
   office: { zh: "办事处", en: "Office" },
   admittedYear: { zh: "{year} 年", en: "{year}" },
   note: { zh: "你的咨询会由我们的客服团队安排时间，所有内容都保密。", en: "Your enquiry goes to our client team, who will arrange a time. Everything you share is confidential." },
-  // 预约：按钮 → 跳出询问表格（问题在 lib/site.ts 的 inquiry），讯息第一句已写好
+  // 预约：按钮 → 跳出全站的咨询表格（lib/site.ts 的 inquiry），讯息第一句已写好这位律师的名字
   book: { zh: "现在预约{name}", en: "Book {name} now" },
-  bookTitle: { zh: "预约{name}", en: "Book a consultation with {name}" },
   bookMessage: { zh: "我要预约{name}咨询离婚事宜。", en: "I'd like to book a consultation with {name} about my divorce matter." },
-  close: { zh: "关闭", en: "Close" },
   // ② 内容
   bio: { zh: "简介", en: "Bio" },
   experience: { zh: "经历", en: "Experience" },
@@ -144,18 +142,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
               </dl>
               <p>{text.note[lang]}</p>
               <div className="btn-row">
-                <BookDialog
-                  label={fill(text.book)}
-                  title={fill(text.bookTitle)}
-                  close={text.close[lang]}
-                  form={{
-                    lang,
-                    intro: fill(text.bookMessage),
-                    placeholder: inquiry.placeholder[lang],
-                    submit: inquiry.submit[lang],
-                    questions: inquiry.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) })),
-                  }}
-                />
+                <ConsultButton className="btn btn-cta" href={whatsappLink(lang, fill(text.bookMessage))} intro={fill(text.bookMessage)}>{fill(text.book)}</ConsultButton>
               </div>
             </div>
             <div className="person-photo">

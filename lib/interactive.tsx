@@ -5,7 +5,9 @@
 // · Menu            选单开关（layout.tsx）
 // · SituationPicker 「我的情况是」选择器（/services 页）
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
-// · BookDialog      预约按钮 → 跳出询问表格（律师个人页；讯息已写好「我要预约某某咨询离婚事宜」）
+// · ConsultButton   全站的「咨询」按钮：点了跳出咨询表格（不是直接去 WhatsApp）
+// · ConsultDialog   咨询表格视窗（layout.tsx，全站一个）：3 个问题 + 其他 → 打开 WhatsApp，讯息已写好
+// · HeaderOverHero  首页：首屏照片还在页首下面时，页首透明；滑过照片变毛玻璃（只设定 <html data-over-hero>，样式在 globals.css）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
 // · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
 // · TabsHash        分页选择记住选了哪一个：网址加 #代号，按返回会回到同一个分页（离婚百科）
@@ -84,10 +86,11 @@ export function SituationPicker({ label, placeholder, options }: {
 // ── 询问表格 ─────────────────────────────────────
 // 用户选好答案 → 按钮 → 打开 WhatsApp，讯息已经帮他打好，由他自己按发送。
 // 网站不储存任何资料。
-export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
+export function InquiryForm({ lang, intro, questions, remark, placeholder, submit }: {
   lang: Lang;
   intro: string; // 讯息第一句，例如「你好，我想咨询「探视权」。」
-  questions: { label: string; options: string[] }[];
+  questions: { label: string; short: string; options: string[] }[]; // short = WhatsApp 讯息里的简短标题（不重复整句问题）
+  remark: { label: string; short: string; placeholder: string }; // 最后一题「其他」：自由填写，可以不填
   placeholder: string;
   submit: string;
 }) {
@@ -95,9 +98,14 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const colon = lang === "zh" ? "：" : ": ";
-    const lines = questions.map((q, i) => `· ${q.label}${colon}${data.get(`q${i}`)}`);
+    const note = String(data.get("remark") ?? "").trim();
+    const lines = [
+      ...questions.map((q, i) => `· ${q.short}${colon}${data.get(`q${i}`)}`),
+      ...(note ? [`· ${remark.short}${colon}${note}`] : []),
+    ];
     track("generate_lead", { method: "whatsapp_form" });
     window.open(whatsappLink(lang, [intro, ...lines].join("\n")), "_blank", "noopener");
+    e.currentTarget.closest("dialog")?.close(); // 在视窗里的话，打开 WhatsApp 后顺便关掉视窗
   };
 
   return (
@@ -111,32 +119,80 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
           </select>
         </label>
       ))}
+      <label className="field">
+        {remark.label}
+        <textarea className="textarea" name="remark" rows={3} placeholder={remark.placeholder} />
+      </label>
       <button type="submit" className="btn btn-cta">{submit}</button>
     </form>
   );
 }
 
-// ── 预约弹出表格 ─────────────────────────────────
-// 按钮 → 跳出视窗（原生 dialog：按 Esc 或 × 关闭），里面就是上面的询问表格。
-export function BookDialog({ label, title, close, form }: {
-  label: string; // 按钮文字，例如「现在预约陈国伟」
-  title: string; // 视窗标题
+// ── 咨询：按钮 → 跳出咨询表格 → 打开 WhatsApp ─────────────
+// 全站只有一个表格视窗（ConsultDialog，放在 layout.tsx）；每个「咨询」按钮（ConsultButton）只负责叫它出来，
+// 顺便告诉它讯息第一句要写什么（例如文章名称、律师名字）。
+// 按钮本身是 WhatsApp 连结：没有 JavaScript 时，点了直接去 WhatsApp。
+const CONSULT_EVENT = "consult-open";
+
+export function ConsultButton({ href, intro, className, children }: {
+  href: string; // 没有 JavaScript 时直接去的 WhatsApp 连结
+  intro?: string; // 讯息第一句；不填就用表格预设的
+  className: string;
+  children: React.ReactNode;
+}) {
+  const open = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent(CONSULT_EVENT, { detail: intro }));
+  };
+  return <a className={className} href={href} target="_blank" rel="noopener" data-consult onClick={open}>{children}</a>;
+}
+
+export function ConsultDialog({ title, desc, close, form }: {
+  title: string;
+  desc: string; // 为什么要填、填完会怎样（用户才不会担心没人回复）
   close: string; // × 按钮给读屏软件的名称
-  form: React.ComponentProps<typeof InquiryForm>;
+  form: Omit<React.ComponentProps<typeof InquiryForm>, "intro"> & { intro: string }; // intro = 预设的讯息第一句
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const [intro, setIntro] = useState(form.intro);
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      setIntro((e as CustomEvent<string | undefined>).detail ?? form.intro);
+      ref.current?.showModal();
+      track("consult_open", { page: location.pathname });
+    };
+    window.addEventListener(CONSULT_EVENT, onOpen);
+    return () => window.removeEventListener(CONSULT_EVENT, onOpen);
+  }, [form.intro]);
   return (
-    <>
-      <button type="button" className="btn btn-cta" onClick={() => ref.current?.showModal()}>{label}</button>
-      <dialog ref={ref} className="dialog" aria-label={title}>
-        <div className="dialog-head">
-          <h2>{title}</h2>
-          <button type="button" className="dialog-close" aria-label={close} onClick={() => ref.current?.close()}>×</button>
-        </div>
-        <InquiryForm {...form} />
-      </dialog>
-    </>
+    <dialog ref={ref} className="dialog" aria-label={title}>
+      <div className="dialog-head">
+        <h2>{title}</h2>
+        <button type="button" className="dialog-close" aria-label={close} onClick={() => ref.current?.close()}>×</button>
+      </div>
+      <p className="dialog-desc">{desc}</p>
+      <InquiryForm key={intro} {...form} intro={intro} />
+    </dialog>
   );
+}
+
+// ── 首页页首透明 ─────────────────────────────────
+// 看 .hero-top 里的照片：照片还在页首下面 → <html data-over-hero>（页首透明）；照片滑过页首 → 拿掉（页首毛玻璃）。
+// 离开首页时自动拿掉。没有 JavaScript 时页首一直是毛玻璃。
+export function HeaderOverHero() {
+  useEffect(() => {
+    const photo = document.querySelector(".hero-top .hero-photo");
+    if (!photo) return;
+    const root = document.documentElement;
+    const header = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) root.dataset.overHero = "";
+      else delete root.dataset.overHero;
+    }, { rootMargin: `-${header}px 0px 0px 0px` });
+    io.observe(photo);
+    return () => { io.disconnect(); delete root.dataset.overHero; };
+  }, []);
+  return null;
 }
 
 // ── 换页动态 ─────────────────────────────────────
@@ -224,7 +280,9 @@ export function CookieConsent({ gaId, text, policyHref }: {
   useEffect(() => {
     if (consent !== "granted") return;
     const onClick = (e: MouseEvent) => {
-      const href = (e.target as HTMLElement).closest("a")?.getAttribute("href") ?? "";
+      const a = (e.target as HTMLElement).closest("a");
+      if (a?.hasAttribute("data-consult")) return; // 咨询按钮只是打开表格；表格送出时才记一笔
+      const href = a?.getAttribute("href") ?? "";
       if (href.startsWith("https://wa.me/")) track("generate_lead", { method: "whatsapp" });
       else if (href.startsWith("tel:")) track("generate_lead", { method: "phone" });
     };

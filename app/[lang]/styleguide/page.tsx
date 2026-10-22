@@ -150,11 +150,11 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           <div>
             <div className="list-head"><h2>照片框</h2><span>photo-frame · 场景 3:2</span></div>
-            <div className="photo-frame max-w-md"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="448px" /></div>
+            <div className="photo-frame"><Image src="/images/hero/hero-bg-v3.png" alt="" fill sizes="448px" /></div>
           </div>
           <div>
-            <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 --cols 栏</span></div>
-            <div className="scroll-row [--cols:3]">
+            <div className="list-head"><h2>滑动列</h2><span>scroll-row · 手机左右滑，电脑 3 栏</span></div>
+            <div className="scroll-row">
               {["01", "02", "03", "04"].map((n) => <div key={n} className="card"><h3>{n}</h3><p>scroll-row 里的项目</p></div>)}
             </div>
             <p className="scroll-hint">scroll-hint：← 左右滑动 →（只在手机显示）</p>

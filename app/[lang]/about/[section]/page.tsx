@@ -12,6 +12,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ConsultButton } from "@/lib/interactive";
 import { CoverHead } from "@/lib/blocks";
 import { aboutSections, common, isLang, pageMeta, whatsappLink, type AboutSection, type Bi } from "@/lib/site";
 
@@ -114,7 +115,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
             <h2>{text.ask.title[lang]}</h2>
             <p>{text.ask.desc[lang]}</p>
           </div>
-          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
         </div>
       </section>
     </>

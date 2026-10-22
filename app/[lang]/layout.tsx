@@ -11,8 +11,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import "@/lib/fonts"; // 字体（MiSans）
-import { CookieConsent, LangSwitch, Menu, PageTransition } from "@/lib/interactive";
-import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, type Bi, type Lang } from "@/lib/site";
+import { ConsultButton, ConsultDialog, CookieConsent, LangSwitch, Menu, PageTransition } from "@/lib/interactive";
+import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, serviceCategories, siteUrl, socials, whatsappLink, inquiry, inquiryForm, type Bi, type Lang } from "@/lib/site";
 
 // ── 页首、页脚的文字 ─────────────────────────────
 const text = {
@@ -85,7 +85,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             </Link>
 
             <div className="nav-right">
-              <a className="btn btn-cta btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{text.book[lang]}</a>
+              <ConsultButton className="btn btn-cta btn-sm" href={whatsappLink(lang)}>{text.book[lang]}</ConsultButton>
 
               {/* 选单：里面放什么写在这里；打开 / 关闭由 lib/interactive.tsx 负责 */}
               <Menu label={text.menu[lang]}>
@@ -136,6 +136,9 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             <p className="footer-disc">{scope[lang]} {disclaimer[lang]} © {new Date().getFullYear()} {firm.name}.</p>
           </div>
         </footer>
+
+        {/* ── 咨询表格视窗（全站一个；所有「咨询」按钮都打开它） ── */}
+        <ConsultDialog title={inquiry.title[lang]} desc={inquiry.desc[lang]} close={inquiry.close[lang]} form={inquiryForm(lang)} />
 
         {/* ── Cookie 提示（没有设定 GA 就不出现） ── */}
         {gaId && (

@@ -14,6 +14,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ConsultButton } from "@/lib/interactive";
 import { CoverHead } from "@/lib/blocks";
 import { articles, lawsPortal } from "@/lib/divorcepedia";
 import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
@@ -33,7 +34,7 @@ const text = {
     title: { zh: "想请律师帮你办？", en: "Want a lawyer to handle this?" },
     desc: { zh: "每个案件都不一样。律师会根据你的情况，告诉你可以怎么做。", en: "Every case is different. A lawyer will explain what you can do in your situation." },
   },
-  message: { zh: "你好，我看了「{title}」，想咨询我的情况。", en: "Hi, I read \"{title}\" and would like to ask about my situation." }, // WhatsApp 预先填好文章名称
+  message: { zh: "你好，我看了「{title}」，想咨询我的情况。", en: "Hi, I read \"{title}\" and would like to ask about my situation." }, // 咨询表格的讯息第一句：预先填好文章名称
   viewService: { zh: "查看{service}服务", en: "View {service} service" },
   // ④ 同分类文章
   browse: { zh: "浏览全部百科", en: "Browse All Articles" },
@@ -121,7 +122,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             <h2>{text.handoff.title[lang]}</h2>
             <p>{text.handoff.desc[lang]}</p>
           </div>
-          <a className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <ConsultButton className="btn btn-cta" href={whatsappLink(lang, fill(text.message))} intro={fill(text.message)}>{common.askLawyer[lang]}</ConsultButton>
           {related.length > 0 && (
             <ul className="link-list">
               {related.map((r) => <li key={r.slug}><Link href={`/${lang}/services/${r.category}/${r.slug}`}>{text.viewService[lang].replace("{service}", r.title[lang])}</Link></li>)}

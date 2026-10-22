@@ -11,6 +11,7 @@
 // ═══════════════════════════════════════════════════════════════
 import Image from "next/image";
 import Link from "next/link";
+import { ConsultButton } from "@/lib/interactive";
 import { cities, cityOf, common, displayName, initials, mapsLink, offices, roles, services, whatsappLink, type Lang, type Member } from "@/lib/site";
 
 // 封面标题区。aside = 标题框右边的资料栏（例如文章的分类、法律依据），没有就不填
@@ -61,7 +62,7 @@ export function OfficeTabs({ lang }: { lang: Lang }) {
                   <p>{o.phoneDisplay}</p>
                   <div className="btn-row">
                     <a className="btn btn-ghost btn-sm" href={`tel:${o.phone}`}>{common.call[lang]}</a>
-                    <a className="btn btn-ghost btn-sm" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.whatsapp[lang]}</a>
+                    <ConsultButton className="btn btn-ghost btn-sm" href={whatsappLink(lang)}>{common.whatsapp[lang]}</ConsultButton>
                     <a className="btn btn-ghost btn-sm" href={mapsLink(o.address)} target="_blank" rel="noopener">{common.directions[lang]}</a>
                   </div>
                 </div>

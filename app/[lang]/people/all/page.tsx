@@ -62,7 +62,7 @@ export default async function AllPeoplePage({ params }: PageProps<"/[lang]/peopl
                   <span>{text.count[lang].replace("{n}", String(people.length))}</span>
                 </summary>
                 <div className="person-grid">
-                  {people.map((p) => <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 860px) 33vw, (min-width: 600px) 50vw, 100vw" />)}
+                  {people.map((p) => <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 860px) 33vw, 50vw" />)}
                 </div>
               </details>
             );

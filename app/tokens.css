@@ -58,6 +58,10 @@
        caption：小标签、面包屑、备注
      层级（小 → 大）：caption < body < lead < subtitle < title
                      320   375   425   768  1024  1440 （px）                       */
+  --tracking-*: initial;   /* 清掉 Tailwind 预设的字距，只留下面两个 */
+  --tracking-tight: -0.01em; /* 字距：标题、引言稍微收紧 */
+  --tracking-wide: 0.12em;   /* 字距：小标签、资料列标题（大写）拉开 */
+
   --text-*: initial;
   --text-caption:  clamp(0.8125rem, 0.7768rem + 0.1786vw, 0.9375rem); /* 13 → 15 · 标签、备注 */
   --text-body:     clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem);       /* 16 → 18 · 正文、说明、按钮、卡片标题 h3（粗体） */
@@ -98,6 +102,8 @@
   --container: 1152px;     /* 内容最大宽度 */
   --section-y: clamp(3rem, 2.143rem + 4.286vw, 6rem);   /* 区块上下留白 48 → 96（流体） */
   --measure: 34em;         /* 正文最大行宽 */
+  --measure-short: 24em;   /* 短行宽：引言、首屏文字（大字只占左边，不压到照片里的人） */
+  --card-min: 300px;       /* 卡片网格：每张卡片最窄多宽（自动决定一行几张） */
   --leading-zh: 1.6;       /* 中文行距（正文）：1.75 时行与行之间已经空约 13px，段落、清单的间距叠上去就分不清；1.6 让「行 < 清单 < 段落 < 小节」一级一级拉开 */
   --leading-en: 1.5;       /* 英文行距 */
   --leading-heading: 1.2;  /* 标题行距 */
@@ -114,6 +120,11 @@
   --motion: 0.35s;         /* 动态：一般（选单、卡片） */
   --motion-fast: 0.2s;     /* 动态：小（按钮、图示） */
   --ease: cubic-bezier(0.32, 0.72, 0, 1); /* 动态曲线：快出慢停 */
+  --focus-color: var(--color-ink); /* 键盘操作时的焦点框颜色（深色带、页脚里换成浅色） */
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --glass-bg: color-mix(in srgb, var(--color-bg) 72%, transparent); /* 页首毛玻璃：半透明白 */
+  --glass-blur: saturate(180%) blur(20px); /* 页首毛玻璃：后面的东西模糊、颜色稍微饱和（Apple 的做法） */
   --scrim-person: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.6) 100%); /* 人卡下方的深色带：放白色的名字、地区 · 职位 */
   --scrim-photo: linear-gradient(180deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.2) 55%, rgb(0 0 0 / 0.45) 100%); /* 照片卡片的暗角：上方放文字、下方放按钮 */
 }

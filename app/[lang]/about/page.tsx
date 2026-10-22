@@ -11,6 +11,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ConsultButton } from "@/lib/interactive";
 import { cities, common, firm, isLang, lawyerCount, offices, pageMeta, whatsappLink, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
@@ -129,7 +130,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
             <h2>{text.ask.title[lang]}</h2>
             <p>{text.ask.desc[lang]}</p>
           </div>
-          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
         </div>
       </section>
     </>

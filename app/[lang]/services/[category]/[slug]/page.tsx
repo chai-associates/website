@@ -13,7 +13,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
 import { InquiryForm } from "@/lib/interactive";
-import { common, inquiry, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
+import { common, inquiry, inquiryForm, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -64,9 +64,8 @@ const text = {
   // ③ 询问表格
   form: {
     title: { zh: "把你的情况发给律师", en: "Tell a lawyer about your situation" },
-    desc: { zh: "回答几个问题，按下按钮后会打开 WhatsApp，讯息已经帮你写好，由你自己决定是否发送。", en: "Answer a few questions. The button opens WhatsApp with your message ready, and you decide whether to send it." },
     intro: { zh: "你好，我想咨询「{service}」。", en: "Hi, I'd like to ask about {service}." },
-    // 问题、选项、按钮文字跟律师个人页的预约表格共用：在 lib/site.ts 的 inquiry
+    // 说明、问题、选项、按钮文字跟全站的咨询表格共用：在 lib/site.ts 的 inquiry
   },
 
 };
@@ -153,15 +152,9 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
           <div className="panel">
             <div>
               <h3>{text.form.title[lang]}</h3>
-              <p>{text.form.desc[lang]}</p>
+              <p>{inquiry.desc[lang]}</p>
             </div>
-            <InquiryForm
-              lang={lang}
-              intro={text.form.intro[lang].replace("{service}", s.title[lang])}
-              placeholder={inquiry.placeholder[lang]}
-              submit={inquiry.submit[lang]}
-              questions={inquiry.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) }))}
-            />
+            <InquiryForm {...inquiryForm(lang)} intro={text.form.intro[lang].replace("{service}", s.title[lang])} />
           </div>
         </div>
       </section>

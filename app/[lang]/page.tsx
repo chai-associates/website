@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { OfficeTabs, PersonCard } from "@/lib/blocks";
+import { HeaderOverHero } from "@/lib/interactive";
 import { cities, common, isLang, pageMeta, roles, serviceCategories, structuredData, team, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -96,7 +97,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       {/* ═════════ ① 首屏 ═════════
           电脑：照片满版、靠右对齐（缩放时右边的人不会被切掉），小标签 → 标题 → 说明 → 按钮放左边；
           手机：照片在上，文字在下。下面接重点。照片换成律所真实照片时，只改上面 text.hero.image。 */}
-      <section className="hero">
+      <section className="hero hero-top">
+        <HeaderOverHero />
         <div className="hero-photo">
           <Image src={hero.image} alt={hero.imageAlt[lang]} fill preload sizes="100vw" />
         </div>

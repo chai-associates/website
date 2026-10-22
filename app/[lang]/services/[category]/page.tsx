@@ -7,6 +7,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ConsultButton } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi, type ServiceCategory } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -96,7 +97,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/servic
             <p>{common.notYours.desc[lang]}</p>
           </div>
           <div className="btn-row">
-            <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+            <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
             <Link className="text-link" href={`/${lang}/services`}>{common.viewAll[lang]} →</Link>
           </div>
         </div>

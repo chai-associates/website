@@ -173,17 +173,51 @@ export const aboutSections = [
 ] as const;
 export type AboutSection = (typeof aboutSections)[number]["slug"];
 
-// ── 询问表格（服务页的表格、律师个人页的预约表格共用）：选好答案 → 打开 WhatsApp，讯息已经写好 ──
+// ── 咨询表格：全站所有「咨询」按钮都先打开这个表格 → 按发送 → 打开 WhatsApp，讯息已经写好 ──
+// 律所要求：用户 PM 时已经说明 ① 所在州属 ② 结婚满 2 年了吗 ③ 想了解协议还是单方面离婚；④ 其他（选填，自由填写）
+// 州属只列西马：东马（沙巴、砂拉越、纳闽）律所不接，不放进选项。
+const states: Bi[] = [
+  { zh: "柔佛", en: "Johor" },
+  { zh: "吉打", en: "Kedah" },
+  { zh: "吉兰丹", en: "Kelantan" },
+  { zh: "吉隆坡", en: "Kuala Lumpur" },
+  { zh: "马六甲", en: "Melaka" },
+  { zh: "森美兰", en: "Negeri Sembilan" },
+  { zh: "彭亨", en: "Pahang" },
+  { zh: "霹雳", en: "Perak" },
+  { zh: "玻璃市", en: "Perlis" },
+  { zh: "槟城", en: "Penang" },
+  { zh: "布城", en: "Putrajaya" },
+  { zh: "雪兰莪", en: "Selangor" },
+  { zh: "登嘉楼", en: "Terengganu" },
+];
 export const inquiry = {
+  // 跳出视窗的标题与说明：先讲清楚「为什么要填」和「填完会怎样」，用户才不会担心没人回复
+  title: { zh: "先告诉我们你的情况", en: "Tell us a little about your situation" },
+  desc: {
+    zh: "回答 3 个问题，律师就能先了解你的情况，更好地帮你。按下按钮后会打开 WhatsApp，讯息已经帮你写好；你按发送，我们就会在 WhatsApp 回复你。",
+    en: "Answer three quick questions so a lawyer understands your situation and can help you better. The button opens WhatsApp with your message ready; once you send it, we'll reply to you on WhatsApp.",
+  },
+  intro: { zh: "你好，我想咨询离婚事宜。", en: "Hi, I'd like to ask about a divorce matter." }, // 讯息第一句（各页可以换成自己的，例如文章名称、律师名字）
   placeholder: { zh: "请选择", en: "Choose one" },
-  submit: { zh: "发送我的资料到 WhatsApp 咨询", en: "Send My Details via WhatsApp" },
+  submit: { zh: "发送到 WhatsApp", en: "Send via WhatsApp" },
+  close: { zh: "关闭", en: "Close" },
   questions: [
-    { label: { zh: "我是", en: "I am" }, options: [{ zh: "丈夫", en: "The husband" }, { zh: "妻子", en: "The wife" }, { zh: "代家人咨询", en: "Asking for a family member" }] },
-    { label: { zh: "对方是否同意离婚", en: "Does your spouse agree to divorce" }, options: [{ zh: "同意", en: "Yes" }, { zh: "不同意", en: "No" }, { zh: "还没谈", en: "Not discussed yet" }, { zh: "我是收到申请的一方", en: "I've received a petition" }] },
-    { label: { zh: "是否有孩子", en: "Do you have children" }, options: [{ zh: "有", en: "Yes" }, { zh: "没有", en: "No" }] },
-    { label: { zh: "所在地区", en: "Where are you based" }, options: [...cities.map((c) => c.label), { zh: "其他", en: "Other" }] },
-  ] as { label: Bi; options: Bi[] }[],
+    { label: { zh: "你目前在哪一州？", en: "Which state are you in?" }, short: { zh: "所在州属", en: "State" }, options: states },
+    { label: { zh: "结婚满 2 年了吗？", en: "Have you been married for 2 years or more?" }, short: { zh: "结婚年数", en: "Married" }, options: [{ zh: "满 2 年", en: "Yes, 2 years or more" }, { zh: "未满 2 年", en: "Not yet 2 years" }] },
+    { label: { zh: "你想了解哪一种离婚？", en: "Which type of divorce are you asking about?" }, short: { zh: "想了解", en: "Asking about" }, options: [{ zh: "协议离婚（双方同意）", en: "Joint petition (we both agree)" }, { zh: "单方面离婚（对方不同意）", en: "Single petition (my spouse doesn't agree)" }, { zh: "还不确定", en: "Not sure yet" }] },
+  ] as { label: Bi; short: Bi; options: Bi[] }[], // label = 表格上的问题；short = WhatsApp 讯息里的简短标题
+  remark: { label: { zh: "其他（选填）", en: "Anything else (optional)" }, short: { zh: "其他", en: "Other" }, placeholder: { zh: "例如：有孩子、想先了解抚养权", en: "e.g. we have children and I'd like to know about custody" } },
 };
+// 表格要的资料（选好语言）：layout.tsx 的咨询视窗、服务页的表格都用这个
+export const inquiryForm = (lang: Lang) => ({
+  lang,
+  intro: inquiry.intro[lang],
+  placeholder: inquiry.placeholder[lang],
+  submit: inquiry.submit[lang],
+  questions: inquiry.questions.map((q) => ({ label: q.label[lang], short: q.short[lang], options: q.options.map((o) => o[lang]) })),
+  remark: { label: inquiry.remark.label[lang], short: inquiry.remark.short[lang], placeholder: inquiry.remark.placeholder[lang] },
+});
 
 // ── 多个页面共用的文字（选单、面包屑、页尾的「不是你的情况？」） ──
 export const common = {

@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SituationPicker } from "@/lib/interactive";
+import { ConsultButton, SituationPicker } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -122,7 +122,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
             <h2>{text.ask.title[lang]}</h2>
             <p>{text.ask.desc[lang]}</p>
           </div>
-          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
         </div>
       </section>
     </>

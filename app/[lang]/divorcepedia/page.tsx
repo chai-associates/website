@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
-import { TabsHash } from "@/lib/interactive";
+import { ConsultButton, TabsHash } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories, whatsappLink } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -95,7 +95,7 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
             <h2>{text.ask.title[lang]}</h2>
             <p>{text.ask.desc[lang]}</p>
           </div>
-          <a className="btn btn-cta" href={whatsappLink(lang)} target="_blank" rel="noopener">{common.askLawyer[lang]}</a>
+          <ConsultButton className="btn btn-cta" href={whatsappLink(lang)}>{common.askLawyer[lang]}</ConsultButton>
         </div>
       </section>
     </>
