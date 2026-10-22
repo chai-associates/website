@@ -225,7 +225,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
 .bleed { aspect-ratio: var(--ratio-photo); }
 .cover-head { padding-bottom: var(--space-3); } /* 面包屑 ↔ 照片 16 */
-.cover-body { padding-bottom: var(--space-5); } /* 标题框 ↔ 内容 48（跟 .page-head 一样） */
+.cover-body { display: flow-root; padding-bottom: var(--space-5); } /* 标题框 ↔ 内容 48（跟 .page-head 一样）；flow-root：标题框往上叠照片的负边距留在框上，整段白底才不会一起往上盖住照片 */
 /* .bleed-pin = 照片停住：往下滑时照片固定在页首下面，后面的区块（白底、浅灰、深色）一层层往上盖过去（手机到电脑都一样） */
 .bleed-pin { position: sticky; top: var(--header-h); z-index: 0; }
 .bleed-pin ~ * { position: relative; z-index: 1; }
@@ -366,7 +366,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .consent { position: fixed; z-index: 25; inset-inline: var(--gutter); bottom: var(--gutter); display: grid; gap: var(--space-3); max-width: var(--measure); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); }
 
 /* ── 外框：页首 ─────────────────────────────────── */
-/* 页首：一直固定在最上面，下面一条细线（只画在内容宽度里，见 .nav::after）。底是毛玻璃（--color-glass 半透明白 + 模糊）；
+/* 页首：一直固定在最上面，不加底线。底是毛玻璃（--color-glass 半透明白 + 模糊）；
    有首屏照片的页面在最上面时透明，一往下滑就变毛玻璃（lib/interactive.tsx 的 HeaderOverHero 切换 data-over-hero）。
    毛玻璃放在 ::before：直接放在页首上会让选单（position: fixed）改成跟着页首定位 */
 .site-header { position: sticky; top: 0; z-index: 30; transition: color var(--motion) var(--ease); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
@@ -375,8 +375,7 @@ html[data-over-hero] .site-header::before { opacity: 0; }
 html[data-over-hero] .site-header { --focus-color: var(--color-on-photo); color: var(--color-on-photo); } /* 页首叠在深色照片上：字变白 */
 html[data-over-hero] .site-header .logo-sub { color: var(--color-on-photo-muted); }
 /* 手机、平板：logo · 咨询 · ☰ 一排 */
-.nav { position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
-.nav::after { content: ""; position: absolute; inset: auto var(--gutter) 0; border-bottom: var(--hairline) solid var(--color-line); } /* 页首下面的细线：跟内容左右对齐（不贴满画面），两边留页边距 */
+.nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
 .nav-links, .nav-right > .lang-switch { display: none; } /* 导航、语言切换在 ☰ 选单里（只藏页首上的那个，选单里的照常显示） */
 .logo { display: flex; flex-direction: column; line-height: var(--leading-heading); white-space: nowrap; }
 .logo-wm { font-size: var(--text-caption); font-weight: var(--weight-medium); letter-spacing: var(--tracking-logo); } /* 手机 caption（全大写加字距，整排很宽）；电脑 subtitle */
