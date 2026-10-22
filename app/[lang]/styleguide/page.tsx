@@ -205,7 +205,7 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
 
       {/* ═══ 资料列、横线清单、左右两栏 ═══ */}
       <section className="section section-muted">
-        <div className="container with-aside">
+        <div className="container stack">
           <div className="stack">
             <div>
               <div className="list-head"><h2>数字</h2><span>figures · 古铜超大数字 → 古铜标签，不加线</span></div>
@@ -239,8 +239,8 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
           </div>
           <aside className="panel">
             <div>
-              <h3>侧栏（with-aside）里放框（panel）</h3>
-              <p>侧栏本身就是卡片。电脑版在右边并跟着滑动；手机版排在正文下面。</p>
+              <h3>框（panel）</h3>
+              <p>白底、细线框、圆角，放表格或一小组资料。</p>
             </div>
             <label className="field">
               栏位（field + select）

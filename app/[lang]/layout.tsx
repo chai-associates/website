@@ -35,7 +35,7 @@ const text = {
       children: [
         { href: "/about/values", label: { zh: "我们的理念", en: "Our Values" } },
         ...aboutSections.map((s) => ({ href: `/about/${s.slug}`, label: s.title })),
-        { href: "/careers", label: { zh: "加入我们", en: "Join Us" }, footer: true },
+        { href: "/careers", label: { zh: "加入我们", en: "Careers" }, footer: true },
         { href: "/locations", label: { zh: "办事处", en: "Locations" }, footer: true },
       ],
       social: true,
