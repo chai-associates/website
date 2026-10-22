@@ -93,7 +93,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
   .hero { min-height: 70svh; align-items: center; }
   .hero-photo, .hero-top .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; height: auto; }
   .hero-body { padding-block: var(--space-6); }
-  .hero-top { min-height: var(--hero-home-h); align-items: start; } /* 首页首屏：固定高度；文字放在上方（一打开就看得到，不用先往下滑） */
+  .hero-top { aspect-ratio: var(--ratio-hero); } /* 首页首屏：跟照片同比例 4:3，照片完整不裁切；文字垂直置中 */
   .hero-top .hero-body { padding-top: calc(var(--header-h) + var(--space-6)); } /* 首页首屏在页首后面：文字从页首下面开始算 */
   .hero-intro { padding-top: var(--space-5); } /* 电脑：照片 ↔ 重点三栏 48（手机的 48 已经在 .hero-body 下方） */
   .hero-body > * { max-width: var(--measure-short); } /* 文字只占左边，不压到右边的人 */

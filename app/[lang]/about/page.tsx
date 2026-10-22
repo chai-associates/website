@@ -30,7 +30,7 @@ const text = {
   // ② 律所简介 + 律所资料
   firm: {
     title: { zh: "律所简介", en: "Our Firm" },
-    image: "/images/about/firm.png", // 律所照片（3:2）
+    image: null as string | null, // 团队合照：放进 public/images/about/ 后填 "/images/about/team.jpg"（1800 × 1200，3:2）
     paragraphs: [
       { zh: "Chai & Associates 成立于 2017 年，现由 Chai Mei Ching 律师主持，专注处理非穆斯林的离婚与家事案件。", en: "Chai & Associates was founded in 2017 and is led today by Chai Mei Ching. The firm acts in divorce and family matters for non-Muslims." },
       { zh: "家事案件牵涉孩子、财产和往后的生活。我们会先把你的处境和可以走的路讲清楚，说明每一步要做什么、大概需要多久，再按你的决定往下办。", en: "Family matters touch your children, your finances and what comes next. We start by explaining where you stand and what your options are, set out what each step involves and roughly how long it will take, and then act on your instructions." },
@@ -90,7 +90,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       {/* ═══ ② 律所简介：照片 + 文字 + 资料（浅灰） ═══ */}
       <section id="firm" className="section section-muted">
         <div className="container split">
-          <div className="photo-frame"><Image src={text.firm.image} alt={firm.name} fill sizes="(min-width: 860px) 50vw, 100vw" /></div>
+          <div className="photo-frame">{text.firm.image && <Image src={text.firm.image} alt={firm.name} fill sizes="(min-width: 860px) 50vw, 100vw" />}</div>
           <div>
             <div className="section-head"><h2>{text.firm.title[lang]}</h2></div>
             <div className="prose">{text.firm.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>

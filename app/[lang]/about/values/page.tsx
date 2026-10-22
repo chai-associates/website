@@ -20,7 +20,7 @@ type Item = { title: Bi; desc: Bi };
 const text = {
   about: { zh: "关于我们", en: "About Us" },
   title: { zh: "我们的理念", en: "Our Values" },
-  image: null as string | null, // 满版照片：放进 public/images/about/ 后填 "/images/about/values.png"（2400 × 1350）
+  image: "/images/about/firm.png" as string | null, // 满版照片（建议 2400 × 1350；现在这张 1536 × 1024，电脑版会被放大、裁掉上下）
   mission: { zh: "用清楚、实际的方式，和你一起处理离婚与家事问题。", en: "To work through divorce and family matters with you, clearly and practically." },
   vision: { zh: "让每一位客户在做决定之前，都清楚自己的权利、选择和下一步。", en: "That every client understands their rights, options and next step before they decide." },
   list: [
