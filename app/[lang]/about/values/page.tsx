@@ -18,7 +18,7 @@ type Item = { title: Bi; desc: Bi };
 // ─────────────────────────────────────────────
 const text = {
   title: { zh: "我们的理念", en: "Our Values" },
-  image: "/images/about/firm.png" as string | null, // 满版照片（建议 2400 × 1350；现在这张 1536 × 1024，电脑版会被放大、裁掉上下）
+  image: "/images/about/value-v2.png" as string | null, // 满版照片 2400 × 1350
   mission: { zh: "用清楚、实际的方式，和你一起处理离婚与家事问题。", en: "To work through divorce and family matters with you, clearly and practically." },
   // ② 愿景与做法（参考旧网站改写；律师公会规定：不自夸、不比较）
   paragraphs: [

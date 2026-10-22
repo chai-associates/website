@@ -166,9 +166,9 @@ export const services: { slug: string; category: ServiceCategory; title: Bi; sho
 // image：页面顶部的满版照片（跟离婚百科文章同一个格式：2400 × 1350，主体放在中间那条 2400 × 600 里；换照片用新文件名）
 // 「我们的理念」「荣誉与认可」也是独立页面，但内容格式不同，各自写在 app/[lang]/about/values、recognitions
 export const aboutSections = [
-  { slug: "media", title: { zh: "媒体报道", en: "In the Media" }, image: "/images/about/media.png" },
-  { slug: "community", title: { zh: "公益活动", en: "Community" }, image: "/images/about/community.png" },
-  { slug: "events", title: { zh: "活动与讲座", en: "Events & Talks" }, image: "/images/about/events.png" },
+  { slug: "media", title: { zh: "媒体报道", en: "In the Media" }, image: "/images/about/media-v2.png" },
+  { slug: "community", title: { zh: "公益活动", en: "Community" }, image: "/images/about/community-v3.png" },
+  { slug: "events", title: { zh: "活动与讲座", en: "Events & Talks" }, image: "/images/about/events-talk-v2.png" },
 ] as const;
 export type AboutSection = (typeof aboutSections)[number]["slug"];
 

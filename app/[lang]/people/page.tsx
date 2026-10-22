@@ -3,7 +3,7 @@
 // ───────────────────────────────────────────────────────────────
 // 区块顺序：① 首屏：团队合照 + 面包屑 → 两行标题 → 按钮「认识我们的团队」（lib/blocks.tsx 的 PageHero）
 //          ② 律所简介：左边标题 + 三段、右边古铜超大数字（10+ 年经验 · 5 间办事处）（浅灰）
-//          ③ 主管合伙人的话 + 按钮「认识我们的团队」（照片满版靠右、引言在左；手机照片在上。跟首页首屏同一个积木 .hero）
+//          ③ 主管合伙人的话（照片满版靠右、引言在左；手机照片在上。.hero）
 // 完整的成员名单在 /people/all（按职位折叠）。成员资料、职位、年经验、办事处在 lib/site.ts；这里只放这一页的文字。
 // ⚠ 中括号 [ ] 里的都是占位，等律所问卷回来后照题目替换。
 // ═══════════════════════════════════════════════════════════════
@@ -42,8 +42,7 @@ const text = {
   //    照片规格：横向 2400 × 1350（16:9）；人放在右边三分之一，左边一半留白放字；脸在画面中间高度，上下各 15% 不放重要东西（电脑版会裁上下、平板会从左边裁）
   message: {
     quote: { zh: "[主管合伙人想对客户说的话，两三句，由本人确认]", en: "[A short message to clients from the Managing Partner, two or three sentences, confirmed by them]" },
-    image: null as string | null, // 放进 public/images/people/ 后填 "/images/people/文件名.png"
-    cta: { zh: "认识我们的团队", en: "See All Our People" },
+    image: "/images/about/firm.png" as string | null,
   },
 };
 
@@ -84,7 +83,7 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
         </div>
       </section>
 
-      {/* ═══ ③ 主管合伙人的话 + 认识我们的团队 ═══ */}
+      {/* ═══ ③ 主管合伙人的话 ═══ */}
       <section className="hero">
         <div className="hero-photo">
           {md && text.message.image && <Image src={text.message.image} alt={displayName(md, lang)} fill sizes="100vw" />}
@@ -96,9 +95,6 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
               <figcaption>— {displayName(md, lang)} · {roles[md.role].label[lang]}</figcaption>
             </figure>
           )}
-          <div className="btn-row">
-            <Link className="btn btn-ghost btn-next" href={`/${lang}/people/all`}>{text.message.cta[lang]}</Link>
-          </div>
         </div>
       </section>
 

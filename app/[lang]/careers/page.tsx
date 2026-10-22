@@ -10,6 +10,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CoverHead } from "@/lib/blocks";
 import { common, firm, isLang, pageMeta, type Bi } from "@/lib/site";
 
 type Item = { title: Bi; desc: Bi };
@@ -19,7 +20,8 @@ type Item = { title: Bi; desc: Bi };
 // ─────────────────────────────────────────────
 const text = {
   title: { zh: "加入我们", en: "Join Us" },
-  // ① 标题
+  // ① 标题（满版照片 2400 × 1350）
+  image: "/images/about/join-us.png" as string | null,
   heading: { zh: "和我们一起，\n陪客户走过人生转折。", en: "Help people through\none of life's hardest moments." },
   lead: { zh: "[一两句话：律所在找什么样的人，以及在这里工作是什么感觉]", en: "[One or two sentences: who the firm is looking for, and what it's like to work here]" },
   // ② 福利
@@ -79,17 +81,16 @@ export default async function CareersPage({ params }: PageProps<"/[lang]/careers
 
   return (
     <>
-      {/* ═══ ① 标题 ═══ */}
-      <section className="page-head">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-            <li aria-current="page">{text.title[lang]}</li>
-          </ol>
-          <h1>{text.heading[lang]}</h1>
-          <p>{text.lead[lang]}</p>
-        </div>
-      </section>
+      {/* ═══ ① 标题：面包屑 → 满版照片 → 标题框（lib/blocks.tsx 的 CoverHead，跟理念、媒体等页一样） ═══ */}
+      <CoverHead
+        crumbs={<>
+          <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
+          <li aria-current="page">{text.title[lang]}</li>
+        </>}
+        image={text.image}
+        title={text.heading[lang]}
+        lead={text.lead[lang]}
+      />
 
       {/* ═══ ② 福利 ═══ */}
       <section id="benefits" className="section section-muted">
