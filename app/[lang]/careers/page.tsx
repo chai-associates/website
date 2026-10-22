@@ -2,7 +2,7 @@
 // 加入我们 /careers
 // ───────────────────────────────────────────────────────────────
 // 区块顺序：① 面包屑 → 满版照片 → 标题框（CoverHead）  ② 为什么选择我们：三段（白）
-//          ③ 按职位申请：满版、左右各一半的照片卡片（白）  ④ 按地点申请：城市 → 办事处（浅灰）
+//          ③ 按职位申请：照片按钮卡，满版左右各一半（白）  ④ 按地点申请：城市 → 办事处（浅灰）
 // 申请一律用电邮（firm.careersEmail，在 lib/site.ts）；按下去会打开电邮，标题已经写好职位或办事处。
 // 办事处清单读 lib/site.ts 的 cities、offices，新增办事处不用改这里。
 // ⚠ 中括号 [ ] 里的都是占位，等律所确认后替换。
@@ -10,7 +10,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CoverHead, PhotoCard } from "@/lib/blocks";
+import { CoverHead, PhotoTile } from "@/lib/blocks";
 import { cities, common, firm, isLang, offices, pageMeta, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -31,12 +31,12 @@ const text = {
       { zh: "[年份] 年实习律师（Chambering）计划将在 [日期] 开始接受申请，收到申请后会陆续安排面试。我们希望你积极主动、对法律有好奇心、成绩不错，最好也参加过模拟法庭或其他课外活动。", en: "Applications for our [Year] chambering programme open on [date] and are reviewed on a rolling basis. We look for candidates who are driven and intellectually curious, with a good academic record and involvement in mooting or other extracurricular activities." },
     ] as Bi[],
   },
-  // ③ 按职位申请（照片 1200 × 1500，直的 4:5；人放在中间偏下，左上留给标题。放进 public/images/ 后填路径；没有照片时是灰底）
+  // ③ 按职位申请（照片按钮卡：纹理照片 1600 × 600，没有人物）
   roles: {
     title: { zh: "选择你想应征的职位", en: "Apply by Role" },
     list: [
-      { title: { zh: "律师", en: "Lawyers" }, desc: { zh: "律师与资深律师", en: "Associates and senior associates" }, image: null },
-      { title: { zh: "行政与支援团队", en: "Business & Support Team" }, desc: { zh: "法律助理、行政人员", en: "Legal assistants and administration" }, image: null },
+      { title: { zh: "律师", en: "Lawyers" }, desc: { zh: "律师与资深律师", en: "Associates and senior associates" }, image: "/images/about/apply1.png" },
+      { title: { zh: "行政与支援团队", en: "Business & Support Team" }, desc: { zh: "法律助理、行政人员", en: "Legal assistants and administration" }, image: "/images/about/apply2.png" },
     ] as { title: Bi; desc: Bi; image: string | null }[],
   },
   // ④ 按地点申请
@@ -87,9 +87,9 @@ export default async function CareersPage({ params }: PageProps<"/[lang]/careers
         <div className="container">
           <div className="section-head"><h2>{text.roles.title[lang]}</h2></div>
         </div>
-        <div className="photo-split">
+        <div className="photo-tiles">
           {text.roles.list.map((r) => (
-            <PhotoCard key={r.title.en} href={mailto(r.title[lang])} image={r.image} title={r.title[lang]} desc={r.desc[lang]} action={text.apply[lang]} sizes="(min-width: 768px) 50vw, 100vw" />
+            <PhotoTile key={r.title.en} href={mailto(r.title[lang])} image={r.image} title={r.title[lang]} desc={r.desc[lang]} action={text.apply[lang]} />
           ))}
         </div>
       </section>

@@ -179,8 +179,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 按钮并排（放不下自动换行） */
 .btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 /* 箭头（全站一种做法）：「去别的地方」的链接和按钮由 CSS 自动加 →，文案里不打箭头 */
-:is(.text-link, .link-list a, .photo-card-action, .btn-next)::after { content: "→"; transition: transform var(--motion-fast) var(--ease); }
-@media (hover: hover) { :is(.text-link, .link-list a, .photo-card-action, .btn-next):hover::after { transform: translateX(var(--space-1)); } } /* 悬停：箭头往右推一点 */
+:is(.text-link, .link-list a, .photo-card-action, .photo-tile-action, .btn-next)::after { content: "→"; transition: transform var(--motion-fast) var(--ease); }
+@media (hover: hover) { :is(.text-link, .link-list a, .photo-card-action, .btn-next):hover::after, .photo-tile:hover .photo-tile-action::after { transform: translateX(var(--space-1)); } } /* 悬停：箭头往右推一点 */
 .text-link { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); font-weight: var(--weight-medium); }
 .chip { cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-pill); font-weight: var(--weight-medium); white-space: nowrap;  transition: border-color var(--motion-fast) var(--ease); }
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
@@ -204,19 +204,20 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .photo-card { aspect-ratio: var(--ratio-card); position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3); overflow: clip; padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-ink-muted); color: var(--color-white); } /* 至少 3:2；字多的时候往下长，不会被切掉（clip 才会长，hidden 会切字） */
 .photo-card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
 .photo-card > img { z-index: -2; transition: transform var(--motion) var(--ease); }
-@media (hover: hover) { .photo-card:hover > img, .person-card:hover .person-photo > img { transform: scale(var(--zoom-hover)); } } /* 悬停：照片轻轻放大 */
+@media (hover: hover) { .photo-card:hover > img, .photo-tile:hover > img, .person-card:hover .person-photo > img { transform: scale(var(--zoom-hover)); } } /* 悬停：照片轻轻放大 */
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
-/* 照片卡片满版、左右各一半（加入我们的「按职位申请」）：贴齐画面两边、不圆角、直的 4:5，标题放大；手机上下排 */
-.photo-split { display: grid; gap: var(--hairline); }
-.photo-split > .photo-card { aspect-ratio: var(--ratio-portrait); border-radius: 0; padding: var(--space-5) var(--gutter); }
-.photo-split > .photo-card h3 { font-size: var(--text-title); }
-@media (width >= --theme(--breakpoint-md)) {
-  .photo-split { --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); grid-template-columns: repeat(2, minmax(0, 1fr)); } /* --edge = 页面内容的左右边距 */
-  .photo-split > .photo-card { padding-inline: var(--space-5); }
-  .photo-split > .photo-card:first-child { padding-left: var(--edge); } /* 外侧的字、按钮跟页面内容对齐 */
-  .photo-split > .photo-card:last-child { padding-right: var(--edge); }
-}
+/* 积木：照片按钮卡（lib/blocks.tsx 的 PhotoTile）—— 暗色纹理照片当背景（没有人物，纯点缀），整张是一个按钮。
+   标题 → 一行说明 → 链接（透明、白字、下划线 + 箭头）。高度由内容决定，尽量矮。
+   .photo-tiles = 满版一排，任何尺寸都左右各一半；外侧的字跟页面内容对齐 */
+.photo-tiles { --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--hairline); } /* --edge = 页面内容的左右边距 */
+.photo-tile { position: relative; isolation: isolate; display: flex; flex-direction: column; overflow: hidden; padding: var(--space-5) var(--space-4); background: var(--color-inverse); color: var(--color-on-photo); --focus-color: var(--color-on-photo); }
+.photo-tiles > .photo-tile:first-child { padding-left: var(--edge); }
+.photo-tiles > .photo-tile:last-child { padding-right: var(--edge); }
+.photo-tile > img { z-index: -1; object-fit: cover; transition: transform var(--motion) var(--ease); }
+.photo-tile h3 { font-size: var(--text-subtitle); }
+.photo-tile p { margin-top: var(--space-1); color: var(--color-on-photo-muted); line-height: var(--leading-lead); }
+.photo-tile-action { display: inline-flex; align-self: flex-start; gap: var(--space-1); margin-top: var(--space-4); font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: var(--space-1); }
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
    .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、平板以上 3:1；没有照片时是浅灰底。
    照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
