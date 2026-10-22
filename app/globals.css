@@ -369,6 +369,9 @@ html[data-header-hidden] .site-header { top: calc(-1 * var(--header-h) - var(--h
 @media (hover: hover) { .nav-links > a:hover, .nav-drop:hover > a { border-color: var(--color-accent); } }
 /* 下拉（有子页面的项目）：鼠标移上去或键盘 Tab 到它时展开 */
 .nav-drop { position: relative; display: flex; }
+/* 有下拉的项目：名字旁边一个向下的小箭头（CSS 画的，跟着字的颜色和大小）；展开时翻成向上 */
+.nav-drop > a::after { content: ""; width: 0.4em; height: 0.4em; margin: -0.2em 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
+.nav-drop:hover > a::after, .nav-drop:focus-within > a::after { transform: translateY(0.2em) rotate(-135deg); }
 .nav-drop-panel { position: absolute; top: 100%; left: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--space-1))); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease), visibility var(--motion-fast); }
 .nav-drop:hover > .nav-drop-panel, .nav-drop:focus-within > .nav-drop-panel { opacity: 1; visibility: visible; transform: none; }
 .nav-drop-panel a { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); color: var(--color-ink-muted); transition: color var(--motion-fast) var(--ease); }
