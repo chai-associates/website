@@ -212,7 +212,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    标题 → 一行说明 → 链接（透明、白字、下划线 + 箭头）。高度由内容决定，尽量矮。
    .photo-tiles = 满版一排，任何尺寸都左右各一半；外侧的字跟页面内容对齐 */
 .photo-tiles { --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--hairline); } /* --edge = 页面内容的左右边距 */
-.photo-tile { position: relative; isolation: isolate; display: flex; flex-direction: column; overflow: hidden; padding: var(--space-5) var(--space-4); background: var(--color-inverse); color: var(--color-on-photo); --focus-color: var(--color-on-photo); }
+.photo-tile { position: relative; isolation: isolate; display: flex; flex-direction: column; overflow: clip; padding: var(--space-5) var(--space-4); background: var(--color-inverse); color: var(--color-on-photo); --focus-color: var(--color-on-photo); }
 .photo-tiles > .photo-tile:first-child { padding-left: var(--edge); }
 .photo-tiles > .photo-tile:last-child { padding-right: var(--edge); }
 .photo-tile > img { z-index: -1; object-fit: cover; transition: transform var(--motion) var(--ease); }
@@ -220,9 +220,9 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .photo-tile p { margin-top: var(--space-1); color: var(--color-on-photo-muted); line-height: var(--leading-lead); }
 .photo-tile-action { display: inline-flex; align-self: flex-start; gap: var(--space-1); margin-top: var(--space-4); font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: var(--space-1); }
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
-   .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。手机 16:9、平板以上 3:1；没有照片时是浅灰底。
-   照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
-   .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
+   .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。任何尺寸都是 16:9（照片 2400 × 1350，整张不裁）；没有照片时是浅灰底。
+   .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。白色圆角框往上叠住照片下缘，左右置中（手机到电脑都一样）：
+   框比正文左右各宽半个页边距、里面再留回半个页边距，所以框的圆角露得出来，标题仍然跟下面正文的左边对齐。 */
 .bleed { aspect-ratio: var(--ratio-photo); }
 .cover-head { padding-bottom: var(--space-3); } /* 面包屑 ↔ 照片 16 */
 .cover-body { display: flow-root; padding-bottom: var(--space-5); } /* 标题框 ↔ 内容 48（跟 .page-head 一样）；flow-root：标题框往上叠照片的负边距留在框上，整段白底才不会一起往上盖住照片 */
@@ -230,13 +230,11 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .bleed-pin { position: sticky; top: var(--header-h); z-index: 0; }
 .bleed-pin ~ * { position: relative; z-index: 1; }
 .bleed-pin ~ :not(.section-muted, .section-dark) { background-color: var(--color-bg); }
-.cover-panel { position: relative; display: grid; gap: var(--space-4); padding-top: var(--space-4); background: var(--color-bg); }
+.cover-panel { --panel-pad: calc(var(--gutter) / 2); position: relative; display: grid; gap: var(--space-4); margin: calc(-1 * var(--space-5)) calc(-1 * var(--panel-pad)) 0; padding: var(--space-5) var(--panel-pad) 0; border-radius: var(--radius-md) var(--radius-md) 0 0; background: var(--color-bg); }
 .cover-panel h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .cover-panel .facts { grid-template-columns: minmax(0, 1fr); } /* 资料栏一律单栏 */
 @media (width >= --theme(--breakpoint-md)) {
-  .bleed { aspect-ratio: var(--ratio-banner); }
-  /* 往左多伸出一个页边距、里面留同样的空白：两个上角都能圆角，标题离框边有空间，而且标题仍然跟下面正文的左边对齐 */
-  .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin: calc(-1 * var(--space-6)) var(--space-6) 0 calc(-1 * var(--gutter)); padding: var(--space-5) var(--space-5) 0 var(--gutter); border-radius: var(--radius-md) var(--radius-md) 0 0; }
+  .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin-top: calc(-1 * var(--space-6)); padding-top: var(--space-6); }
 }
 
 /* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句。不加框 ──
@@ -452,22 +450,32 @@ html[data-over-hero] .site-header .logo-sub { color: var(--color-on-photo-muted)
 .footer-disc { padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-inverse-line); font-size: var(--text-caption); }
 
 /* ── 品牌语法 8：动态（速度、距离都在 tokens.css：--motion* / --ease / --reveal-distance / --stagger） ──────────
-   ① 进场：往下滑时，一组一组的项目（卡片、人卡、清单、编号清单）轻轻浮现。自动套用，页面上不用加 class。
+   以手机为准：手机、平板没有滑鼠，所以「滑动」和「按」都要有反应；电脑另外有悬停。
+   ① 进场：往下滑时，标题、每一段文字、一组一组的项目（卡片、人卡、清单、编号清单、数字）轻轻浮现。自动套用，页面上不用加 class。
       同一排的第 2、3 个稍微晚一点出现（错开）。滑动列（手机左右滑）不套用。
+      照片卡片、照片按钮卡的照片：滑进画面时从 --zoom-settle 倍慢慢缩回（用 scale，跟电脑悬停的 transform 分开，不会互相盖掉）。
       用浏览器原生的滚动动画：Chrome、Edge、Safari 26 有；Firefox 等不支援的浏览器直接显示，不影响阅读。 */
 @supports (animation-timeline: view()) {
+  :is(.section-head, .prose > *, .figures > *, .groups > * > h3, .photo-tiles > *) { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  :is(.photo-card, .photo-tile) > img { animation: zoom-in-view linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
   :is(.card-grid, .person-grid, .numbered, .link-list) > * { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
   :is(.card-grid, .person-grid, .numbered, .link-list) > :nth-child(3n + 2) { animation-range: entry 10% entry 70%; }
   :is(.card-grid, .person-grid, .numbered, .link-list) > :nth-child(3n + 3) { animation-range: entry 20% entry 80%; }
 }
-/* ② 首屏（首页、律师团队的主管合伙人）：一打开，文字一行一行浮现；照片从 --zoom-settle 倍慢慢缩回原本大小 */
-.hero-body > * { animation: reveal var(--motion-slow) var(--ease) both; }
-.hero-body > :nth-child(2) { animation-delay: var(--stagger); }
-.hero-body > :nth-child(3) { animation-delay: calc(2 * var(--stagger)); }
-.hero-body > :nth-child(4) { animation-delay: calc(3 * var(--stagger)); }
-.hero-photo > img { animation: settle calc(2 * var(--motion-slow)) var(--ease) both; }
+/* ② 首屏、封面（PageHero、CoverHead）：一打开，文字一行一行浮现；照片从 --zoom-settle 倍慢慢缩回原本大小 */
+:is(.hero-body, .cover-panel > div) > * { animation: reveal var(--motion-slow) var(--ease) both; }
+:is(.hero-body, .cover-panel > div) > :nth-child(2) { animation-delay: var(--stagger); }
+:is(.hero-body, .cover-panel > div) > :nth-child(3) { animation-delay: calc(2 * var(--stagger)); }
+:is(.hero-body, .cover-panel > div) > :nth-child(4) { animation-delay: calc(3 * var(--stagger)); }
+:is(.hero-photo, .bleed) > img { animation: settle calc(2 * var(--motion-slow)) var(--ease) both; }
+/* ③ 按下去（手机、平板）：卡片、按钮、清单项目轻轻缩一下，放手弹回（电脑用悬停，不套用） */
+@media (hover: none) {
+  :is(.photo-card, .photo-tile, .person-card, .link-list a, .btn) { transition-property: scale, background-color, color, border-color, filter; transition-duration: var(--motion-fast); transition-timing-function: var(--ease); }
+  :is(.photo-card, .photo-tile, .person-card, .link-list a, .btn):active { scale: var(--zoom-open); }
+}
 @keyframes reveal { from { opacity: 0; transform: translateY(var(--reveal-distance)); } }
 @keyframes settle { from { transform: scale(var(--zoom-settle)); } }
+@keyframes zoom-in-view { from { scale: var(--zoom-settle); } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes fade-out { to { opacity: 0; } }
 
