@@ -310,7 +310,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .scroll-row::-webkit-scrollbar { display: none; }
 .scroll-row > * { scroll-snap-align: start; }
 /* 滑动提示：只在手机显示（电脑是网格，不用滑） */
-.scroll-row + .scroll-hint { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); }
+.scroll-row + .scroll-hint { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); text-align: center; } /* 置中：提示的是整排，不是左边那一张 */
 @media (width >= --theme(--breakpoint-md)) {
   .scroll-row { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
   .scroll-hint { display: none; }
