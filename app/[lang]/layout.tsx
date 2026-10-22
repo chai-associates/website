@@ -31,9 +31,8 @@ const text = {
     { href: "/people", label: { zh: "律师团队", en: "People" } },
     { href: "/about/recognitions", label: { zh: "荣誉与认可", en: "Recognitions" } },
     {
-      href: "/about", label: { zh: "关于我们", en: "Profile" },
+      href: "/about", label: { zh: "关于我们", en: "Profile" }, // 有下拉的项目本身不是页面：href 只当代号用
       children: [
-        { href: "/about", label: { zh: "律所简介", en: "Our Firm" } },
         { href: "/about/values", label: { zh: "我们的理念", en: "Our Values" } },
         ...aboutSections.map((s) => ({ href: `/about/${s.slug}`, label: s.title })),
         { href: "/careers", label: { zh: "加入我们", en: "Join Us" }, footer: true },
@@ -41,7 +40,7 @@ const text = {
       ],
       social: true,
     },
-  ] as { href: string; label: Bi; children?: { href: string; label: Bi; footer?: boolean }[]; social?: boolean }[], // footer：子项目也列在页脚；social：下拉最后加「关注我们」（社群连结）
+  ] as { href: string; label: Bi; children?: { href: string; label: Bi; footer?: boolean }[]; social?: boolean }[], // footer：这个子项目列在页脚（有下拉的项目本身不列）；social：下拉最后加「关注我们」（社群连结）
   social: { zh: "关注我们", en: "Connect with Us" },
   logoSub: { zh: "律师事务所", en: "Advocates & Solicitors" },
   book: { zh: "咨询", en: "Enquire" },
@@ -141,7 +140,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
               <span className="logo-sub">{text.logoSub[lang]}</span>
             </Link>
             <nav className="footer-links">
-              {text.nav.flatMap((l) => [l, ...(l.children ?? []).filter((c) => c.footer)]).map((l) => <Link key={l.href} href={`${home}${l.href}`}>{l.label[lang]}</Link>)}
+              {text.nav.flatMap((l) => (l.children ? l.children.filter((c) => c.footer) : [l])).map((l) => <Link key={l.href} href={`${home}${l.href}`}>{l.label[lang]}</Link>)}
               {socials.map((s) => <a key={s.label} href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
               <Link href={`${home}/privacy`}>{text.privacy[lang]}</Link>
             </nav>

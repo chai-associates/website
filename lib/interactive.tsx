@@ -8,7 +8,7 @@
 // · ConsultButton   全站的「咨询」按钮：点了跳出咨询表格（不是直接去 WhatsApp）
 // · ConsultDialog   咨询表格视窗（layout.tsx，全站一个）：3 个问题 + 其他 → 打开 WhatsApp，讯息已写好
 // · NavLinks       电脑版页首的导航：目前所在的页面标古铜线；有子页面的鼠标移上去展开下拉（layout.tsx）
-// · HeaderOverHero  首页、律所简介：最上面的照片还在页首下面时，页首透明；滑过照片变白底（只设定 <html data-over-hero>，样式在 globals.css）
+// · HeaderOverHero  首页、律师团队：最上面的照片还在页首下面时，页首透明；滑过照片变白底（只设定 <html data-over-hero>，样式在 globals.css）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
 // · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
 // · TabsHash        分页选择记住选了哪一个：网址加 #代号，按返回会回到同一个分页（离婚百科）
@@ -225,7 +225,7 @@ export function NavLinks({ label, items, home }: { label: string; items: NavItem
 }
 
 // ── 首页页首透明 ─────────────────────────────────
-// 看最上面的照片（首页 .hero-top 的照片、律所简介的 .cover-full）：照片还在页首下面 → <html data-over-hero>（页首透明）；照片滑过页首 → 拿掉（页首白底）。
+// 看最上面的照片（首页 .hero-top 的照片、律师团队的 .cover-full）：照片还在页首下面 → <html data-over-hero>（页首透明）；照片滑过页首 → 拿掉（页首白底）。
 // 离开该页时自动拿掉。没有 JavaScript 时页首一直是白底。
 export function HeaderOverHero() {
   useEffect(() => {

@@ -36,7 +36,7 @@ const text = {
     ["bg-subtle", "subtle 浅灰区块"], ["bg-accent", "accent 古铜"], ["bg-inverse", "inverse 深色底"],
   ],
   sizes: [
-    ["text-display", "display · 超大数字（.stats：01 02 03、2017）"],
+    ["text-display", "display · 超大数字（.big-num，古铜：10+、01 02 03）"],
     ["text-title", "title · 页面标题 h1"], ["text-lead", "lead · 页面副标题（跟 title 一组）"],
     ["text-subtitle", "subtitle · 区块标题 h2"], ["text-body", "body · 说明、正文、卡片标题 h3（跟 subtitle 一组）"], ["text-caption", "caption · 小标签、面包屑、备注"],
   ],
@@ -208,11 +208,16 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
         <div className="container with-aside">
           <div className="stack">
             <div>
-              <div className="list-head"><h2>大数字清单</h2><span>stats · 超大数字 → 细线 → 标签 → 细线 → 说明</span></div>
-              <ol className="stats">
-                <li><span className="stats-num">01</span><h3>讲清楚</h3><p>一句话说明</p></li>
-                <li><span className="stats-num">2017</span><h3>{lang === "en" ? "Founded" : "年成立"}</h3></li>
-                <li><span className="stats-num">5</span><h3>{lang === "en" ? "Offices" : "间办事处"}</h3><p>{lang === "en" ? "Johor Bahru · Petaling Jaya · Melaka" : "新山 · 八打灵再也 · 马六甲"}</p></li>
+              <div className="list-head"><h2>数字</h2><span>figures · 古铜超大数字 → 古铜标签，不加线</span></div>
+              <ul className="figures">
+                <li><span className="big-num">10+</span><span>{lang === "en" ? "Years of Experience" : "年经验"}</span></li>
+                <li><span className="big-num">5</span><span>{lang === "en" ? "Offices" : "间办事处"}</span></li>
+              </ul>
+            </div>
+            <div>
+              <div className="list-head"><h2>编号清单</h2><span>numbered · 古铜超大编号 → 细线 → 标题 → 细线 → 说明</span></div>
+              <ol className="numbered">
+                {["讲清楚", "讲实际", "有时限"].map((t, i) => <li key={t}><span className="big-num">{String(i + 1).padStart(2, "0")}</span><h3>{t}</h3><p>一句话说明</p></li>)}
               </ol>
             </div>
             <div>
@@ -272,14 +277,6 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
               <blockquote><p>{lang === "en" ? "Every family is different. We listen first, then explain your options in plain words." : "每个家庭都不一样。我们先听，再用简单的话告诉你有哪些选择。"}</p></blockquote>
               <figcaption>— {lang === "en" ? "Lim Hui Ying" : "林慧盈"}</figcaption>
             </figure>
-          </div>
-          <div>
-            <div className="list-head"><h2>步骤</h2><span>steps · 编号用小标签</span></div>
-            <ol className="steps">
-              {["联系我们", "初次咨询", "报价与委托", "办理案件"].map((t, i) => (
-                <li key={t}><span className="tag">{String(i + 1).padStart(2, "0")}</span><h3>{t}</h3><p>steps：手机一栏，电脑自动并排</p></li>
-              ))}
-            </ol>
           </div>
           <div>
             <div className="list-head"><h2>链接清单</h2><span>link-list · 不加框，一行一个链接</span></div>

@@ -12,11 +12,12 @@ export type Bi = { zh: string; en: string }; // 中英对照文字
 export const isLang = (v: string): v is Lang => (locales as readonly string[]).includes(v);
 
 // ── 律所 ─────────────────────────────────────────
-// founded 已确认。email、careersEmail 用 chaiassociates.my（已确认）。不写营业时间：时间由律师和客户直接约。律师人数由 team 自动算
+// founded、experience 已确认。email、careersEmail 用 chaiassociates.my（已确认）。不写营业时间：时间由律师和客户直接约。
 export const firm = {
   name: "Chai & Associates",
   nameZh: "律师事务所",
-  founded: 2017, // 关于我们显示「成立 2017」（2017 年成立，现由 Chai Mei Ching 主持）
+  founded: 2017, // 2017 年成立，现由 Chai Mei Ching 主持（律师团队页的律所简介、Google 结构化资料）
+  experience: "10+", // 年经验：律师团队页的古铜超大数字（律所确认）
   phone: "+60194774149",
   phoneDisplay: "+6019-477 4149",
   email: "enquiry@chaiassociates.my",
@@ -117,8 +118,6 @@ export const displayName = (p: Member, lang: Lang) => (p.honorific ? `${p.honori
 export const cityOf = (p: Member) => cities.find((c) => c.id === offices.find((o) => o.id === p.office)?.city)!;
 // 没有照片时显示的英文名缩写，例如 Lim Hui Ying → LH
 export const initials = (name: Bi) => name.en.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-// 律师人数（合伙人、顾问律师、律师；法律支援团队不算律师）
-export const lawyerCount = team.filter((p) => roles[p.role].group !== "support").length;
 
 // ── 离婚服务：5 个分类（首页卡片、选单、服务页都读这里） ──
 // 网址：/services（全部）→ /services/分类 → /services/分类/服务

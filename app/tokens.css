@@ -55,7 +55,7 @@
      6 级。两两一组使用：
        页面标题区：title（h1）+ lead（副标题）
        区块：      subtitle（h2）+ body（说明、正文）；卡片标题 h3 = body 粗体
-       数字：      display（大数字）+ lead（标签）—— 只给 .stats 用
+       数字：      display（超大数字，古铜）+ lead（标签）—— .big-num
        caption：小标签、面包屑、备注
      层级（小 → 大）：caption < body < lead < subtitle < title < display
                      320   375   425   768  1024  1440 （px）                       */
@@ -69,7 +69,7 @@
   --text-lead:     clamp(1.125rem, 1.0893rem + 0.1786vw, 1.25rem);    /* 18 → 20 · 页面副标题（h1 下面那一句） */
   --text-subtitle: clamp(1.25rem, 1.1786rem + 0.3571vw, 1.5rem);      /* 20 → 24 · 区块标题 h2 */
   --text-title:    clamp(1.625rem, 1.375rem + 1.25vw, 2.5rem);        /* 26 → 40 · 页面标题 h1 */
-  --text-display:  clamp(4.5rem, 3.5rem + 5vw, 8rem);                 /* 72 → 128 · 超大数字（.stats：律所简介的数字、理念的 01 02 03） */
+  --text-display:  clamp(4.5rem, 3.5rem + 5vw, 8rem);                 /* 72 → 128 · 超大数字（.big-num：律师团队的数字、理念的 01 02 03） */
 
   /* ── 圆角 ──────────────────────────────────── */
   --radius-*: initial;
@@ -103,7 +103,7 @@
   --section-y: clamp(3rem, 2.143rem + 4.286vw, 6rem);   /* 区块上下留白 48 → 96（流体） */
   --measure: 34em;         /* 正文最大行宽 */
   --ratio-hero: 4 / 3;     /* 首页首屏的宽 : 高（电脑、平板）：跟首屏照片 2400 × 1800 同比例 */
-  --ratio-photo: 16 / 9;   /* 满版照片的宽 : 高（照片 2400 × 1350）：手机版封面、关于我们的团队合照 */
+  --ratio-photo: 16 / 9;   /* 满版照片的宽 : 高（照片 2400 × 1350）：手机版封面、律师团队页的团队合照 */
   --ratio-banner: 3 / 1;   /* 满版封面在平板以上的宽 : 高（同一张 2400 × 1350，主体放中间那条） */
   --ratio-card: 3 / 2;     /* 照片卡片、照片框（场景照） */
   --ratio-portrait: 4 / 5; /* 人像（人卡、个人页） */
@@ -111,7 +111,7 @@
   --measure-short: 24em;   /* 短行宽：引言、首屏文字（大字只占左边，不压到照片里的人） */
   /* 自动排栏：每一格最窄多宽（放得下几格就排几格，手机自动变一栏） */
   --col-min-xs: 160px;     /* 资料列 .facts */
-  --col-min-sm: 220px;     /* 步骤 .steps */
+  --col-min-sm: 220px;     /* 编号清单 .numbered */
   --col-min-md: 300px;     /* 卡片网格 .card-grid */
   --col-min-lg: 400px;     /* 服务索引 .link-list */
   --hero-min-h: 70svh;     /* 首屏（.hero）在平板以上最矮多高 */

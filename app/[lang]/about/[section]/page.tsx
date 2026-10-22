@@ -75,7 +75,7 @@ export default async function AboutSectionPage({ params }: PageProps<"/[lang]/ab
       <CoverHead
         crumbs={<>
           <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-          <li><Link href={`/${lang}/about`}>{text.about[lang]}</Link></li>
+          <li>{text.about[lang]}</li>
           <li aria-current="page">{s.title[lang]}</li>
         </>}
         image={s.image}

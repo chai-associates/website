@@ -52,7 +52,7 @@ export default async function ValuesPage({ params }: PageProps<"/[lang]/about/va
       <CoverHead
         crumbs={<>
           <li><Link href={`/${lang}`}>{common.home[lang]}</Link></li>
-          <li><Link href={`/${lang}/about`}>{text.about[lang]}</Link></li>
+          <li>{text.about[lang]}</li>
           <li aria-current="page">{text.title[lang]}</li>
         </>}
         image={text.image}
@@ -64,10 +64,10 @@ export default async function ValuesPage({ params }: PageProps<"/[lang]/about/va
       <section className="section">
         <div className="container stack">
           <div className="prose">{text.paragraphs.map((p) => <p key={p.zh}>{p[lang]}</p>)}</div>
-          <ol className="stats">
+          <ol className="numbered">
             {text.list.map((v, i) => (
               <li key={v.title.zh}>
-                <span className="stats-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                <span className="big-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{v.title[lang]}</h3>
                 <p>{v.desc[lang]}</p>
               </li>
