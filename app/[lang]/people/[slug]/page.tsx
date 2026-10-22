@@ -1,9 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
 // 律师个人页 /people/[slug]（所有成员共用这一个模板）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 名字 + 资料列 + 预约按钮（左）+ 照片（右；手机在上）——这一页唯一的主要行动
-//          ② 两个分页（.tabs，不需要 JavaScript；没有内容的分页自动隐藏）：
-//             概览：用自己的话（引言）→ 关于（含工作以外）→ 可以帮你的事（主要领域排第一、变黑）
+// 区块顺序：① 职位 · 地区 → 名字 → 资料列（语言 · 办事处 · 执业年份）→ 安排说明 → 预约按钮（左）+ 照片（右；手机在上）
+//             预约按钮 = 这一页唯一的主要行动：跳出询问表格，讯息已写好「我要预约某某咨询离婚事宜」
+//          ② 底线分页 .tabs-line（不需要 JavaScript；没有内容的分页自动隐藏）：
+//             概览：简介（标题）→ 段落 → 工作以外 → 用自己的话（引言）
 //             资历：资格 · 经历 · 奖项 · 讲座与著作 · 会员资格（每一小组一个小标题）
 //          ③ 同一个城市的其他成员（跟首页「我们的团队」一样左右滑）
 // 名字、职位、城市、语言、负责的服务在 lib/site.ts（team）；
@@ -16,11 +17,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PersonCard } from "@/lib/blocks";
-import { cityOf, common, displayName, initials, isLang, pageMeta, roles, services, team, whatsappLink, type Bi } from "@/lib/site";
+import { BookDialog } from "@/lib/interactive";
+import { cityOf, common, displayName, inquiry, isLang, initials, pageMeta, roles, team, type Bi } from "@/lib/site";
 
 type Profile = {
   admitted?: number;                         // 执业年份（只显示在标题区的资料列）
-  tagline?: Bi;                              // 一句话介绍
   quote?: Bi;                                // 用自己的话（In your own words）
   about?: Bi[];                              // 关于（每个元素一段）
   qualifications?: { label: Bi; value: Bi }[]; // 资历：执业资格、其他资格（学历也放在其他资格）
@@ -39,7 +40,6 @@ const text = {
   profiles: {
     "lim-hui-ying": {
       admitted: 2010,
-      tagline: { zh: "[一句话介绍，由律师本人确认]", en: "[One-line introduction, confirmed by the lawyer]" },
       quote: { zh: "[用自己的话：为什么做家事法、想对正在经历离婚的人说什么（两三句）]", en: "[In your own words: why family law, and what you would say to someone going through a divorce (two or three sentences)]" },
       about: [
         { zh: "[第一段：负责的案件类型、所在办事处]", en: "[Paragraph 1: the matters they handle and their office]" },
@@ -67,12 +67,15 @@ const text = {
   languages: { zh: "语言", en: "Languages" },
   admitted: { zh: "执业年份", en: "Admitted" },
   office: { zh: "办事处", en: "Office" },
-  book: { zh: "预约{name}的咨询", en: "Book a consultation with {name}" },
-  bookMessage: { zh: "你好，我想预约{name}律师的咨询。", en: "Hi, I'd like to book a consultation with {name}." },
+  admittedYear: { zh: "{year} 年", en: "{year}" },
   note: { zh: "你的咨询会由我们的客服团队安排时间，所有内容都保密。", en: "Your enquiry goes to our client team, who will arrange a time. Everything you share is confidential." },
+  // 预约：按钮 → 跳出询问表格（问题在 lib/site.ts 的 inquiry），讯息第一句已写好
+  book: { zh: "现在预约{name}", en: "Book {name} now" },
+  bookTitle: { zh: "预约{name}", en: "Book a consultation with {name}" },
+  bookMessage: { zh: "我要预约{name}咨询离婚事宜。", en: "I'd like to book a consultation with {name} about my divorce matter." },
+  close: { zh: "关闭", en: "Close" },
   // ② 内容
-  about: { zh: "关于{name}", en: "About {name}" },
-  help: { zh: "可以帮你的事", en: "How {name} can help" },
+  bio: { zh: "简介", en: "Bio" },
   experience: { zh: "经历", en: "Experience" },
   awards: { zh: "奖项", en: "Awards" },
   talks: { zh: "讲座与著作", en: "Talks & publications" },
@@ -98,7 +101,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/people/[sl
   const { lang, slug } = await params;
   const p = team.find((x) => x.slug === slug);
   if (!isLang(lang) || !p) return {};
-  return pageMeta(lang, `/people/${p.slug}`, displayName(p, lang), text.profiles[p.slug]?.tagline?.[lang] ?? roles[p.role].label[lang]);
+  return pageMeta(lang, `/people/${p.slug}`, displayName(p, lang), `${roles[p.role].label[lang]} · ${cityOf(p).full[lang]}`);
 }
 
 export default async function PersonPage({ params }: PageProps<"/[lang]/people/[slug]">) {
@@ -110,9 +113,6 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
   const city = cityOf(p).full[lang];
   const role = roles[p.role].label[lang];
   const fill = (t: Bi) => t[lang].replace("{name}", name).replace("{city}", city);
-  const bookHref = whatsappLink(lang, fill(text.bookMessage));
-  // 主要领域排第一（data-lead 会让它变黑）
-  const helps = services.filter((s) => p.services.includes(s.slug)).sort((a, b) => Number(b.slug === p.lead) - Number(a.slug === p.lead));
   const hasCredentials = [profile.qualifications, profile.experience, profile.awards, profile.talks, profile.memberships].some((x) => x && x.length > 0);
   // 资历与经历的小组（没有资料的小组自动隐藏）
   const lists = [
@@ -137,16 +137,26 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
             <div>
               <p className="tag">{role} · {city}</p>
               <h1>{name}</h1>
-              {profile.tagline && <p>{profile.tagline[lang]}</p>}
               <dl className="facts">
                 <div><dt>{text.languages[lang]}</dt><dd>{p.languages[lang]}</dd></div>
-                {profile.admitted && <div><dt>{text.admitted[lang]}</dt><dd>{profile.admitted}</dd></div>}
                 <div><dt>{text.office[lang]}</dt><dd>{city}</dd></div>
+                {profile.admitted && <div><dt>{text.admitted[lang]}</dt><dd>{text.admittedYear[lang].replace("{year}", String(profile.admitted))}</dd></div>}
               </dl>
-              <div className="btn-row">
-                <a className="btn btn-cta" href={bookHref} target="_blank" rel="noopener">{fill(text.book)}</a>
-              </div>
               <p>{text.note[lang]}</p>
+              <div className="btn-row">
+                <BookDialog
+                  label={fill(text.book)}
+                  title={fill(text.bookTitle)}
+                  close={text.close[lang]}
+                  form={{
+                    lang,
+                    intro: fill(text.bookMessage),
+                    placeholder: inquiry.placeholder[lang],
+                    submit: inquiry.submit[lang],
+                    questions: inquiry.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) })),
+                  }}
+                />
+              </div>
             </div>
             <div className="person-photo">
               {p.image ? <Image src={p.image} alt={name} fill preload sizes="(min-width: 860px) 40vw, 100vw" /> : initials(p.name)}
@@ -158,36 +168,30 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
       {/* ═══ ② 分页：概览 · 资历（浅灰） ═══ */}
       <section className="section section-muted">
         <div className="container">
-          <div className="tabs">
+          <div className="tabs tabs-line">
             <div className="tab">
               <input type="radio" name="profile-tab" id="profile-overview" defaultChecked />
-              <label htmlFor="profile-overview" className="chip">{text.overview[lang]}</label>
+              <label htmlFor="profile-overview">{text.overview[lang]}</label>
               <div className="tab-panel">
                 <div className="stack">
+                  <div id="bio">
+                    <div className="list-head"><h2>{text.bio[lang]}</h2></div>
+                    <div className="prose">
+                      {profile.about ? (
+                        <>
+                          {profile.about.map((para) => <p key={para.zh}>{para[lang]}</p>)}
+                          {profile.outside && <p className="muted">{text.outside[lang]}{lang === "zh" ? "：" : ": "}{profile.outside[lang]}</p>}
+                        </>
+                      ) : (
+                        <p className="muted">{text.pending[lang]}</p>
+                      )}
+                    </div>
+                  </div>
                   {profile.quote && (
                     <figure className="quote">
                       <blockquote><p>{profile.quote[lang]}</p></blockquote>
                       <figcaption>— {name}</figcaption>
                     </figure>
-                  )}
-                  <div id="about" className="prose">
-                    <h2>{fill(text.about)}</h2>
-                    {profile.about ? (
-                      <>
-                        {profile.about.map((para) => <p key={para.zh}>{para[lang]}</p>)}
-                        {profile.outside && <p className="muted">{text.outside[lang]}{lang === "zh" ? "：" : ": "}{profile.outside[lang]}</p>}
-                      </>
-                    ) : (
-                      <p className="muted">{text.pending[lang]}</p>
-                    )}
-                  </div>
-                  {helps.length > 0 && (
-                    <div id="help">
-                      <div className="list-head"><h2>{fill(text.help)}</h2></div>
-                      <div className="btn-row">
-                        {helps.map((s) => <Link key={s.slug} className="chip" data-lead={s.slug === p.lead || undefined} href={`/${lang}/services/${s.category}/${s.slug}`}>{s.title[lang]} →</Link>)}
-                      </div>
-                    </div>
                   )}
                 </div>
               </div>
@@ -195,7 +199,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
             {hasCredentials && (
               <div className="tab">
                 <input type="radio" name="profile-tab" id="profile-credentials" />
-                <label htmlFor="profile-credentials" className="chip">{text.credentials[lang]}</label>
+                <label htmlFor="profile-credentials">{text.credentials[lang]}</label>
                 <div className="tab-panel">
                   <div className="groups">
                     {profile.qualifications && (
@@ -226,7 +230,7 @@ export default async function PersonPage({ params }: PageProps<"/[lang]/people/[
           <div className="container">
             <div className="list-head">
               <h2>{fill(text.alsoIn)}</h2>
-              <Link className="text-link" href={`/${lang}/people`}>{text.allPeople[lang]} →</Link>
+              <Link className="text-link" href={`/${lang}/people/all`}>{text.allPeople[lang]} →</Link>
             </div>
             <div className="scroll-row">
               {others.map((o) => <PersonCard key={o.slug} p={o} lang={lang} sizes="(min-width: 860px) 33vw, 80vw" />)}

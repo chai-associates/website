@@ -5,6 +5,7 @@
 // · Menu            选单开关（layout.tsx）
 // · SituationPicker 「我的情况是」选择器（/services 页）
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
+// · BookDialog      预约按钮 → 跳出询问表格（律师个人页；讯息已写好「我要预约某某咨询离婚事宜」）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
 // · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
 // · TabsHash        分页选择记住选了哪一个：网址加 #代号，按返回会回到同一个分页（离婚百科）
@@ -14,7 +15,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import { useEffect, useState, useSyncExternalStore, ViewTransition } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, ViewTransition } from "react";
 import { whatsappLink, type Lang } from "@/lib/site";
 
 // ── 选单 ─────────────────────────────────────────
@@ -112,6 +113,29 @@ export function InquiryForm({ lang, intro, questions, placeholder, submit }: {
       ))}
       <button type="submit" className="btn btn-cta">{submit}</button>
     </form>
+  );
+}
+
+// ── 预约弹出表格 ─────────────────────────────────
+// 按钮 → 跳出视窗（原生 dialog：按 Esc 或 × 关闭），里面就是上面的询问表格。
+export function BookDialog({ label, title, close, form }: {
+  label: string; // 按钮文字，例如「现在预约陈国伟」
+  title: string; // 视窗标题
+  close: string; // × 按钮给读屏软件的名称
+  form: React.ComponentProps<typeof InquiryForm>;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  return (
+    <>
+      <button type="button" className="btn btn-cta" onClick={() => ref.current?.showModal()}>{label}</button>
+      <dialog ref={ref} className="dialog" aria-label={title}>
+        <div className="dialog-head">
+          <h2>{title}</h2>
+          <button type="button" className="dialog-close" aria-label={close} onClick={() => ref.current?.close()}>×</button>
+        </div>
+        <InquiryForm {...form} />
+      </dialog>
+    </>
   );
 }
 

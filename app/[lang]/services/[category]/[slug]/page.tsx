@@ -2,10 +2,10 @@
 // 服务页 /services/[category]/[slug]（所有服务共用这一个模板）
 // ───────────────────────────────────────────────────────────────
 // 色带顺序：① 标题（白）  ② 你需要知道的：跟百科文章同一个阅读排版，小标题 + 圆点清单（白）
-//          ③ 继续了解其他服务（深色）  ④ 询问表格：白底细线框 .panel（白）
+//          ③ 继续了解其他服务 → 延伸阅读其他百科（深色，两组）  ④ 询问表格：白底细线框 .panel（白）
 // 一页只有一个主要行动：询问表格。其他都是文字链接。
 // 服务名称、分类在 lib/site.ts；每项服务的内容写在下面 text.content。
-// 继续了解其他服务 = 相关文章（lib/divorcepedia.ts，文章的 services 有这项服务）+ 同分类的其他服务（最多 3 项）。
+// 继续了解其他服务 = 同分类的其他服务（最多 3 项）；延伸阅读其他百科 = 相关文章（lib/divorcepedia.ts，文章的 services 有这项服务）。
 // 还没写内容的服务会显示「内容准备中」。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -13,7 +13,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/divorcepedia";
 import { InquiryForm } from "@/lib/interactive";
-import { cities, common, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
+import { common, inquiry, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
 // ─────────────────────────────────────────────
 // 这一页的文字（中英对照）
@@ -56,7 +56,8 @@ const text = {
       ],
     },
   } as Record<string, { intro: Bi; points: Bi[] }>,
-  reads: { zh: "继续了解其他服务", en: "Keep exploring other services" },
+  moreServices: { zh: "继续了解其他服务", en: "Keep exploring other services" },
+  moreArticles: { zh: "延伸阅读其他百科", en: "Further reading from Divorcepedia" },
   pending: { zh: "这项服务的详细说明正在准备中。你可以先用下面的表格，把情况发给律师。", en: "Details for this service are being prepared. In the meantime, send your situation to a lawyer using the form below." },
   know: { zh: "你需要知道的", en: "What you need to know" },
 
@@ -65,14 +66,7 @@ const text = {
     title: { zh: "把你的情况发给律师", en: "Tell a lawyer about your situation" },
     desc: { zh: "回答几个问题，按下按钮后会打开 WhatsApp，讯息已经帮你写好，由你自己决定是否发送。", en: "Answer a few questions. The button opens WhatsApp with your message ready, and you decide whether to send it." },
     intro: { zh: "你好，我想咨询「{service}」。", en: "Hi, I'd like to ask about {service}." },
-    placeholder: { zh: "请选择", en: "Choose one" },
-    submit: { zh: "发送我的资料到 WhatsApp 咨询", en: "Send My Details via WhatsApp" },
-    questions: [
-      { label: { zh: "我是", en: "I am" }, options: [{ zh: "丈夫", en: "The husband" }, { zh: "妻子", en: "The wife" }, { zh: "代家人咨询", en: "Asking for a family member" }] },
-      { label: { zh: "对方是否同意离婚", en: "Does your spouse agree to divorce" }, options: [{ zh: "同意", en: "Yes" }, { zh: "不同意", en: "No" }, { zh: "还没谈", en: "Not discussed yet" }, { zh: "我是收到申请的一方", en: "I've received a petition" }] },
-      { label: { zh: "是否有孩子", en: "Do you have children" }, options: [{ zh: "有", en: "Yes" }, { zh: "没有", en: "No" }] },
-      { label: { zh: "所在地区", en: "Where are you based" }, options: [...cities.map((c) => c.label), { zh: "其他", en: "Other" }] },
-    ] as { label: Bi; options: Bi[] }[],
+    // 问题、选项、按钮文字跟律师个人页的预约表格共用：在 lib/site.ts 的 inquiry
   },
 
 };
@@ -98,10 +92,6 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
   const content = text.content[s.slug];
   const reads = articles.filter((a) => a.services.includes(s.slug));
   const related = services.filter((x) => x.category === s.category && x.slug !== s.slug).slice(0, 3);
-  const further = [
-    ...reads.map((a) => ({ href: `/${lang}/divorcepedia/${a.slug}`, title: a.title[lang] })),
-    ...related.map((r) => ({ href: `/${lang}/services/${r.category}/${r.slug}`, title: r.title[lang] })),
-  ];
 
   return (
     <>
@@ -133,14 +123,26 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
         </div>
       </section>
 
-      {/* ═══ ③ 继续了解其他服务（深色） ═══ */}
-      {further.length > 0 && (
+      {/* ═══ ③ 继续了解其他服务 → 延伸阅读其他百科（深色；服务和文章分两组，没有资料的那组自动隐藏） ═══ */}
+      {(related.length > 0 || reads.length > 0) && (
         <section className="section section-dark">
-          <div className="container">
-            <div className="list-head"><h2>{text.reads[lang]}</h2></div>
-            <ul className="link-list">
-              {further.map((f) => <li key={f.href}><Link href={f.href}>{f.title}</Link></li>)}
-            </ul>
+          <div className="container stack">
+            {related.length > 0 && (
+              <div>
+                <div className="list-head"><h2>{text.moreServices[lang]}</h2></div>
+                <ul className="link-list">
+                  {related.map((r) => <li key={r.slug}><Link href={`/${lang}/services/${r.category}/${r.slug}`}>{r.title[lang]}</Link></li>)}
+                </ul>
+              </div>
+            )}
+            {reads.length > 0 && (
+              <div>
+                <div className="list-head"><h2>{text.moreArticles[lang]}</h2></div>
+                <ul className="link-list">
+                  {reads.map((a) => <li key={a.slug}><Link href={`/${lang}/divorcepedia/${a.slug}`}>{a.title[lang]}</Link></li>)}
+                </ul>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -156,9 +158,9 @@ export default async function ServicePage({ params }: PageProps<"/[lang]/service
             <InquiryForm
               lang={lang}
               intro={text.form.intro[lang].replace("{service}", s.title[lang])}
-              placeholder={text.form.placeholder[lang]}
-              submit={text.form.submit[lang]}
-              questions={text.form.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) }))}
+              placeholder={inquiry.placeholder[lang]}
+              submit={inquiry.submit[lang]}
+              questions={inquiry.questions.map((q) => ({ label: q.label[lang], options: q.options.map((o) => o[lang]) }))}
             />
           </div>
         </div>

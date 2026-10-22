@@ -173,6 +173,18 @@ export const aboutSections = [
 ] as const;
 export type AboutSection = (typeof aboutSections)[number]["slug"];
 
+// ── 询问表格（服务页的表格、律师个人页的预约表格共用）：选好答案 → 打开 WhatsApp，讯息已经写好 ──
+export const inquiry = {
+  placeholder: { zh: "请选择", en: "Choose one" },
+  submit: { zh: "发送我的资料到 WhatsApp 咨询", en: "Send My Details via WhatsApp" },
+  questions: [
+    { label: { zh: "我是", en: "I am" }, options: [{ zh: "丈夫", en: "The husband" }, { zh: "妻子", en: "The wife" }, { zh: "代家人咨询", en: "Asking for a family member" }] },
+    { label: { zh: "对方是否同意离婚", en: "Does your spouse agree to divorce" }, options: [{ zh: "同意", en: "Yes" }, { zh: "不同意", en: "No" }, { zh: "还没谈", en: "Not discussed yet" }, { zh: "我是收到申请的一方", en: "I've received a petition" }] },
+    { label: { zh: "是否有孩子", en: "Do you have children" }, options: [{ zh: "有", en: "Yes" }, { zh: "没有", en: "No" }] },
+    { label: { zh: "所在地区", en: "Where are you based" }, options: [...cities.map((c) => c.label), { zh: "其他", en: "Other" }] },
+  ] as { label: Bi; options: Bi[] }[],
+};
+
 // ── 多个页面共用的文字（选单、面包屑、页尾的「不是你的情况？」） ──
 export const common = {
   home: { zh: "首页", en: "Home" },

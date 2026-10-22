@@ -54,13 +54,13 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .page-head .container > h1 { margin-top: var(--space-3); }
 .page-head .container > p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
 .page-head .container > p + p { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); } /* 第二段 = 备注：灰色 caption；跟副标题相隔 16（标题 ↔ 副标题才是 8） */
-/* 个人页的标题区：职位、名字、介绍、资料列、按钮（左）+ 照片（右）；手机照片在上 */
+/* 个人页的标题区：职位 · 地区、名字、资料列、安排说明、预约按钮（左）+ 照片（右）；手机照片在上 */
 .profile-head { display: grid; gap: var(--space-4); margin-top: var(--space-4); }
 .profile-head > .person-photo { order: -1; } /* 手机：照片排在最上面 */
 .profile-head .tag + h1 { margin-top: var(--space-2); }
-.profile-head h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); } /* 副标题：深色 */
-.profile-head .facts, .profile-head .btn-row { margin-top: var(--space-4); }
-.profile-head .btn-row + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-caption); }
+.profile-head .facts { margin-top: var(--space-4); }
+.profile-head .facts + p { margin-top: var(--space-4); color: var(--color-ink-muted); font-size: var(--text-caption); } /* 安排说明（小字）→ 下面接预约按钮 */
+.profile-head p + .btn-row { margin-top: var(--space-3); }
 @media (min-width: 860px) {
   .profile-head { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: center; gap: var(--space-6); }
   .profile-head > .person-photo { order: 0; } /* 电脑：照片在右边 */
@@ -83,7 +83,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .hero-body > * { max-width: var(--measure); }
 .hero-body .tag + h1 { margin-top: var(--space-2); }
 .hero-body h1 + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
-.hero-body > p + .btn-row { margin-top: var(--space-4); }
+.hero-body > * + .btn-row { margin-top: var(--space-4); } /* 说明或引言 ↔ 按钮 24 */
 @media (min-width: 860px) {
   .hero { min-height: 70svh; align-items: center; }
   .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; }
@@ -149,8 +149,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .chip em { font-style: normal; font-size: var(--text-caption); color: var(--color-ink-muted); }
 /* 筛选说明：一排 chip 前面的灰色小字，例如团队页的「办事处」 */
 /* 选中的按钮变黑（城市分页、团队筛选共用）；data-lead = 主要领域（个人页），一样变黑 */
-.chip[data-lead], .tab > input:checked + label { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
-.tab > input:checked + label em { color: var(--color-inverse-muted); }
+.chip[data-lead], .tab > input:checked + .chip { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
+.tab > input:checked + .chip em { color: var(--color-inverse-muted); }
 
 /* ── 积木：卡片 ─────────────────────────────────── */
 .card { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); }
@@ -197,8 +197,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 
 /* ── 积木：人物卡片（照片 4:5 → 名字 → 职位 → 办事处 · 语言） ── */
 /* 人物网格：手机 2 栏、电脑 4 栏 */
-.person-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); }
-@media (min-width: 860px) { .person-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } } /* 电脑 6 栏：一屏看得到一排完整资料 + 下一排的照片，知道还可以往下看 */
+/* 人卡网格：每张至少 300 宽（跟 .card-grid 一样），最多 3 栏 → 手机 1 栏、平板 2 栏、电脑 3 栏，不用另外设断点 */
+.person-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(min(100%, 300px), (100% - 2 * var(--space-4)) / 3), 1fr)); gap: var(--space-4); }
 /* 人卡：照片 4:5，下方深色带压白字：名字 → 地区 · 职位。
    电脑（有鼠标）：鼠标移上去，深色带往上长，多显示语言、主要领域；手机、平板（没有鼠标）不显示，点进个人页看 */
 .person-card { position: relative; display: block; overflow: hidden; border-radius: var(--radius-md); }
@@ -266,6 +266,11 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 
 /* ── 积木：表格栏位 ─────────────────────────────── */
 /* 表格：一个一个栏位往下排（栏位之间 24），送出按钮占满宽度；「我的情况是」选择器也用 */
+/* 弹出视窗（律师个人页的预约表格）：原生 dialog，置中；后面变暗 */
+.dialog { margin: auto; width: min(100% - 2 * var(--gutter), var(--measure)); max-height: calc(100svh - 2 * var(--gutter)); padding: var(--space-4); border: 0; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-ink); box-shadow: var(--shadow-float); }
+.dialog::backdrop { background: var(--color-backdrop); }
+.dialog-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.dialog-close { min-width: var(--tap-min); min-height: var(--tap-min); border: 0; background: none; color: var(--color-ink); font: inherit; font-size: var(--text-title); font-weight: var(--weight-regular); line-height: 1; cursor: pointer; }
 .form { display: grid; gap: var(--space-4); }
 .form > .btn { width: 100%; }
 .field { display: grid; gap: var(--space-2); font-weight: var(--weight-medium); }
@@ -293,6 +298,12 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .tab > input:focus-visible + label { outline: 2px solid var(--color-ink); outline-offset: 2px; }
 .tab-panel { display: none; order: 1; flex-basis: 100%; margin-top: var(--space-2); } /* order 1 = 排到所有按钮后面；8 + 8 = 按钮与内容相隔 16 */
 .tab > input:checked ~ .tab-panel { display: block; }
+/* 底线分页（律师个人页「概览 · 资历」：同一个人的不同章节，比药丸按钮安静）：文字分页，选中的变黑、下面一条黑线；整排下面一条细线。
+   结构跟 .tabs 一样，只是 label 不加 .chip：<div class="tabs tabs-line"> */
+.tabs-line { column-gap: var(--space-5); row-gap: 0; }
+.tabs-line .tab > label { position: relative; z-index: 1; margin-bottom: calc(-1 * var(--hairline)); padding-block: var(--space-3); border-bottom: var(--border) solid transparent; color: var(--color-ink-muted); font-weight: var(--weight-medium); cursor: pointer; }
+.tabs-line .tab > input:checked + label { border-color: var(--color-ink); color: var(--color-ink); }
+.tabs-line .tab-panel { margin-top: 0; padding-top: var(--space-5); border-top: var(--hairline) solid var(--color-line); }
 
 /* ── 积木：Cookie 提示（固定在画面下方；按同意 / 不同意后消失）── */
 .consent { position: fixed; z-index: 25; inset-inline: var(--gutter); bottom: var(--gutter); display: grid; gap: var(--space-3); max-width: var(--measure); padding: var(--space-4); border: var(--border) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); }

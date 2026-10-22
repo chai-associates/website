@@ -194,6 +194,15 @@ export default async function StyleguidePage({ params }: PageProps<"/[lang]/styl
                 </div>
               ))}
             </div>
+            <div className="tabs tabs-line">
+              {["概览", "资历"].map((c, i) => (
+                <div key={c} className="tab">
+                  <input type="radio" name="sg-tabs-line" id={`sg-tabline-${i}`} defaultChecked={i === 0} />
+                  <label htmlFor={`sg-tabline-${i}`}>{c}</label>
+                  <div className="tab-panel"><p>tabs-line：同一个人的不同章节（律师个人页），比药丸按钮安静</p></div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
