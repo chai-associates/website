@@ -47,6 +47,8 @@
   --color-inverse-line: color-mix(in srgb, var(--color-inverse-ink) 15%, transparent); /* 深底上的细线 */
   --color-backdrop: rgb(0 0 0 / 0.4); /* 选单打开时，后面变暗的部分 */
   --color-glass: rgb(255 255 255 / 0.4); /* 页首毛玻璃：40% 白，后面的内容模糊透出来 */
+  --color-on-photo: #ffffff;              /* 首屏照片（深色底）上的字：标题、说明 */
+  --color-on-photo-muted: rgb(255 255 255 / 0.72); /* 首屏照片上的小字：面包屑、城市小标签（浅白带灰） */
 
   /* ── 字体 ──────────────────────────────────── */
   --font-sans: "MiSans", "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif; /* 全站唯一字体（中英文、标题、正文）；载入在 lib/fonts.ts */

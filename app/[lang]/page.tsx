@@ -27,13 +27,10 @@ const text = {
 
   // ① 首屏
   hero: {
-    title: { zh: "专注家事法律，\n陪你走过人生转折", en: "Family law,\nhandled with care." },
-    sub: {
-      zh: "离婚、抚养权、赡养费与财产分割，我们用清楚易懂的方式陪你处理每一步。",
-      en: "Divorce, custody, maintenance and division of assets — explained clearly and handled with you, step by step.",
-    },
+    // 首屏的字一律不加逗号句号；两行标题用 \n 换行
+    title: { zh: "专注家事法律\n陪你走过人生转折", en: "Dedicated to family law\nwith you through every change" },
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
-    image: "/images/hero/hero-bg-v6.png", // 2400 × 1800（旧比例，会裁掉上下）→ 新图请出 2400 × 1260
+    image: "/images/hero/hero-bg-v7.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
     // 首屏下方的重点（图示可选 award / chat / lock / update，或在 lib/blocks.tsx 的 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
@@ -78,20 +75,19 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       {/* 给 Google 看的律所与办事处资料（画面上看不到） */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(lang) }} />
 
-      {/* ═════════ ① 首屏（PageHero：小标签 + 标题叠在照片左边；说明、按钮在照片下面）→ 重点 ═════════
+      {/* ═════════ ① 首屏（PageHero：城市小字 → 两行标题 → 按钮，叠在照片左边）→ 重点 ═════════
           照片换成律所真实照片时，只改上面 text.hero.image（规格见 lib/blocks.tsx 的 PageHero）。 */}
       <PageHero
         image={hero.image}
         alt={hero.imageAlt[lang]}
         eyebrow={<p className="tag">{cities.map((c) => (lang === "zh" ? c.label : c.full)[lang]).join(" · ")}</p>}
         title={hero.title[lang]}
-        lead={hero.sub[lang]}
       >
         <div className="btn-row">
-          <Link className="btn btn-ghost btn-next" href={`/${lang}/services`}>{hero.cta[lang]}</Link>
+          <Link className="btn btn-light btn-next" href={`/${lang}/services`}>{hero.cta[lang]}</Link>
         </div>
       </PageHero>
-      <div className="container">
+      <div className="container hero-below">
         <ul className="points">
           {hero.points.map((p) => <li key={p.icon}><Icon name={p.icon} /> {p.title[lang]}</li>)}
         </ul>

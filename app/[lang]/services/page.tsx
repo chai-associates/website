@@ -2,7 +2,7 @@
 // 全部服务 /services
 // ───────────────────────────────────────────────────────────────
 // 母页：只做导览，带人到分类页（每个分类的服务清单在分类页）。品牌语法 4：一条色带只做一件事。
-// 色带顺序：① 标题（白）  ② 选单「我们可以怎么帮你？」（浅灰）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白；不另加标题，页面标题已经说了）  ④ 找不到你的情况？（浅灰）
+// 色带顺序：① 首屏：面包屑 → 两行标题 → 选单「选择最接近你的情况」（选好的服务出现在首屏下面）  ③ 5 个分类：照片卡片，标题 + 一句 + 链接放在照片里面（白；不另加标题，页面标题已经说了）  ④ 找不到你的情况？（浅灰）
 // 分类和服务清单在 lib/site.ts；这里只放这一页的文字和「情况 → 服务」的对应。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
@@ -22,10 +22,9 @@ const text = {
       en: "Divorce and family law services at Chai & Associates: joint and single petitions, custody, maintenance, division of assets and more.",
     },
   },
-  // ① 标题
-  image: null as string | null, // 首屏照片：放进 public/images/ 后填路径（2400 × 1260，规格见 lib/blocks.tsx 的 PageHero）
-  lead: { zh: "从你的情况开始，找到对应的服务。", en: "Start with your situation and find the right service." },
-  // ② 我的情况是
+  // ① 首屏：两行标题（不加逗号句号）+ 选单「选择最接近你的情况」（选好后，对应的服务出现在首屏下面）
+  image: "/images/services/service.png" as string | null, // 2400 × 1350（规格见 lib/blocks.tsx 的 PageHero）
+  title: { zh: "我们会针对你的情况\n提供服务", en: "Services shaped\naround your situation" },
   picker: {
     label: { zh: "选择你的情况", en: "Choose your situation" }, // 不显示，给读屏软件用
     placeholder: { zh: "选择最接近你的情况", en: "Choose the closest situation" },
@@ -73,26 +72,23 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       <PageHero
         image={text.image}
         eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li aria-current="page">{common.services[lang]}</li></ol>}
-        title={common.services[lang]}
-        lead={text.lead[lang]}
-      />
-
-      {/* ═══ ② 选单「我们可以怎么帮你？」（浅灰） ═══ */}
-      <section className="section section-muted">
-        <div className="container">
-          <SituationPicker
-            label={text.picker.label[lang]}
-            placeholder={text.picker.placeholder[lang]}
-            options={text.picker.options.map((o) => ({
-              label: o.label[lang],
-              cards: o.slugs.map((slug) => {
-                const s = services.find((x) => x.slug === slug)!;
-                return { href: href(slug), title: s.title[lang], short: s.short[lang] };
-              }),
-            }))}
-          />
-        </div>
-      </section>
+        title={text.title[lang]}
+      >
+        <SituationPicker
+          label={text.picker.label[lang]}
+          placeholder={text.picker.placeholder[lang]}
+          resultsId="situation-results"
+          options={text.picker.options.map((o) => ({
+            label: o.label[lang],
+            cards: o.slugs.map((slug) => {
+              const s = services.find((x) => x.slug === slug)!;
+              return { href: href(slug), title: s.title[lang], short: s.short[lang] };
+            }),
+          }))}
+        />
+      </PageHero>
+      {/* 选好情况后，对应的服务出现在这里（SituationPicker 放进来）；没选之前不占位置 */}
+      <div id="situation-results" className="container hero-below" aria-live="polite" />
 
       {/* ═══ ③ 5 个分类：照片卡片（白） ═══ */}
       <section className="section">

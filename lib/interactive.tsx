@@ -3,7 +3,7 @@
 // 服务员：全站所有「点了会动」的东西都在这里，只管动作，不放内容。
 // 文字和选项由使用它的 layout.tsx / page.tsx 传进来。
 // · Menu            选单开关（layout.tsx）
-// · SituationPicker 「我的情况是」选择器（/services 页）
+// · SituationPicker 「我的情况是」选择器（/services 首屏；选好的服务放到首屏下面）
 // · InquiryForm     询问表格 → 自动打开 WhatsApp（服务页）
 // · ConsultButton   全站的「咨询」按钮：点了跳出咨询表格（不是直接去 WhatsApp）
 // · ConsultDialog   咨询表格视窗（layout.tsx，全站一个）：3 个问题 + 其他 → 打开 WhatsApp，讯息已写好
@@ -19,6 +19,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useRef, useState, useSyncExternalStore, ViewTransition } from "react";
+import { createPortal } from "react-dom";
 import { whatsappLink, type Lang } from "@/lib/site";
 
 // ── 选单 ─────────────────────────────────────────
@@ -52,24 +53,31 @@ export function Menu({ label, children }: { label: string; children: React.React
 }
 
 // ── 「我的情况是」选择器 ─────────────────────────
-// 选一个情况 → 下面显示相关的服务卡片
+// 选单在首屏里；选一个情况 → 相关的服务清单出现在 resultsId 那一格（首屏下面），并滑到那里
 type Card = { href: string; title: string; short: string };
-export function SituationPicker({ label, placeholder, options }: {
-  label: string; // 不显示，给读屏软件用（选单的预设文字本身就是问题，例如「我们可以怎么帮你？」）
+export function SituationPicker({ label, placeholder, options, resultsId }: {
+  label: string; // 不显示，给读屏软件用（选单的预设文字本身就是问题）
   placeholder: string;
   options: { label: string; cards: Card[] }[];
+  resultsId: string; // 页面上放结果的那一格（id）
 }) {
   const [picked, setPicked] = useState(-1);
   const cards = options[picked]?.cards ?? [];
+  const results = typeof document === "undefined" ? null : document.getElementById(resultsId);
+
+  const pick = (i: number) => {
+    setPicked(i);
+    requestAnimationFrame(() => results?.scrollIntoView({ block: "start" }));
+  };
 
   return (
-    <div className="form">
-      <select className="select" aria-label={label} value={picked} onChange={(e) => setPicked(Number(e.target.value))}>
+    <>
+      <select className="select" aria-label={label} value={picked} onChange={(e) => pick(Number(e.target.value))}>
         <option value={-1} disabled>{placeholder}</option>
         {options.map((o, i) => <option key={o.label} value={i}>{o.label}</option>)}
       </select>
-      {cards.length > 0 && (
-        <ul className="link-list" aria-live="polite">
+      {results && cards.length > 0 && createPortal(
+        <ul className="link-list">
           {cards.map((c) => (
             <li key={c.href}>
               <Link href={c.href}>
@@ -78,9 +86,10 @@ export function SituationPicker({ label, placeholder, options }: {
               </Link>
             </li>
           ))}
-        </ul>
+        </ul>,
+        results,
       )}
-    </div>
+    </>
   );
 }
 

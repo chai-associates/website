@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 荣誉与认可 /about/recognitions（选单「关于我们 › 荣誉与认可」）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 首屏：照片 + 面包屑 + 标题（lib/blocks.tsx 的 PageHero），说明在照片下面
+// 区块顺序：① 首屏：照片 + 面包屑 → 两行标题 → 按钮（lib/blocks.tsx 的 PageHero）
 //          ② 清单：小标签（荣誉 / 会员资格）→ 名称 → 颁发单位 · 年份（白；清单是空的就显示「内容准备中」）
 //          ③ 想先聊聊（浅灰）
 // ⚠ 律师公会宣传规定：不自夸、不比较，只写「名称 · 颁发单位 · 年份」。
@@ -20,7 +20,13 @@ type Item = { kind: Bi; title: Bi; desc: Bi };
 // ─────────────────────────────────────────────
 const text = {
   title: { zh: "荣誉与认可", en: "Recognitions" },
-  image: "/images/about/recognitions-v2.png" as string | null, // 首屏照片：现在这张 2400 × 1350（会裁掉上下）→ 新图请出 2400 × 1260
+  image: "/images/about/recognitions-v3.png" as string | null, // 首屏照片 2400 × 1350
+  // 首屏：两行标题 + 按钮（还没决定写什么；不加逗号句号）
+  hero: {
+    title: { zh: "[两行标题]\n[两行标题]", en: "[Two-line title]\n[Two-line title]" },
+    cta: { zh: "[按钮文字]", en: "[Button label]" }, // 往下到清单
+  },
+  // lead：不显示在页面上，给 Google 的页面说明
   lead: { zh: "[一句话：律所获得的荣誉、认可与会员资格]", en: "[One line: the firm's awards, recognitions and memberships]" },
   list: [
     { kind: { zh: "荣誉", en: "Award" }, title: { zh: "[奖项或认可名称]", en: "[Award or recognition]" }, desc: { zh: "[颁发单位 · 年份]", en: "[Awarding body · Year]" } },
@@ -45,12 +51,13 @@ export default async function RecognitionsPage({ params }: PageProps<"/[lang]/ab
       <PageHero
         image={text.image}
         eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li><Link href={`/${lang}/people`}>{common.people[lang]}</Link></li><li aria-current="page">{text.title[lang]}</li></ol>}
-        title={text.title[lang]}
-        lead={text.lead[lang]}
-      />
+        title={text.hero.title[lang]}
+      >
+        <a className="btn btn-light btn-next" href="#list">{text.hero.cta[lang]}</a>
+      </PageHero>
 
-      {/* ═══ ② 清单（白） ═══ */}
-      <section className="section">
+      {/* ═══ ② 清单（白；首屏的按钮到这里） ═══ */}
+      <section id="list" className="section">
         <div className="container">
           {text.list.length > 0 ? (
             <div className="card-grid">

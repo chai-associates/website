@@ -39,7 +39,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 区块节奏：两个白色区块相连时共用一个留白；页面标题区后面接白色区块时不再加留白（浅灰、深色不会相邻，见品牌语法 4） */
 .section:not(.section-muted, .section-dark) + .section:not(.section-muted, .section-dark),
 .page-head + .section:not(.section-muted, .section-dark),
-.hero-below + .section:not(.section-muted, .section-dark) { padding-top: 0; }
+.hero-below:not(:empty) + .section:not(.section-muted, .section-dark) { padding-top: 0; }
 /* 品牌语法 4：色带 = 白（.section）/ 浅灰（.section-muted）/ 深色（.section-dark），相邻两段不同色 */
 .section-muted { background: var(--color-subtle); }
 .section-dark { --focus-color: var(--color-inverse-ink); background: var(--color-inverse); color: var(--color-inverse-ink); }
@@ -76,9 +76,9 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .quote + .text-link { margin-top: var(--space-3); }
 /* 照片格式 ②「满版」：左右贴齐画面边缘，不留白、不圆角（卡片里的照片才圆角留白）。共用 .hero：
    · .hero-top = 每一页的首屏（首页、离婚服务、离婚百科、律师团队、荣誉与认可；lib/blocks.tsx 的 PageHero）：
-     照片永远跟原图同比例（--ratio-hero，2400 × 1260），整张不裁，所以人永远在同一个位置；
-     标题（小标签 / 面包屑 + h1）一律叠在照片左边的文字框里，文字框只占左边 --hero-copy（不碰到右边的人），太长自动换行；
-     说明、按钮放在照片下面（.hero-below）。平板以上照片延伸到页首后面（页首在最上面时透明）。
+     照片永远跟首屏同比例（--ratio-hero），人永远在同一个位置；左字右图：小字 / 面包屑 → 两行标题 → 按钮或说明，
+     全部叠在照片左边的文字框里，文字框只占左边 --hero-copy（不碰到右边的人），太长自动换行。
+     平板以上照片延伸到页首后面（页首在最上面时透明、字变白）。
    · 其他 .hero（律师团队的主管合伙人的话）：电脑照片铺满、靠右，文字在左；手机照片在上（黄金比例），文字接在下面。 */
 /* 照片容器（首屏照片、满版封面、人像）共用：裁切、照片铺满、没照片时浅灰底 */
 :is(.hero-photo, .bleed, .person-photo) { position: relative; overflow: hidden; background: var(--color-line); }
@@ -91,21 +91,26 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .hero-body :is(.tag, .breadcrumb) + h1 { margin-top: var(--space-2); }
 .hero-body h1 + p { margin-top: var(--space-2); color: var(--color-ink-muted); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .hero-body > * + .btn-row { margin-top: var(--space-4); } /* 说明或引言 ↔ 按钮 24 */
-/* 首屏：照片当底、文字框在左边（任何尺寸都叠在照片上）。文字框左边跟页面内容对齐（等于 .container 的左边距） */
-.hero-top { aspect-ratio: var(--ratio-hero); align-items: center; }
-.hero-top .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; }
+/* 首屏：照片当底（深色），文字框在左边（任何尺寸都叠在照片上）：小字 / 面包屑 → 两行标题 → 按钮或说明。
+   文字框左边跟页面内容对齐（等于 .container 的左边距）。字用白色（--color-on-photo），小字浅白带灰 */
+.hero-top { aspect-ratio: var(--ratio-hero); align-items: center; --focus-color: var(--color-on-photo); color: var(--color-on-photo); background: var(--color-inverse); }
+/* 手机：字比照片高时首屏会变高 —— 照片固定原比例贴在上面（人不会被放大移位），下缘淡出到深色底，多出来的字接在深色底上 */
+.hero-top .hero-photo { position: absolute; inset: 0 0 auto; z-index: -1; aspect-ratio: var(--ratio-hero); mask-image: linear-gradient(to bottom, black 60%, transparent); }
+.hero-top .btn { white-space: nowrap; } /* 按钮字不拆成两行 */
 .hero-top .hero-body { width: var(--hero-copy); padding-block: var(--space-3); padding-left: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter))); }
+.hero-top :is(.tag, .breadcrumb, .breadcrumb [aria-current="page"]) { color: var(--color-on-photo-muted); }
 .hero-top h1 { hyphens: auto; } /* 很窄的手机：英文长字自动断字换行，不会伸进右边的人 */
-/* 首屏下面：说明（lead）→ 按钮 */
+.hero-top h1 + * { margin-top: var(--space-4); } /* 标题 ↔ 按钮 / 选单 24 */
+/* 首屏下面接的东西（首页的重点、离婚服务选好情况后出现的服务）；没有内容时不占位置 */
 .hero-below { padding-block: var(--space-4) var(--space-5); }
-.hero-below > p { max-width: var(--measure); font-size: var(--text-lead); line-height: var(--leading-lead); }
-.hero-below > * + * { margin-top: var(--space-4); }
+.hero-below:empty { display: none; }
 @media (width >= --theme(--breakpoint-md)) {
   .hero { min-height: var(--hero-min-h); align-items: center; }
   .hero-photo { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; }
   .hero-body { padding-block: var(--space-6); }
   .hero-body > * { max-width: var(--measure-short); } /* 文字只占左边，不压到右边的人 */
-  .hero-top { min-height: 0; margin-top: calc(-1 * var(--header-h)); } /* 平板以上：往上延伸到页首后面；高度只看比例（不用 --hero-min-h） */
+  .hero-top { min-height: 0; margin-top: calc(-1 * var(--header-h)); }
+  .hero-top .hero-photo { inset: 0; aspect-ratio: auto; mask-image: none; } /* 平板以上：字放得下，照片铺满整个首屏 */ /* 平板以上：往上延伸到页首后面；高度只看比例（不用 --hero-min-h） */
   .hero-top .hero-body { padding-block: calc(var(--header-h) + var(--space-3)) var(--space-3); } /* 文字从页首下面开始算，在剩下的高度里垂直置中 */
 }
 /* 重点（首屏下方）：上下细线，任何尺寸都是一排 4 个；每一点 = 图示（上）+ 一个短词（下，caption）。
@@ -354,9 +359,13 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 页首：一直固定在最上面，下面一条细线。底是毛玻璃（--color-glass 半透明白 + 模糊）；
    有首屏照片的页面在最上面时透明，一往下滑就变毛玻璃（lib/interactive.tsx 的 HeaderOverHero 切换 data-over-hero）。
    毛玻璃放在 ::before：直接放在页首上会让选单（position: fixed）改成跟着页首定位 */
-.site-header { position: sticky; top: 0; z-index: 30; border-bottom: var(--hairline) solid var(--color-line); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
+.site-header { position: sticky; top: 0; z-index: 30; border-bottom: var(--hairline) solid var(--color-line); transition: color var(--motion) var(--ease); view-transition-name: site-header; } /* 换页时页首不动（见下面「换页动态」） */
 .site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--color-glass); backdrop-filter: blur(var(--blur-glass)); -webkit-backdrop-filter: blur(var(--blur-glass)); transition: opacity var(--motion) var(--ease); }
 html[data-over-hero] .site-header::before { opacity: 0; }
+@media (width >= --theme(--breakpoint-md)) {
+  html[data-over-hero] .site-header { --focus-color: var(--color-on-photo); color: var(--color-on-photo); } /* 页首叠在深色照片上：字变白 */
+  html[data-over-hero] .site-header .logo-sub { color: var(--color-on-photo-muted); }
+}
 /* 手机、平板：logo · 咨询 · ☰ 一排 */
 .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--header-h); }
 .nav-links, .nav-right > .lang-switch { display: none; } /* 导航、语言切换在 ☰ 选单里（只藏页首上的那个，选单里的照常显示） */
@@ -388,7 +397,7 @@ html[data-over-hero] .site-header::before { opacity: 0; }
 /* 有下拉的项目：名字旁边一个向下的小箭头（CSS 画的，跟着字的颜色和大小）；展开时翻成向上 */
 .nav-drop > summary::after { --chev: 0.4em; content: ""; width: var(--chev); height: var(--chev); margin: calc(var(--chev) / -2) 0 0 var(--space-2); border-right: var(--border) solid currentColor; border-bottom: var(--border) solid currentColor; transform: rotate(45deg); transition: transform var(--motion-fast) var(--ease); }
 .nav-drop[open] > summary::after { transform: translateY(calc(var(--chev) / 2)) rotate(-135deg); }
-.nav-drop-panel { position: absolute; top: 100%; right: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease); }
+.nav-drop-panel { position: absolute; top: 100%; right: calc(-1 * var(--space-3)); display: grid; min-width: max-content; padding: var(--space-2) 0; border: var(--hairline) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-bg); box-shadow: var(--shadow-float); transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease); color: var(--color-ink); }
 @starting-style { .nav-drop[open] > .nav-drop-panel { opacity: 0; transform: translateY(calc(-1 * var(--space-1))); } } /* 展开那一刻：淡入 + 往下一点 */
 .nav-drop-panel a { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); color: var(--color-ink-muted); transition: color var(--motion-fast) var(--ease); }
 .nav-drop-panel a:hover, .nav-drop-panel a[aria-current="page"] { color: var(--color-ink); }
@@ -399,14 +408,14 @@ html[data-over-hero] .site-header::before { opacity: 0; }
 /* ── 外框：选单（打开 / 关闭由 lib/interactive.tsx 切换 data-open） ── */
 /* ☰ 三条线（只属于这个按钮的尺寸）；打开时上下两条移到中间、转成 ✕：移动距离 = 线距 + 线粗 */
 .menu-btn { --bar-w: 22px; --bar-h: 2px; --bar-gap: 5px; display: grid; place-content: center; gap: var(--bar-gap); width: var(--tap-min); height: var(--tap-min); cursor: pointer; }
-.menu-btn span { display: block; width: var(--bar-w); height: var(--bar-h); border-radius: var(--bar-h); background: var(--color-ink); transition: transform var(--motion) var(--ease), opacity var(--motion-fast) var(--ease); }
+.menu-btn span { display: block; width: var(--bar-w); height: var(--bar-h); border-radius: var(--bar-h); background: currentColor; transition: transform var(--motion) var(--ease), opacity var(--motion-fast) var(--ease); }
 .menu[data-open="true"] .menu-btn span:nth-child(1) { transform: translateY(calc(var(--bar-gap) + var(--bar-h))) rotate(45deg); }
 .menu[data-open="true"] .menu-btn span:nth-child(2) { opacity: 0; }
 .menu[data-open="true"] .menu-btn span:nth-child(3) { transform: translateY(calc(-1 * (var(--bar-gap) + var(--bar-h)))) rotate(-45deg); }
 /* 后面变暗的部分：点它就关闭 */
 .menu-backdrop { position: fixed; inset: var(--header-h) 0 0 0; background: var(--color-backdrop); opacity: 0; visibility: hidden; transition: opacity var(--motion) var(--ease), visibility var(--motion); }
 /* 从右边滑进来的面板 */
-.menu-panel { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--menu-w); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); overflow-y: auto; padding: var(--space-3) var(--gutter) var(--space-5); background: var(--color-bg); box-shadow: var(--shadow-float); transform: translateX(100%); visibility: hidden; transition: transform var(--motion) var(--ease), visibility var(--motion); }
+.menu-panel { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--menu-w); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); overflow-y: auto; padding: var(--space-3) var(--gutter) var(--space-5); background: var(--color-bg); box-shadow: var(--shadow-float); transform: translateX(100%); visibility: hidden; transition: transform var(--motion) var(--ease), visibility var(--motion); color: var(--color-ink); }
 .menu-panel > * { opacity: 0; transform: translateX(var(--space-4)); transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease); }
 .menu[data-open="true"] .menu-backdrop { opacity: 1; visibility: visible; }
 .menu[data-open="true"] .menu-panel { transform: none; visibility: visible; }

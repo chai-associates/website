@@ -19,8 +19,12 @@ import { common, isLang, pageMeta, serviceCategories } from "@/lib/site";
 const text = {
   title: { zh: "离婚百科", en: "Divorcepedia" },
   // ① 标题
-  heading: { zh: "离婚前后，\n你会想知道的事。", en: "What you'll want to know,\nbefore and after divorce." },
-  image: null as string | null, // 首屏照片：放进 public/images/ 后填路径（2400 × 1260，规格见 lib/blocks.tsx 的 PageHero）
+  image: "/images/divorcepedia/divorcepedia.png" as string | null, // 首屏照片 2400 × 1350（规格见 lib/blocks.tsx 的 PageHero）
+  hero: {
+    title: { zh: "关于离婚前后的一些事\n你都可以先了解", en: "What to know\nbefore and after divorce" }, // 不加逗号句号
+    cta: { zh: "阅读", en: "Read" }, // 往下到文章分类
+  },
+  // lead：不显示在页面上，给 Google 的页面说明
   lead: { zh: "用简单的话，解释马来西亚非穆斯林离婚的常见问题。", en: "Plain answers to common questions about non-Muslim divorce in Malaysia." },
   // ② 分类
   services: { zh: "查看{category}的服务", en: "View {category} services" }, // 读完百科 → 去看服务：一律用动词开头
@@ -50,12 +54,13 @@ export default async function DivorcepediaPage({ params }: PageProps<"/[lang]/di
       <PageHero
         image={text.image}
         eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li aria-current="page">{text.title[lang]}</li></ol>}
-        title={text.heading[lang]}
-        lead={text.lead[lang]}
-      />
+        title={text.hero.title[lang]}
+      >
+        <a className="btn btn-light btn-next" href="#articles">{text.hero.cta[lang]}</a>
+      </PageHero>
 
-      {/* ═══ ② 分类按钮 → 该分类的文章（浅灰色带） ═══ */}
-      <section className="section section-muted">
+      {/* ═══ ② 分类按钮 → 该分类的文章（浅灰色带；首屏的「阅读」到这里） ═══ */}
+      <section id="articles" className="section section-muted">
         <div className="container">
           <div className="tabs">
             {groups.map((g, i) => (

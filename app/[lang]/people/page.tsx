@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // 律师团队 /people（原本的「关于我们 › 律所简介」并进来了：介绍律所 = 介绍律所的人）
 // ───────────────────────────────────────────────────────────────
-// 区块顺序：① 首屏：团队合照 + 面包屑 + 标题（lib/blocks.tsx 的 PageHero），说明在照片下面
+// 区块顺序：① 首屏：团队合照 + 面包屑 → 两行标题 → 按钮「认识我们的团队」（lib/blocks.tsx 的 PageHero）
 //          ② 律所简介：左边标题 + 三段、右边古铜超大数字（10+ 年经验 · 5 间办事处）（浅灰）
 //          ③ 主管合伙人的话 + 按钮「认识我们的团队」（照片满版靠右、引言在左；手机照片在上。跟首页首屏同一个积木 .hero）
 // 完整的成员名单在 /people/all（按职位折叠）。成员资料、职位、年经验、办事处在 lib/site.ts；这里只放这一页的文字。
@@ -18,10 +18,11 @@ import { common, displayName, firm, isLang, offices, pageMeta, roles, team, type
 // 这一页的文字（中英对照）
 // ─────────────────────────────────────────────
 const text = {
-  // ① 首屏：团队合照 + 标题（现在这张 2400 × 1350 的人站满整张，标题会压到人 → 新图请出 2400 × 1260，左边 45% 留白）
-  image: "/images/about/our-firm-v2.png" as string | null,
-  heading: { zh: "坦诚相待，\n重视每一段关系。", en: "Open, approachable,\nbuilt on relationships." },
-  lead: {
+  // ① 首屏：团队合照（2400 × 1350；人在右边、左边暗）
+  image: "/images/about/people.png" as string | null,
+  heading: { zh: "坦诚相待\n重视每一段关系", en: "Open and approachable\nbuilt on relationships" }, // 首屏两行标题：不加逗号句号
+  cta: { zh: "认识我们的团队", en: "See All Our People" },
+  lead: { // 不显示在页面上，给 Google 的说明（页面说明）
     zh: "我们力求进取、亲切、重视关系，和同事之间、和客户之间，都坦诚相待。我们鼓励每一位成员做自己，也把握每个机会发掘和培养他们的潜力，让律所和客户都受益。",
     en: "We aim to be progressive, approachable and relationship-driven, and to keep our relationships open and honest, with each other and with our clients. We encourage our people to be themselves, and we take every opportunity to develop their potential, for the firm and for our clients.",
   },
@@ -65,8 +66,9 @@ export default async function PeoplePage({ params }: PageProps<"/[lang]/people">
         alt={firm.name}
         eyebrow={<ol className="breadcrumb"><li><Link href={`/${lang}`}>{common.home[lang]}</Link></li><li aria-current="page">{common.people[lang]}</li></ol>}
         title={text.heading[lang]}
-        lead={text.lead[lang]}
-      />
+      >
+        <Link className="btn btn-light btn-next" href={`/${lang}/people/all`}>{text.cta[lang]}</Link>
+      </PageHero>
 
       {/* ═══ ② 律所简介：左边文字、右边古铜超大数字（浅灰） ═══ */}
       <section className="section section-muted">
