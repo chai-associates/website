@@ -2,7 +2,7 @@
 // 离婚百科文章 /divorcepedia/[slug]（所有文章共用这一个模板）
 // ───────────────────────────────────────────────────────────────
 // 百科 = 读文章的感觉（服务页才有侧栏表格）：封面照片 + 一栏正文、不放侧栏。
-// 色带顺序：① 面包屑 → 封面：照片上压标题 + 一句话重点（白）
+// 色带顺序：① 面包屑 → 封面：照片在上，白色标题框叠在照片下缘（标题 + 一句话重点；右边资料栏：分类 · 法律依据 · 法律最近修订）（白）
 //          ② 文章：一栏，行宽固定（白，接在标题下面）
 //          ③ 想请律师帮你办？：问律师按钮 → 下面一行一个「查看 X 服务」（浅灰）
 //          ④ 同一个分类的其他文章（白）
@@ -21,6 +21,10 @@ import { common, isLang, pageMeta, serviceCategories, services, whatsappLink, ty
 // ─────────────────────────────────────────────
 const text = {
   pedia: { zh: "离婚百科", en: "Divorcepedia" },
+  // ① 资料栏
+  category: { zh: "分类", en: "Category" },
+  law: { zh: "法律依据", en: "Legislation" },
+  amended: { zh: "法律最近修订", en: "Law last amended" },
   // ③ 读完 → 交给律师 / 去看服务：连结一律用动词开头
   handoff: {
     title: { zh: "想请律师帮你办？", en: "Want a lawyer to handle this?" },
@@ -67,9 +71,20 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
             <li aria-current="page">{a.title[lang]}</li>
           </ol>
           <div className="cover">
-            {a.image && <Image src={a.image} alt="" fill preload sizes="(min-width: 1152px) 1088px, 100vw" />}
-            <h1>{a.title[lang]}</h1>
-            <p>{a.summary[lang]}</p>
+            <div className="photo-frame">
+              {a.image && <Image src={a.image} alt="" fill preload sizes="(min-width: 1152px) 1088px, 100vw" />}
+            </div>
+            <div className="cover-panel">
+              <div>
+                <h1>{a.title[lang]}</h1>
+                <p>{a.summary[lang]}</p>
+              </div>
+              <dl className="facts">
+                <div><dt>{text.category[lang]}</dt><dd>{c.title[lang]}</dd></div>
+                {a.law && <div><dt>{text.law[lang]}</dt><dd>{a.law.name[lang]}</dd></div>}
+                {a.law && <div><dt>{text.amended[lang]}</dt><dd>{a.law.amended[lang]}</dd></div>}
+              </dl>
+            </div>
           </div>
         </div>
       </section>
