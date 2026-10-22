@@ -47,31 +47,37 @@ export function PageHero({ image, alt = "", eyebrow, title, children }: {
 }
 
 // 封面标题区。aside = 标题框右边的资料栏（例如文章的分类、法律依据），没有就不填
-export function CoverHead({ crumbs, image, title, lead, aside }: {
+export function CoverHead({ crumbs, image, title, lead, aside, pin }: {
   crumbs: React.ReactNode;
   image: string | null;
   title: string;
   lead?: string; // 标题下面一句话；不填就只有标题
   aside?: React.ReactNode;
+  pin?: boolean; // 往下滑时照片停住，标题框和下面的内容往上盖过照片
 }) {
+  // 三块是 <main> 里的兄弟（不包在同一个 section 里）：照片要停住，只能停在它的父层范围内
   return (
-    <section className="page-head">
-      <div className="container">
-        <ol className="breadcrumb">{crumbs}</ol>
-      </div>
-      <div className="bleed">
+    <>
+      <section className="page-head cover-head">
+        <div className="container">
+          <ol className="breadcrumb">{crumbs}</ol>
+        </div>
+      </section>
+      <div className={pin ? "bleed bleed-pin" : "bleed"}>
         {image && <Image src={image} alt="" fill preload sizes="100vw" />}
       </div>
-      <div className="container">
-        <div className="cover-panel">
-          <div>
-            <h1>{title}</h1>
-            {lead && <p>{lead}</p>}
+      <section className="cover-body">
+        <div className="container">
+          <div className="cover-panel">
+            <div>
+              <h1>{title}</h1>
+              {lead && <p>{lead}</p>}
+            </div>
+            {aside}
           </div>
-          {aside}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

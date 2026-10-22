@@ -39,6 +39,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 /* 区块节奏：两个白色区块相连时共用一个留白；页面标题区后面接白色区块时不再加留白（浅灰、深色不会相邻，见品牌语法 4） */
 .section:not(.section-muted, .section-dark) + .section:not(.section-muted, .section-dark),
 .page-head + .section:not(.section-muted, .section-dark),
+.cover-body + .section:not(.section-muted, .section-dark),
 .hero-below:not(:empty) + .section:not(.section-muted, .section-dark) { padding-top: 0; }
 /* 品牌语法 4：色带 = 白（.section）/ 浅灰（.section-muted）/ 深色（.section-dark），相邻两段不同色 */
 .section-muted { background: var(--color-subtle); }
@@ -223,7 +224,12 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
    照片统一 2400 × 1350，主体放在中间那条 2400 × 600 里。
    .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。电脑版往上叠住照片下缘 64，跟正文左边对齐。 */
 .bleed { aspect-ratio: var(--ratio-photo); }
-.page-head > .bleed { margin-top: var(--space-3); } /* 面包屑 ↔ 照片 16 */
+.cover-head { padding-bottom: var(--space-3); } /* 面包屑 ↔ 照片 16 */
+.cover-body { padding-bottom: var(--space-5); } /* 标题框 ↔ 内容 48（跟 .page-head 一样） */
+/* .bleed-pin = 照片停住：往下滑时照片固定在页首下面，后面的区块（白底、浅灰、深色）一层层往上盖过去（手机到电脑都一样） */
+.bleed-pin { position: sticky; top: var(--header-h); z-index: 0; }
+.bleed-pin ~ * { position: relative; z-index: 1; }
+.bleed-pin ~ :not(.section-muted, .section-dark) { background-color: var(--color-bg); }
 .cover-panel { position: relative; display: grid; gap: var(--space-4); padding-top: var(--space-4); background: var(--color-bg); }
 .cover-panel h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .cover-panel .facts { grid-template-columns: minmax(0, 1fr); } /* 资料栏一律单栏 */
