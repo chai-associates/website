@@ -30,7 +30,7 @@ const text = {
     // 首屏的字一律不加逗号句号；两行标题用 \n 换行
     title: { zh: "专注家事法律\n陪你走过人生转折", en: "Dedicated to family law\nwith you through every change" },
     cta: { zh: "了解我们的服务", en: "Explore Our Services" },
-    image: "/images/hero/hero-bg-v7.png",
+    image: "/images/hero/hero-bg-v8.png",
     imageAlt: { zh: "律师与客户进行咨询", en: "A lawyer in a consultation with a client" },
     // 首屏下方的重点（图示可选 award / chat / lock / update，或在 lib/blocks.tsx 的 Icon 加新的）。不写收费：每个案件不同，由律师在咨询时说明
     points: [
