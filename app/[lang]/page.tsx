@@ -42,12 +42,12 @@ const text = {
     ] as { icon: IconName; title: Bi }[],
   },
 
-  // ② 服务范围（服务清单本身在 lib/site.ts）
+  // ② 服务范围（服务清单本身在 lib/site.ts）· 标题不显示在页面上，给读屏软件用（aria-label）
   services: {
     title: { zh: "服务范围", en: "Our Services" },
   },
 
-  // ③ 我们的团队（成员资料在 lib/site.ts 的 team）
+  // ③ 我们的团队（成员资料在 lib/site.ts 的 team）· 标题不显示在页面上，给读屏软件用（aria-label）
   people: {
     title: { zh: "我们的团队", en: "Our People" },
   },
@@ -94,13 +94,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </div>
 
       {/* ═════════ ② 服务范围 ═════════
-          每张卡片连到该服务自己的页面（/zh/服务代号），服务清单在 lib/site.ts。 */}
-      <section id="services" className="section">
-        <div className="container">
-          <div className="section-head">
-            <h2>{text.services.title[lang]}</h2>
-          </div>
-        </div>
+          每张卡片连到该服务自己的页面（/zh/服务代号），服务清单在 lib/site.ts。不放标题：首屏 → 重点 → 照片直接接上；照片下缘紧贴下一条色带 */}
+      <section id="services" className="section" aria-label={text.services.title[lang]}>
         {/* 5 个服务分类（内容在 lib/site.ts）· 满版一排两张、每张 16:9（照片 2400 × 1350，整张不裁）；手机一排一张 */}
         <div className="photo-tiles photo-tiles-scene">
           {serviceCategories.map((c) => (
@@ -110,12 +105,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* ═════════ ③ 我们的团队 ═════════
-          手机左右滑，电脑 3 栏（滑动列积木的默认栏数）。 */}
-      <section id="people" className="section section-muted">
+          任何尺寸都左右滑（滑动列积木）。不放标题。 */}
+      <section id="people" className="section section-muted" aria-label={people.title[lang]}>
         <div className="container">
-          <div className="section-head">
-            <h2>{people.title[lang]}</h2>
-          </div>
           <div className="scroll-row">
             {team.filter((p) => roles[p.role].group !== "support").map((p) => (
               <PersonCard key={p.slug} p={p} lang={lang} sizes="(min-width: 768px) 33vw, 80vw" />

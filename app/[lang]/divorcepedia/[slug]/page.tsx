@@ -2,7 +2,7 @@
 // 离婚百科文章 /divorcepedia/[slug]（所有文章共用这一个模板）
 // ───────────────────────────────────────────────────────────────
 // 百科 = 读文章的感觉（服务页才有侧栏表格）：封面照片 + 一栏正文、不放侧栏。
-// 色带顺序：① 面包屑 → 满版照片 → 白色标题框叠在照片下缘（标题 + 一句话重点；右边资料栏：分类 · 法律依据）（白；lib/blocks.tsx 的 CoverHead）
+// 色带顺序：① 面包屑 → 满版照片（往下滑时停住，内容往上盖过去）→ 白色标题框叠在照片下缘，一栏放中间：标题 → 一句话重点 → 资料栏（分类 · 法律依据）（白；lib/blocks.tsx 的 CoverHead）
 //            法律依据：一条法令一项 → 小字：引用的条文 · 法律最近修订生效日期 · 资料来源（连到总检察署的法律资料库）
 //          ② 文章：一栏，行宽固定（白，接在标题下面）
 //          ③ 想请律师帮你办？：问律师按钮 → 下面一行一个「查看 X 服务」（浅灰）
@@ -77,6 +77,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/divorce
         image={a.image ?? null}
         title={a.title[lang]}
         lead={a.summary[lang]}
+        pin
         aside={
           <dl className="facts">
             <div><dt>{text.category[lang]}</dt><dd>{c.title[lang]}</dd></div>

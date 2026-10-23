@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AskSection, PageHero, PhotoCard } from "@/lib/blocks";
+import { AskSection, PageHero, PhotoTile } from "@/lib/blocks";
 import { SituationPicker } from "@/lib/interactive";
 import { common, isLang, pageMeta, serviceCategories, services, type Bi } from "@/lib/site";
 
@@ -90,14 +90,12 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       {/* 选好情况后，对应的服务出现在这里（SituationPicker 放进来）；没选之前不占位置 */}
       <div id="situation-results" className="container hero-below" aria-live="polite" />
 
-      {/* ═══ ③ 5 个分类：照片卡片（白） ═══ */}
+      {/* ═══ ③ 5 个分类：满版照片按钮卡，一排两张、每张 16:9（照片 2400 × 1350，整张不裁）；手机一排一张（白） ═══ */}
       <section className="section">
-        <div className="container">
-          <div className="card-grid">
-            {serviceCategories.map((c) => (
-              <PhotoCard key={c.slug} href={`/${lang}/services/${c.slug}`} image={c.image} title={c.title[lang]} desc={c.short[lang]} action={common.viewService[lang]} />
-            ))}
-          </div>
+        <div className="photo-tiles photo-tiles-scene">
+          {serviceCategories.map((c) => (
+            <PhotoTile key={c.slug} href={`/${lang}/services/${c.slug}`} image={c.image} title={c.title[lang]} desc={c.short[lang]} action={common.viewService[lang]} sizes="(min-width: 768px) 50vw, 100vw" />
+          ))}
         </div>
       </section>
 

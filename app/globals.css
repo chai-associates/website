@@ -41,6 +41,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .page-head + .section:not(.section-muted, .section-dark),
 .cover-body + .section:not(.section-muted, .section-dark),
 .hero-below:not(:empty) + .section:not(.section-muted, .section-dark) { padding-top: 0; }
+/* 区块最后是满版照片按钮卡时，照片下缘直接贴下一条色带（不留白） */
+.section:has(> .photo-tiles:last-child) { padding-bottom: 0; }
 /* 品牌语法 4：色带 = 白（.section）/ 浅灰（.section-muted）/ 深色（.section-dark），相邻两段不同色 */
 .section-muted { background: var(--color-subtle); }
 .section-dark { --focus-color: var(--color-inverse-ink); background: var(--color-inverse); color: var(--color-inverse-ink); }
@@ -101,7 +103,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .hero-top h1 { hyphens: auto; } /* 英文长字放不下时自动断字换行 */
 .hero-top h1 + * { margin-top: var(--space-4); } /* 标题 ↔ 按钮 / 选单 24 */
 /* 首屏下面接的东西（首页的重点、离婚服务选好情况后出现的服务）；没有内容时不占位置 */
-.hero-below { padding-block: var(--space-4) var(--space-5); }
+.hero-below { padding-block: var(--space-5); } /* 上下一样：夹在首屏和下面的照片之间，放在正中间 */
 .hero-below:empty { display: none; }
 @media (width >= --theme(--breakpoint-md)) {
   .hero { min-height: var(--hero-min-h); align-items: center; }
@@ -231,8 +233,8 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .photo-tile-action { display: inline-flex; align-self: flex-end; gap: var(--space-1); margin-top: auto; padding-top: var(--space-4); font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: var(--space-1); } /* 右下角：margin-top auto 推到底，padding-top 保证跟说明至少隔 24 */
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
    .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。任何尺寸都是 16:9（照片 2400 × 1350，整张不裁）；没有照片时是浅灰底。
-   .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。白色圆角框往上叠住照片下缘，左右置中（手机到电脑都一样）：
-   框比正文左右各宽半个页边距、里面再留回半个页边距，所以框的圆角露得出来，标题仍然跟下面正文的左边对齐。 */
+   .cover-panel = 标题框（标题 → 一句话重点 → 资料栏，一栏往下）。白色圆角框往上叠住照片下缘，左右置中；里面的字也是一栏放在正中间（手机到电脑都一样）：
+   框比内容左右各宽半个页边距、里面再留回半个页边距，所以框的圆角露得出来。 */
 .bleed { aspect-ratio: var(--ratio-photo); }
 .cover-head { padding-bottom: var(--space-3); } /* 面包屑 ↔ 照片 16 */
 .cover-body { display: flow-root; padding-bottom: var(--space-5); } /* 标题框 ↔ 内容 48（跟 .page-head 一样）；flow-root：标题框往上叠照片的负边距留在框上，整段白底才不会一起往上盖住照片 */
@@ -241,10 +243,11 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .bleed-pin ~ * { position: relative; z-index: 1; }
 .bleed-pin ~ :not(.section-muted, .section-dark) { background-color: var(--color-bg); }
 .cover-panel { --panel-pad: calc(var(--gutter) / 2); position: relative; display: grid; gap: var(--space-4); margin: calc(-1 * var(--space-5)) calc(-1 * var(--panel-pad)) 0; padding: var(--space-5) var(--panel-pad) 0; border-radius: var(--radius-md) var(--radius-md) 0 0; background: var(--color-bg); }
+.cover-panel > * { justify-self: center; width: min(100%, var(--measure)); } /* 字的框：正文行宽，放在正中间 */
 .cover-panel h1 + p { margin-top: var(--space-2); font-size: var(--text-lead); line-height: var(--leading-lead); }
 .cover-panel .facts { grid-template-columns: minmax(0, 1fr); } /* 资料栏一律单栏 */
 @media (width >= --theme(--breakpoint-md)) {
-  .cover-panel { grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr); align-items: start; gap: var(--space-5); margin-top: calc(-1 * var(--space-6)); padding-top: var(--space-6); }
+  .cover-panel { margin-top: calc(-1 * var(--space-6)); padding-top: var(--space-6); }
 }
 
 /* ── 积木：文字项目（母页用、没有照片的项目，例如理念、荣誉）：小标签 → 标题 → 一两句。不加框 ──
@@ -342,16 +345,14 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .select, .textarea { width: 100%; min-height: var(--tap); padding: 0 var(--space-3); border: var(--border) solid var(--color-line); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-ink); font: inherit; font-size: var(--text-body); font-weight: var(--weight-regular); }
 .textarea { padding-block: var(--space-2); resize: vertical; } /* 多行输入（咨询表格的「其他」） */
 
-/* ── 积木：滑动列（手机左右滑；电脑变 3 栏网格） ── */
+/* ── 积木：滑动列（任何尺寸都左右滑；每张的宽度让下一张露出一点，看得出可以滑） ── */
 .scroll-row { display: grid; grid-auto-flow: column; grid-auto-columns: 76%; gap: var(--space-3); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .scroll-row::-webkit-scrollbar { display: none; }
 .scroll-row > * { scroll-snap-align: start; }
-/* 滑动提示：只在手机显示（电脑是网格，不用滑） */
+/* 滑动提示 */
 .scroll-row + .scroll-hint { margin-top: var(--space-3); color: var(--color-ink-muted); font-size: var(--text-caption); text-align: center; } /* 置中：提示的是整排，不是左边那一张 */
-@media (width >= --theme(--breakpoint-md)) {
-  .scroll-row { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
-  .scroll-hint { display: none; }
-}
+@media (width >= --theme(--breakpoint-md)) { .scroll-row { grid-auto-columns: 40%; } } /* 平板：两张多一点 */
+@media (width >= --theme(--breakpoint-lg)) { .scroll-row { grid-auto-columns: 30%; } } /* 电脑：三张多一点 */
 
 /* ── 积木：分页选择（例如城市）──────────────────────
    选中的按钮变黑底，下面只显示该项的内容。不需要 JavaScript，也不用为每个选项写 CSS。
@@ -364,7 +365,7 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .tab-panel { display: none; order: 1; flex-basis: 100%; margin-top: var(--space-2); } /* order 1 = 排到所有按钮后面；8 + 8 = 按钮与内容相隔 16 */
 /* .tabs-bleed = 内容要满版的分页（离婚百科：满版照片按钮卡）：不放在 .container 里，按钮用 --edge 跟内容对齐，内容区伸到画面两边 */
 .tabs-bleed { padding-inline: var(--edge); }
-.tabs-bleed .tab-panel { flex-basis: calc(100% + 2 * var(--edge)); margin-inline: calc(-1 * var(--edge)); } /* 往两边各伸出 --edge = 刚好到画面边缘 */
+.tabs-bleed .tab-panel { flex-basis: calc(100% + 2 * var(--edge)); margin: calc(var(--section-y) - var(--space-2)) calc(-1 * var(--edge)) 0; } /* 往两边各伸出 --edge = 刚好到画面边缘；按钮上下留白一样（区块上方留白 = 按钮 ↔ 照片） */
 .tab > input:checked ~ .tab-panel { display: block; animation: fade-in var(--motion) var(--ease); } /* 切换分页：内容淡入 */
 /* 底线分页（律师个人页「概览 · 资历」：同一个人的不同章节，比药丸按钮安静）：文字分页，选中的变黑、下面一条黑线；整排下面一条细线。
    结构跟 .tabs 一样，只是 label 不加 .chip：<div class="tabs tabs-line"> */
