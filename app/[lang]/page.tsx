@@ -4,13 +4,13 @@
 // 区块顺序：① 首屏  ② 服务范围  ③ 我们的团队  ④ 联系我们
 //   用 Cmd + F 搜「① 首屏」等标题就能跳到该区块。
 // 样式规则（跟其他页一样）：
-// · 视觉样式只用 globals.css 的积木（hero、points、photo-card、scroll-row、tabs……）
+// · 视觉样式只用 globals.css 的积木（hero、points、photo-tiles、scroll-row、tabs……）
 // · 只属于这一页的排版（几栏、比例、位置、高度）直接写在下面的 className
 // 律所资料、服务清单、办事处来自 lib/site.ts（全站共用）。
 // ═══════════════════════════════════════════════════════════════
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Icon, OfficeTabs, PageHero, PersonCard, PhotoCard, type IconName } from "@/lib/blocks";
+import { Icon, OfficeTabs, PageHero, PersonCard, PhotoTile, type IconName } from "@/lib/blocks";
 import { cities, common, isLang, pageMeta, roles, serviceCategories, structuredData, team, type Bi, type Lang } from "@/lib/site";
 
 // ─────────────────────────────────────────────
@@ -100,12 +100,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <div className="section-head">
             <h2>{text.services.title[lang]}</h2>
           </div>
-          {/* 5 个服务分类（内容在 lib/site.ts）· 卡片比例固定 3:2 */}
-          <div className="card-grid">
-            {serviceCategories.map((c) => (
-              <PhotoCard key={c.slug} href={`/${lang}/services/${c.slug}`} image={c.image} title={c.title[lang]} desc={c.short[lang]} action={common.viewService[lang]} />
-            ))}
-          </div>
+        </div>
+        {/* 5 个服务分类（内容在 lib/site.ts）· 满版一排两张、每张 16:9（照片 2400 × 1350，整张不裁）；手机一排一张 */}
+        <div className="photo-tiles photo-tiles-scene">
+          {serviceCategories.map((c) => (
+            <PhotoTile key={c.slug} href={`/${lang}/services/${c.slug}`} image={c.image} title={c.title[lang]} desc={c.short[lang]} action={common.viewService[lang]} sizes="(min-width: 768px) 50vw, 100vw" />
+          ))}
         </div>
       </section>
 

@@ -103,6 +103,7 @@
   --space-6: 64px;   /* 电脑版左右并排的照片 ↔ 文字 */
   --gutter: clamp(1rem, 0.7143rem + 1.429vw, 2rem);      /* 页面左右边距 16 → 32（流体） */
   --container: 1152px;     /* 内容最大宽度 */
+  --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); /* 画面边缘 → 页面内容左边的距离（满版区块里的字用它跟内容对齐） */
   --section-y: clamp(3rem, 2.143rem + 4.286vw, 6rem);   /* 区块上下留白 48 → 96（流体） */
   --measure: 34em;         /* 正文最大行宽 */
   --ratio-hero: 40 / 21;   /* 首屏的宽 : 高（任何尺寸）：跟首屏照片 2400 × 1260 同比例，整张不裁 */

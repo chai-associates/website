@@ -208,17 +208,27 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 @media (hover: hover) { .photo-card:hover > img, .photo-tile:hover > img, .person-card:hover .person-photo > img { transform: scale(var(--zoom-hover)); } } /* 悬停：照片轻轻放大 */
 .photo-card h3 + p { margin-top: var(--space-1); line-height: var(--leading-lead); } /* 小组「h3 + 说明」 */
 .photo-card-action { align-self: flex-end; }
-/* 积木：照片按钮卡（lib/blocks.tsx 的 PhotoTile）—— 暗色纹理照片当背景（没有人物，纯点缀），整张是一个按钮。
-   标题 → 一行说明 → 链接（透明、白字、下划线 + 箭头）。高度由内容决定，尽量矮。
-   .photo-tiles = 满版一排，任何尺寸都左右各一半；外侧的字跟页面内容对齐 */
-.photo-tiles { --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--hairline); } /* --edge = 页面内容的左右边距 */
+/* 积木：照片按钮卡（lib/blocks.tsx 的 PhotoTile）—— 照片当背景，整张是一个按钮。
+   标题 → 一行说明 → 右下角链接（透明、白字、下划线 + 箭头）。
+   .photo-tiles = 满版，一排两张；外侧的字跟页面内容对齐（--edge）。单数时最后一格留空。
+   · 纹理照片（没有人物，例如加入我们）：任何尺寸都左右各一半，高度由内容决定，尽量矮。
+   · .photo-tiles-scene = 有人物、场景的照片（首页服务、离婚百科）：每张 16:9，跟照片 2400 × 1350 同比例，整张不裁；手机一排一张；加暗角让字看得清楚 */
+.photo-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--hairline); }
 .photo-tile { position: relative; isolation: isolate; display: flex; flex-direction: column; overflow: clip; padding: var(--space-5) var(--space-4); background: var(--color-inverse); color: var(--color-on-photo); --focus-color: var(--color-on-photo); }
-.photo-tiles > .photo-tile:first-child { padding-left: var(--edge); }
-.photo-tiles > .photo-tile:last-child { padding-right: var(--edge); }
-.photo-tile > img { z-index: -1; object-fit: cover; transition: transform var(--motion) var(--ease); }
+.photo-tiles > :nth-child(odd) { padding-left: var(--edge); }
+.photo-tiles > :nth-child(even) { padding-right: var(--edge); }
+.photo-tile > img { z-index: -2; object-fit: cover; transition: transform var(--motion) var(--ease); }
+.photo-tiles-scene { grid-template-columns: minmax(0, 1fr); }
+.photo-tiles-scene > .photo-tile { aspect-ratio: var(--ratio-photo); padding-inline: var(--edge); }
+.photo-tiles-scene > .photo-tile::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--scrim-photo); }
+@media (width >= --theme(--breakpoint-md)) {
+  .photo-tiles-scene { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .photo-tiles-scene > :nth-child(odd) { padding-right: var(--space-4); }
+  .photo-tiles-scene > :nth-child(even) { padding-left: var(--space-4); }
+}
 .photo-tile h3 { font-size: var(--text-subtitle); }
 .photo-tile p { margin-top: var(--space-1); color: var(--color-on-photo-muted); line-height: var(--leading-lead); }
-.photo-tile-action { display: inline-flex; align-self: flex-start; gap: var(--space-1); margin-top: var(--space-4); font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: var(--space-1); }
+.photo-tile-action { display: inline-flex; align-self: flex-end; gap: var(--space-1); margin-top: auto; padding-top: var(--space-4); font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: var(--space-1); } /* 右下角：margin-top auto 推到底，padding-top 保证跟说明至少隔 24 */
 /* 照片格式 ②「满版」的另一种排法：满版照片 + 白色标题框（离婚百科文章、关于我们的子页面；lib/blocks.tsx 的 CoverHead）。
    .bleed = 满版照片，可以放在任何区块上下，不限于页面顶部。任何尺寸都是 16:9（照片 2400 × 1350，整张不裁）；没有照片时是浅灰底。
    .cover-panel = 标题框（左：标题 + 一句话重点；右：资料栏）。白色圆角框往上叠住照片下缘，左右置中（手机到电脑都一样）：
@@ -352,6 +362,9 @@ svg { flex-shrink: 0; } /* 图示放在按钮、重点三栏里时不会被挤�
 .tab > label { user-select: none; }
 .tab > input:focus-visible + label { outline: var(--focus-width) solid var(--focus-color); outline-offset: var(--focus-offset); } /* 输入框是隐藏的，焦点框画在按钮文字上 */
 .tab-panel { display: none; order: 1; flex-basis: 100%; margin-top: var(--space-2); } /* order 1 = 排到所有按钮后面；8 + 8 = 按钮与内容相隔 16 */
+/* .tabs-bleed = 内容要满版的分页（离婚百科：满版照片按钮卡）：不放在 .container 里，按钮用 --edge 跟内容对齐，内容区伸到画面两边 */
+.tabs-bleed { padding-inline: var(--edge); }
+.tabs-bleed .tab-panel { flex-basis: calc(100% + 2 * var(--edge)); margin-inline: calc(-1 * var(--edge)); } /* 往两边各伸出 --edge = 刚好到画面边缘 */
 .tab > input:checked ~ .tab-panel { display: block; animation: fade-in var(--motion) var(--ease); } /* 切换分页：内容淡入 */
 /* 底线分页（律师个人页「概览 · 资历」：同一个人的不同章节，比药丸按钮安静）：文字分页，选中的变黑、下面一条黑线；整排下面一条细线。
    结构跟 .tabs 一样，只是 label 不加 .chip：<div class="tabs tabs-line"> */

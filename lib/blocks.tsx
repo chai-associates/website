@@ -11,9 +11,9 @@
 //               用在：首页「我们的团队」、律师团队、个人页底部
 // · Icon        线条图示（全站一套）：首页重点、☰ 选单「关注我们」的社群（箭头不用图示，由 CSS 加 →）
 // · PhotoCard   照片卡片：照片 + 标题（+ 一句说明）+ 右下角按钮；整张可点
-//               用在：首页、离婚服务（服务分类）、离婚百科（文章）、文章页底部
+//               用在：离婚服务（服务分类）、文章页底部
 // · PhotoTile   照片按钮卡：纹理照片当背景（没有人物），标题 → 说明 → 白字下划线链接；一排两张满版
-//               用在：加入我们的「按职位申请」
+//               用在：首页「服务范围」、离婚百科（文章）、加入我们的「按职位申请」
 // · AskSection  页面结尾「问律师」：标题 + 说明 + 直接咨询律师按钮（可加旁边的链接、下面的清单）
 //               用在：服务、服务分类、办事处、离婚百科、文章、关于我们各页
 // 样式在 globals.css 的 .bleed / .cover-panel / .tabs / .card / .person-card
@@ -162,12 +162,13 @@ export function PhotoCard({ href, image, title, desc, action, sizes = "(min-widt
   );
 }
 
-// 照片按钮卡：暗色纹理照片当背景（没有人物，纯点缀），整张是一个按钮。放在 <div className="photo-tiles"> 里一排两张
-// 照片规格：1600 × 600（横向 8:3），偏暗、没有字；会被裁成任何比例，所以只放纹理
-export function PhotoTile({ href, image, title, desc, action }: { href: string; image?: string | null; title: string; desc?: string; action: string }) {
+// 照片按钮卡：照片当背景，整张是一个按钮，链接在右下角。放在满版的 <div className="photo-tiles"> 里一排两张
+// · 纹理照片（没有人物）：1600 × 600，偏暗、没有字；会被裁成任何比例，所以只放纹理（加入我们）
+// · 人物、场景照片：2400 × 1350，放在 <div className="photo-tiles photo-tiles-scene">，整张不裁（首页服务、离婚百科）；sizes 传 "(min-width: 768px) 50vw, 100vw"
+export function PhotoTile({ href, image, title, desc, action, sizes = "50vw" }: { href: string; image?: string | null; title: string; desc?: string; action: string; sizes?: string }) {
   return (
     <Link href={href} className="photo-tile">
-      {image && <Image src={image} alt="" fill sizes="50vw" />}
+      {image && <Image src={image} alt="" fill sizes={sizes} />}
       <h3>{title}</h3>
       {desc && <p>{desc}</p>}
       <span className="photo-tile-action">{action}</span>
