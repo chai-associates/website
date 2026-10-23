@@ -11,7 +11,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import "@/lib/fonts"; // 字体（MiSans）
-import { ConsultButton, ConsultDialog, CookieConsent, LangSwitch, Menu, NavLinks, PageTransition } from "@/lib/interactive";
+import { ConsultButton, ConsultDialog, CookieConsent, LangSwitch, Menu, NavLinks, PageTransition, Reveal } from "@/lib/interactive";
 import { Icon } from "@/lib/blocks";
 import { aboutSections, common, disclaimer, firm, gaId, isLang, launched, locales, scope, siteUrl, socials, whatsappLink, inquiry, inquiryForm, type Bi, type Lang } from "@/lib/site";
 
@@ -131,6 +131,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <PageTransition>
           <main>{children}</main>
         </PageTransition>
+        <Reveal />
 
         {/* ── 页脚 ───────────────────────────── */}
         <footer className="site-footer">

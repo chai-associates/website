@@ -10,6 +10,7 @@
 // · NavLinks       电脑版页首的导航：目前所在的页面标古铜线；有子页面的鼠标移上去展开下拉（layout.tsx）
 // · HeaderOverHero  有首屏照片的页面：在最上面时页首透明，一往下滑变毛玻璃（只设定 <html data-over-hero>，样式在 globals.css）
 // · PageTransition  换页动态（layout.tsx 包住 <main>；样式在 globals.css「换页动态」）
+// · Reveal          往下滑时，标题、文字、卡片一个一个浮现（手机到电脑都一样；样式在 globals.css「动态」①）
 // · LangSwitch      语言切换：换语言时留在同一页（layout.tsx 的选单里）
 // · TabsHash        分页选择记住选了哪一个：网址加 #代号，按返回会回到同一个分页（离婚百科）
 // · CookieConsent   Cookie 提示 + 同意后才载入 GA4（layout.tsx）
@@ -259,6 +260,32 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       {children}
     </ViewTransition>
   );
+}
+
+// ── 往下滑：浮现 ─────────────────────────────────
+// 还没进画面的项目先藏起来（data-reveal），滑进画面时改成 data-reveal="in" 播放浮现动画；同一批进来的依序错开（--reveal-i）。
+// 打开页面时已经在画面里的项目不藏（不会闪一下）；手机设定「减少动态」时整个不启动。换页后重新扫描。
+const REVEAL = ".section-head, .prose > *, .figures > *, .groups > * > h3, .card-grid > *, .person-grid > *, .numbered > *, .link-list > *, .photo-tiles > *, .quote";
+export function Reveal() {
+  const path = usePathname();
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.filter((e) => e.isIntersecting).forEach((e, i) => {
+        const el = e.target as HTMLElement;
+        el.style.setProperty("--reveal-i", String(i));
+        el.dataset.reveal = "in";
+        io.unobserve(el);
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
+    document.querySelectorAll<HTMLElement>(`main :is(${REVEAL})`).forEach((el) => {
+      if (el.closest(".scroll-row") || el.getBoundingClientRect().top < innerHeight) return;
+      el.dataset.reveal = "";
+      io.observe(el);
+    });
+    return () => io.disconnect();
+  }, [path]);
+  return null;
 }
 
 // ── 语言切换 ─────────────────────────────────

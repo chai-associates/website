@@ -451,16 +451,14 @@ html[data-over-hero] .site-header .logo-sub { color: var(--color-on-photo-muted)
 
 /* ── 品牌语法 8：动态（速度、距离都在 tokens.css：--motion* / --ease / --reveal-distance / --stagger） ──────────
    以手机为准：手机、平板没有滑鼠，所以「滑动」和「按」都要有反应；电脑另外有悬停。
-   ① 进场：往下滑时，标题、每一段文字、一组一组的项目（卡片、人卡、清单、编号清单、数字）轻轻浮现。自动套用，页面上不用加 class。
-      同一排的第 2、3 个稍微晚一点出现（错开）。滑动列（手机左右滑）不套用。
-      照片卡片、照片按钮卡的照片：滑进画面时从 --zoom-settle 倍慢慢缩回（用 scale，跟电脑悬停的 transform 分开，不会互相盖掉）。
-      用浏览器原生的滚动动画：Chrome、Edge、Safari 26 有；Firefox 等不支援的浏览器直接显示，不影响阅读。 */
-@supports (animation-timeline: view()) {
-  :is(.section-head, .prose > *, .figures > *, .groups > * > h3, .photo-tiles > *) { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
-  :is(.photo-card, .photo-tile) > img { animation: zoom-in-view linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
-  :is(.card-grid, .person-grid, .numbered, .link-list) > * { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
-  :is(.card-grid, .person-grid, .numbered, .link-list) > :nth-child(3n + 2) { animation-range: entry 10% entry 70%; }
-  :is(.card-grid, .person-grid, .numbered, .link-list) > :nth-child(3n + 3) { animation-range: entry 20% entry 80%; }
+   ① 进场：往下滑时，标题、每一段文字、一组一组的项目（卡片、人卡、清单、编号清单、数字、照片按钮卡）浮现。
+      哪些项目会动由 lib/interactive.tsx 的 Reveal 决定，页面上不用加 class。同一批进画面的依序错开（--stagger）。
+      照片卡片、照片按钮卡浮现时，照片同时从 --zoom-settle 倍慢慢缩回（用 scale，跟电脑悬停的 transform 分开，不会互相盖掉）。
+      所有浏览器都有（不靠浏览器的滚动动画）；没有 JavaScript 时直接显示。 */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal=""] { opacity: 0; }
+  [data-reveal="in"] { animation: reveal var(--motion-slow) var(--ease) calc(var(--reveal-i, 0) * var(--stagger)) both; }
+  :is(.photo-card, .photo-tile)[data-reveal="in"] > img { animation: zoom-in-view calc(2 * var(--motion-slow)) var(--ease) both; }
 }
 /* ② 首屏、封面（PageHero、CoverHead）：一打开，文字一行一行浮现；照片从 --zoom-settle 倍慢慢缩回原本大小 */
 :is(.hero-body, .cover-panel > div) > * { animation: reveal var(--motion-slow) var(--ease) both; }
